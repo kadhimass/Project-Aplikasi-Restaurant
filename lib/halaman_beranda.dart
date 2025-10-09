@@ -52,8 +52,7 @@ class HalamanBeranda extends StatelessWidget {
             padding: const EdgeInsets.all(12),
             itemCount: produkList.length,
             gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
-              crossAxisCount:
-                  5, // Saya kembalikan ke 2 kolom agar lebih ideal di HP
+              crossAxisCount: 2, // Saya kembalikan ke 2 kolom agar lebih ideal di HP
               crossAxisSpacing: 12,
               mainAxisSpacing: 12,
               childAspectRatio: 0.7,
