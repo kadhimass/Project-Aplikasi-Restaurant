@@ -41,7 +41,7 @@ class _HalamanDetailState extends State<HalamanDetail> {
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.stretch,
           children: [
-            Image.network(
+            Image.asset(
               widget.produk.gambar,
               height: 250,
               fit: BoxFit.cover,

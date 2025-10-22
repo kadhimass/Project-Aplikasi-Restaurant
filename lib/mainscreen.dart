@@ -26,8 +26,7 @@ class _MainScreenState extends State<MainScreen> {
       'Selamat Datang, ${widget.email}',
       'Keranjang Belanja',
       'Profil Pengguna',
-      'Pengaturan'
-          'Riwayat Transaksi',
+      'Pengaturan',
     ];
   }
 

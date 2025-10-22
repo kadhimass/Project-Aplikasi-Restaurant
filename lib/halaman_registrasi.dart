@@ -30,7 +30,11 @@ class _HalamanRegistrasiState extends State<HalamanRegistrasi> {
     }
 
     fakeDatabase[email] = password;
-    setState(() => message = "Registrasi berhasil! Silakan login.");
+    Navigator.pushReplacement(
+      context,
+      animatedRoute(const HalamanLogin(), direction: AxisDirection.down),
+    );
+    //setState(() => message = "Registrasi berhasil! Silakan login.");
   }
 
   @override

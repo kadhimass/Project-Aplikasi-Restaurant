@@ -18,9 +18,10 @@ class HalamanBuktiTransaksi extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final totalAkhir = keranjang.totalHarga >= 50000 
-        ? keranjang.totalHarga 
-        : keranjang.totalHarga + 10000;
+    // PERBAIKAN: Gunakan harga setelah diskon dari keranjang
+    final totalAkhir = keranjang.hargaSetelahDiskon;
+    final dapatDiskon = keranjang.dapatDiskon;
+    final jumlahDiskon = keranjang.jumlahDiskon;
 
     return Scaffold(
       appBar: AppBar(
@@ -59,6 +60,32 @@ class HalamanBuktiTransaksi extends StatelessWidget {
                     ),
                   ),
                   const SizedBox(height: 8),
+                  // Tampilkan info diskon jika ada
+                  if (dapatDiskon)
+                    Container(
+                      padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
+                      decoration: BoxDecoration(
+                        color: Colors.orange.shade50,
+                        borderRadius: BorderRadius.circular(20),
+                        border: Border.all(color: Colors.orange.shade200),
+                      ),
+                      child: Row(
+                        mainAxisSize: MainAxisSize.min,
+                        children: [
+                          Icon(Icons.discount, color: Colors.orange, size: 16),
+                          SizedBox(width: 6),
+                          Text(
+                            'Anda hemat Rp${jumlahDiskon.toStringAsFixed(0)}!',
+                            style: TextStyle(
+                              color: Colors.orange.shade800,
+                              fontWeight: FontWeight.bold,
+                              fontSize: 12,
+                            ),
+                          ),
+                        ],
+                      ),
+                    ),
+                  const SizedBox(height: 8),
                   Text(
                     'Terima kasih telah berbelanja di Warung Kita',
                     style: TextStyle(
@@ -93,6 +120,12 @@ class HalamanBuktiTransaksi extends StatelessWidget {
                     _buildInfoRow('Tanggal', _formatTanggal(waktuTransaksi)),
                     _buildInfoRow('Waktu', _formatWaktu(waktuTransaksi)),
                     _buildInfoRow('Email', email),
+                    // Tambahan: Status Diskon
+                    _buildInfoRow(
+                      'Status Diskon', 
+                      dapatDiskon ? 'Dapat Diskon' : 'Tidak Dapat Diskon',
+                      valueColor: dapatDiskon ? Colors.green : Colors.grey,
+                    ),
                   ],
                 ),
               ),
@@ -140,13 +173,67 @@ class HalamanBuktiTransaksi extends StatelessWidget {
                       ),
                     ),
                     const SizedBox(height: 16),
+                    
+                    // Subtotal
                     _buildSummaryRow('Subtotal', keranjang.totalHarga),
+                    
+                    // Diskon
+                    _buildSummaryRow(
+                      'Diskon', 
+                      dapatDiskon ? -jumlahDiskon : 0,
+                      isDiscount: dapatDiskon,
+                    ),
+                    
                     const Divider(height: 24),
+                    
+                    // Total Akhir
                     _buildSummaryRow(
                       'Total Pembayaran', 
                       totalAkhir,
                       isTotal: true,
                     ),
+
+                    // Info tambahan tentang diskon
+                    if (dapatDiskon) ...[
+                      const SizedBox(height: 16),
+                      Container(
+                        padding: const EdgeInsets.all(12),
+                        decoration: BoxDecoration(
+                          color: Colors.green.shade50,
+                          borderRadius: BorderRadius.circular(8),
+                          border: Border.all(color: Colors.green.shade200),
+                        ),
+                        child: Row(
+                          children: [
+                            Icon(Icons.info_outline, color: Colors.green, size: 20),
+                            SizedBox(width: 12),
+                            Expanded(
+                              child: Column(
+                                crossAxisAlignment: CrossAxisAlignment.start,
+                                children: [
+                                  Text(
+                                    'Anda mendapatkan diskon!',
+                                    style: TextStyle(
+                                      color: Colors.green.shade800,
+                                      fontWeight: FontWeight.bold,
+                                      fontSize: 14,
+                                    ),
+                                  ),
+                                  SizedBox(height: 4),
+                                  Text(
+                                    'Diskon Rp10.000 untuk pembelian di atas Rp10.000',
+                                    style: TextStyle(
+                                      color: Colors.green.shade600,
+                                      fontSize: 12,
+                                    ),
+                                  ),
+                                ],
+                              ),
+                            ),
+                          ],
+                        ),
+                      ),
+                    ],
                   ],
                 ),
               ),
@@ -180,7 +267,6 @@ class HalamanBuktiTransaksi extends StatelessWidget {
                 Expanded(
                   child: ElevatedButton(
                     onPressed: () {
-                      // ✅ PERBAIKAN: Kembali ke MainScreen, bukan langsung ke Beranda
                       Navigator.pushAndRemoveUntil(
                         context,
                         MaterialPageRoute(
@@ -246,6 +332,18 @@ class HalamanBuktiTransaksi extends StatelessWidget {
                       color: Colors.grey.shade600,
                     ),
                   ),
+                  // Info diskon tambahan
+                  if (dapatDiskon) ...[
+                    const SizedBox(height: 4),
+                    Text(
+                      'Anda berhasil menghemat Rp${jumlahDiskon.toStringAsFixed(0)} dengan diskon spesial!',
+                      style: TextStyle(
+                        fontSize: 12,
+                        color: Colors.green.shade600,
+                        fontWeight: FontWeight.bold,
+                      ),
+                    ),
+                  ],
                 ],
               ),
             ),
@@ -255,7 +353,7 @@ class HalamanBuktiTransaksi extends StatelessWidget {
     );
   }
 
-  Widget _buildInfoRow(String label, String value) {
+  Widget _buildInfoRow(String label, String value, {Color? valueColor}) {
     return Padding(
       padding: const EdgeInsets.symmetric(vertical: 8),
       child: Row(
@@ -270,9 +368,10 @@ class HalamanBuktiTransaksi extends StatelessWidget {
           ),
           Text(
             value,
-            style: const TextStyle(
+            style: TextStyle(
               fontSize: 14,
               fontWeight: FontWeight.w500,
+              color: valueColor ?? Colors.black,
             ),
           ),
         ],
@@ -292,7 +391,7 @@ class HalamanBuktiTransaksi extends StatelessWidget {
         children: [
           ClipRRect(
             borderRadius: BorderRadius.circular(8),
-            child: Image.network(
+            child: Image.asset(
               item.produk.gambar,
               width: 50,
               height: 50,
@@ -333,7 +432,7 @@ class HalamanBuktiTransaksi extends StatelessWidget {
     );
   }
 
-  Widget _buildSummaryRow(String label, double value, {bool isTotal = false}) {
+  Widget _buildSummaryRow(String label, double value, {bool isDiscount = false, bool isTotal = false}) {
     return Padding(
       padding: const EdgeInsets.symmetric(vertical: 4),
       child: Row(
@@ -343,15 +442,17 @@ class HalamanBuktiTransaksi extends StatelessWidget {
             label,
             style: TextStyle(
               fontSize: isTotal ? 16 : 14,
-              color: isTotal ? Colors.orange : Colors.grey.shade600,
+              color: isDiscount ? Colors.green : (isTotal ? Colors.orange : Colors.grey.shade600),
               fontWeight: isTotal ? FontWeight.bold : FontWeight.normal,
             ),
           ),
           Text(
-            value == 0 ? 'Diskon' : 'Rp${value.toStringAsFixed(0)}',
+            isDiscount && value < 0 
+              ? '-Rp${value.abs().toStringAsFixed(0)}' 
+              : 'Rp${value.toStringAsFixed(0)}',
             style: TextStyle(
               fontSize: isTotal ? 18 : 14,
-              color: isTotal ? Colors.orange : Colors.black,
+              color: isDiscount ? Colors.green : (isTotal ? Colors.orange : Colors.black),
               fontWeight: FontWeight.bold,
             ),
           ),

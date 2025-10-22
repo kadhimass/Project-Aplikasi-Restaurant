@@ -7,11 +7,16 @@ class Transaksi {
   final String idTransaksi;
   final DateTime waktuTransaksi;
 
-  const Transaksi({
+  Transaksi({
     required this.keranjang,
     required this.email,
     required this.idTransaksi,
     required this.waktuTransaksi,
   });
-}
 
+  // Getter untuk informasi diskon
+  double get totalSebelumDiskon => keranjang.totalHarga;
+  double get jumlahDiskon => keranjang.jumlahDiskon;
+  double get totalSetelahDiskon => keranjang.hargaSetelahDiskon;
+  bool get dapatDiskon => keranjang.dapatDiskon;
+}

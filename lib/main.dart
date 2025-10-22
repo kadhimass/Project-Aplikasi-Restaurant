@@ -1,7 +1,9 @@
-
 import 'package:flutter/material.dart';
+import 'package:menu_makanan/halaman_beranda.dart';
+import 'package:menu_makanan/model/keranjang.dart';
+import 'package:menu_makanan/model/produk.dart';
+import 'package:menu_makanan/tombol/profil.dart';
 import 'package:provider/provider.dart';
-//import 'package:webview_flutter_android/webview_flutter_android.dart';
 import 'halaman_registrasi.dart';
 import 'package:menu_makanan/halaman_login.dart';
 import 'package:menu_makanan/halaman_password.dart';
@@ -13,7 +15,7 @@ import 'package:intl/date_symbol_data_local.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
-   await initializeDateFormatting('id_ID', null);
+  await initializeDateFormatting('id_ID', null);
   runApp(
     MultiProvider(
       providers: [
@@ -39,10 +41,13 @@ class MyApp extends StatelessWidget {
           theme: ThemeData(
             primarySwatch: Colors.blue,
             brightness: Brightness.light,
+            // Tambahan untuk mobile
+            visualDensity: VisualDensity.adaptivePlatformDensity,
           ),
           darkTheme: ThemeData(
             primarySwatch: Colors.blue,
             brightness: Brightness.dark,
+            visualDensity: VisualDensity.adaptivePlatformDensity,
           ),
           initialRoute: "/splash",
           routes: {
@@ -50,6 +55,8 @@ class MyApp extends StatelessWidget {
             "/login": (context) => const HalamanLogin(),
             "/register": (context) => const HalamanRegistrasi(),
             "/forgot": (context) => const HalamanLupaPassword(),
+            "/profil": (context) => const HalamanProfil(email: '',),
+            "/beranda": (context) => HalamanBeranda(email: '', keranjang: Keranjang(), onAddToCart: (Produk p1) {  },),
             "/main": (context) {
               final args = ModalRoute.of(context)!.settings.arguments
                   as Map<String, dynamic>?;
@@ -102,7 +109,7 @@ Offset _getBeginOffset(AxisDirection direction) {
 }
 
 // ======================================================
-// AUTH SCAFFOLD (RESPONSIVE LAYOUT)
+// AUTH SCAFFOLD (RESPONSIVE LAYOUT - MOBILE FIRST)
 // ======================================================
 class AuthScaffold extends StatelessWidget {
   final String title;
@@ -130,42 +137,125 @@ class AuthScaffold extends StatelessWidget {
             fit: BoxFit.cover,
           ),
         ),
-        padding: const EdgeInsets.all(20),
-        child: LayoutBuilder(
-          builder: (context, constraints) {
-            bool isWide = constraints.maxWidth > 700;
+        child: SafeArea(
+          // SafeArea untuk menghindari notch dan status bar
+          child: LayoutBuilder(
+            builder: (context, constraints) {
+              bool isMobile = constraints.maxWidth < 600;
+              bool isTablet = constraints.maxWidth < 1000;
 
-            return Center(
-              child: Container(
-                width: isWide ? 800 : double.infinity,
-                height: isWide ? 500 : double.infinity,
-                decoration: BoxDecoration(
-                  color: Colors.white.withOpacity(0.9),
-                  boxShadow: isWide
-                      ? [const BoxShadow(color: Colors.black12, blurRadius: 10)]
-                      : null,
-                  borderRadius: isWide
-                      ? BorderRadius.circular(15)
-                      : BorderRadius.zero,
+              return Padding(
+                padding: isMobile 
+                  ? const EdgeInsets.all(16.0) 
+                  : const EdgeInsets.all(20.0),
+                child: Center(
+                  child: Container(
+                    width: isMobile ? double.infinity : 800,
+                    height: isMobile ? null : 500, // Auto height untuk mobile
+                    constraints: isMobile 
+                      ? const BoxConstraints(maxWidth: 400) 
+                      : const BoxConstraints(),
+                    decoration: BoxDecoration(
+                      color: Colors.white.withOpacity(0.95), // Sedikit lebih opaque untuk mobile
+                      boxShadow: [
+                        BoxShadow(
+                          color: Colors.black12,
+                          blurRadius: isMobile ? 5 : 10,
+                        )
+                      ],
+                      borderRadius: BorderRadius.circular(isMobile ? 12 : 15),
+                    ),
+                    child: isMobile
+                        ? _buildMobileLayout(context)
+                        : _buildDesktopLayout(context),
+                  ),
                 ),
-                child: isWide
-                    ? Row(
-                        children: [
-                          _buildFormSection(context),
-                          _buildBlueSection(),
-                        ],
-                      )
-                    : Column(
-                        children: [
-                          Expanded(child: _buildFormSection(context)),
-                          _buildBlueSection(),
-                        ],
-                      ),
-              ),
-            );
-          },
+              );
+            },
+          ),
         ),
       ),
+    );
+  }
+
+  Widget _buildMobileLayout(BuildContext context) {
+    return SingleChildScrollView(
+      child: Column(
+        children: [
+          // Header section untuk mobile
+          Container(
+            width: double.infinity,
+            padding: const EdgeInsets.all(20),
+            decoration: const BoxDecoration(
+              gradient: LinearGradient(
+                colors: [Colors.blue, Colors.blueAccent],
+                begin: Alignment.topLeft,
+                end: Alignment.bottomRight,
+              ),
+              borderRadius: BorderRadius.only(
+                topLeft: Radius.circular(12),
+                topRight: Radius.circular(12),
+              ),
+            ),
+            child: Column(
+              children: [
+                Container(
+                  height: 80,
+                  width: 80,
+                  decoration: BoxDecoration(
+                    shape: BoxShape.circle,
+                    border: Border.all(color: Colors.white, width: 2),
+                    image: const DecorationImage(
+                      image: AssetImage('assets/LOGO.png'),
+                      fit: BoxFit.cover,
+                    ),
+                  ),
+                ),
+                const SizedBox(height: 10),
+                const Text(
+                  "Warung Kita",
+                  textAlign: TextAlign.center,
+                  style: TextStyle(
+                    fontSize: 20,
+                    color: Colors.white,
+                    fontWeight: FontWeight.bold,
+                  ),
+                ),
+              ],
+            ),
+          ),
+          
+          // Form section untuk mobile
+          Padding(
+            padding: const EdgeInsets.all(20.0),
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                Text(
+                  title,
+                  style: const TextStyle(
+                    fontSize: 20, // Sedikit lebih kecil untuk mobile
+                    fontWeight: FontWeight.bold,
+                  ),
+                ),
+                const SizedBox(height: 20),
+                fields,
+                const SizedBox(height: 20),
+                _buildBottomTextRow(),
+              ],
+            ),
+          ),
+        ],
+      ),
+    );
+  }
+
+  Widget _buildDesktopLayout(BuildContext context) {
+    return Row(
+      children: [
+        _buildFormSection(context),
+        _buildBlueSection(),
+      ],
     );
   }
 
@@ -187,20 +277,30 @@ class AuthScaffold extends StatelessWidget {
               const SizedBox(height: 30),
               fields,
               const SizedBox(height: 20),
-              Row(
-                mainAxisAlignment: MainAxisAlignment.center,
-                children: [
-                  Text(bottomText),
-                  TextButton(
-                    onPressed: onBottomButtonPressed,
-                    child: Text(bottomButtonText),
-                  ),
-                ],
-              ),
+              _buildBottomTextRow(),
             ],
           ),
         ),
       ),
+    );
+  }
+
+  Widget _buildBottomTextRow() {
+    return Row(
+      mainAxisAlignment: MainAxisAlignment.center,
+      children: [
+        Text(
+          bottomText,
+          style: const TextStyle(fontSize: 14),
+        ),
+        TextButton(
+          onPressed: onBottomButtonPressed,
+          child: Text(
+            bottomButtonText,
+            style: const TextStyle(fontSize: 14),
+          ),
+        ),
+      ],
     );
   }
 

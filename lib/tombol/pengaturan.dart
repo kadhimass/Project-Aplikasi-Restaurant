@@ -72,14 +72,17 @@ class _HalamanPengaturanState extends State<HalamanPengaturan> {
             _SingleSection(
               title: "Organisasi",
               children: [
-                const _CustomListTile(
+                _CustomListTile(
                   title: "Profil",
                   icon: Icons.person_outline_rounded,
+                  onTap:(){
+                    Navigator.pushNamed(context, '/profil');  
+                  },
                 ),
-                const _CustomListTile(
+                /*const _CustomListTile(
                   title: "Keranjang",
                   icon: Icons.shopping_cart_checkout_outlined,
-                ),
+                ),*/
                 _CustomListTile(
                   title: "Riwayat Transaksi",
                   icon: Icons.history_edu_outlined,
