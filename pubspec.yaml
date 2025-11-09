@@ -41,6 +41,7 @@ dependencies:
   rating_summary: ^1.0.3
   flutter_lints: ^6.0.0
   flutter_screenutil: ^5.8.4
+  sizer: ^2.0.15
   google_fonts: ^6.0.0
   animated_rating_stars: ^1.0.1
   webview_flutter: ^4.7.0

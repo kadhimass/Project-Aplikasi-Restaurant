@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
-import 'package:getwidget/getwidget.dart';
 import 'package:intl/intl.dart';
+import 'package:sizer/sizer.dart';
 import 'package:menu_makanan/halaman_detailproduk.dart';
 import 'package:menu_makanan/model/dummydata.dart';
 import 'package:menu_makanan/model/keranjang.dart';
@@ -46,20 +46,29 @@ class HalamanBeranda extends StatelessWidget {
             ],
           ),
         ),
-        
+
         // Daftar produk dengan layout responsif
         Expanded(
           child: LayoutBuilder(
             builder: (context, constraints) {
               final screenWidth = constraints.maxWidth;
               final isMobile = screenWidth < 600;
-              
+
               if (isMobile) {
                 // MOBILE: Setiap baris 5 kolom, scroll vertikal untuk baris berikutnya
-                return _buildMobileVerticalScroll(produkList, formatRupiah, context);
+                return _buildMobileVerticalScroll(
+                  produkList,
+                  formatRupiah,
+                  context,
+                );
               } else {
                 // DESKTOP/TABLET: Grid traditional
-                return _buildDesktopLayout(produkList, formatRupiah, context, screenWidth);
+                return _buildDesktopLayout(
+                  produkList,
+                  formatRupiah,
+                  context,
+                  screenWidth,
+                );
               }
             },
           ),
@@ -70,9 +79,9 @@ class HalamanBeranda extends StatelessWidget {
 
   // Layout mobile: Setiap baris 5 kolom, scroll vertikal
   Widget _buildMobileVerticalScroll(
-    List<Produk> produkList, 
-    NumberFormat currencyFormatter, 
-    BuildContext context
+    List<Produk> produkList,
+    NumberFormat currencyFormatter,
+    BuildContext context,
   ) {
     // Bagi produk menjadi chunks berisi 5 item per baris
     List<List<Produk>> rows = [];
@@ -89,9 +98,14 @@ class HalamanBeranda extends StatelessWidget {
             itemCount: rows.length,
             itemBuilder: (context, rowIndex) {
               return Container(
-                height: 170, // Tinggi tetap untuk setiap baris
+                height: 24.h, // Tinggi responsif untuk setiap baris (sizer)
                 margin: const EdgeInsets.only(bottom: 12),
-                child: _buildProductRow(rows[rowIndex], currencyFormatter, context, rowIndex),
+                child: _buildProductRow(
+                  rows[rowIndex],
+                  currencyFormatter,
+                  context,
+                  rowIndex,
+                ),
               );
             },
           ),
@@ -102,10 +116,10 @@ class HalamanBeranda extends StatelessWidget {
 
   // Widget untuk membangun satu baris berisi 5 produk
   Widget _buildProductRow(
-    List<Produk> rowProducts, 
-    NumberFormat currencyFormatter, 
+    List<Produk> rowProducts,
+    NumberFormat currencyFormatter,
     BuildContext context,
-    int rowIndex
+    int rowIndex,
   ) {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
@@ -119,14 +133,18 @@ class HalamanBeranda extends StatelessWidget {
               if (index < rowProducts.length) {
                 final produk = rowProducts[index];
                 return Container(
-                  width: MediaQuery.of(context).size.width / 3.5, // Lebar responsive
+                  width: 40.w, // Lebar responsif menggunakan sizer
                   margin: const EdgeInsets.symmetric(horizontal: 4),
-                  child: _buildMobileProductCard(produk, currencyFormatter, context),
+                  child: _buildMobileProductCard(
+                    produk,
+                    currencyFormatter,
+                    context,
+                  ),
                 );
               } else {
                 // Placeholder untuk kolom kosong (jika kurang dari 5 produk di baris terakhir)
                 return Container(
-                  width: MediaQuery.of(context).size.width / 3.5,
+                  width: 40.w,
                   margin: const EdgeInsets.symmetric(horizontal: 4),
                   child: Opacity(
                     opacity: 0.3,
@@ -139,7 +157,11 @@ class HalamanBeranda extends StatelessWidget {
                         child: Column(
                           mainAxisAlignment: MainAxisAlignment.center,
                           children: [
-                            Icon(Icons.fastfood, color: Colors.grey.shade400, size: 40),
+                            Icon(
+                              Icons.fastfood,
+                              color: Colors.grey.shade400,
+                              size: 40,
+                            ),
                             SizedBox(height: 8),
                             Text(
                               'Segera Hadir',
@@ -164,9 +186,9 @@ class HalamanBeranda extends StatelessWidget {
 
   // Card produk untuk mobile (compact)
   Widget _buildMobileProductCard(
-    Produk produk, 
-    NumberFormat currencyFormatter, 
-    BuildContext context
+    Produk produk,
+    NumberFormat currencyFormatter,
+    BuildContext context,
   ) {
     return InkWell(
       onTap: () {
@@ -190,17 +212,19 @@ class HalamanBeranda extends StatelessWidget {
           children: [
             // Gambar produk
             Container(
-              height: 80,
+              height: 12.h,
               width: double.infinity,
               decoration: BoxDecoration(
-                borderRadius: const BorderRadius.vertical(top: Radius.circular(8)),
+                borderRadius: const BorderRadius.vertical(
+                  top: Radius.circular(8),
+                ),
                 image: DecorationImage(
                   image: AssetImage(produk.gambar),
                   fit: BoxFit.cover,
                 ),
               ),
             ),
-            
+
             // Info produk
             Expanded(
               child: Padding(
@@ -228,11 +252,11 @@ class HalamanBeranda extends StatelessWidget {
                         fontWeight: FontWeight.bold,
                         fontSize: 10,
                       ),
-                    ),                
+                    ),
                     // Tombol pesan
                     SizedBox(
                       width: double.infinity,
-                      height: 24,
+                      height: 4.h,
                       child: ElevatedButton(
                         onPressed: () {
                           onAddToCart(produk);
@@ -249,10 +273,7 @@ class HalamanBeranda extends StatelessWidget {
                           children: [
                             Icon(Icons.add_shopping_cart, size: 10),
                             SizedBox(width: 2),
-                            Text(
-                              'Pesan',
-                              style: TextStyle(fontSize: 9),
-                            ),
+                            Text('Pesan', style: TextStyle(fontSize: 9)),
                           ],
                         ),
                       ),
@@ -269,21 +290,32 @@ class HalamanBeranda extends StatelessWidget {
 
   // Layout untuk desktop/tablet (grid traditional)
   Widget _buildDesktopLayout(
-    List<Produk> produkList, 
-    NumberFormat currencyFormatter, 
+    List<Produk> produkList,
+    NumberFormat currencyFormatter,
     BuildContext context,
-    double screenWidth
+    double screenWidth,
   ) {
-    final crossAxisCount = screenWidth < 100 ? 5 : 6;
-    
+    // Hitung jumlah kolom berdasarkan lebar layar agar responsif
+    final crossAxisCount = screenWidth < 800 ? 3 : (screenWidth < 1200 ? 4 : 6);
+
+    // Perkirakan lebar tile setelah memperhitungkan padding dan spacing
+    const horizontalPadding = 12.0; // padding GridView
+    const spacing = 12.0; // crossAxisSpacing
+    final totalSpacing = (crossAxisCount - 1) * spacing + 2 * horizontalPadding;
+    final tileWidth = (screenWidth - totalSpacing) / crossAxisCount;
+
+    // Tetapkan tinggi target tile agar konten (image + title + button) muat
+    final tileHeight = 40.h; // tinggi tile responsif menggunakan sizer
+
     return GridView.builder(
-      padding: const EdgeInsets.all(12),
+      padding: const EdgeInsets.all(horizontalPadding),
       itemCount: produkList.length,
       gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
         crossAxisCount: crossAxisCount,
-        crossAxisSpacing: 12,
-        mainAxisSpacing: 12,
-        childAspectRatio: crossAxisCount == 3 ? 0.7 : 0.65,
+        crossAxisSpacing: spacing,
+        mainAxisSpacing: spacing,
+        // Gunakan rasio lebar:tinggi yang dihitung agar tile tidak terpotong
+        childAspectRatio: tileWidth / tileHeight,
       ),
       itemBuilder: (context, index) {
         final produk = produkList[index];
@@ -294,9 +326,9 @@ class HalamanBeranda extends StatelessWidget {
 
   // Card produk untuk desktop (original GFCard)
   Widget _buildDesktopProductCard(
-    Produk produk, 
-    NumberFormat currencyFormatter, 
-    BuildContext context
+    Produk produk,
+    NumberFormat currencyFormatter,
+    BuildContext context,
   ) {
     return InkWell(
       onTap: () {
@@ -312,56 +344,78 @@ class HalamanBeranda extends StatelessWidget {
           ),
         );
       },
-      child: GFCard(
+      child: Card(
         margin: EdgeInsets.zero,
-        padding: EdgeInsets.zero,
         elevation: 3,
-        boxFit: BoxFit.cover,
-        showImage: true,
-        image: Image.asset(
-          produk.gambar,
-          height: 150,
-          width: double.infinity,
-          fit: BoxFit.cover,
-        ),
-        title: GFListTile(
-          padding: const EdgeInsets.all(8),
-          title: Text(
-            produk.nama,
-            style: const TextStyle(
-              fontWeight: FontWeight.bold,
-              fontSize: 16,
-            ),
-            maxLines: 1,
-            overflow: TextOverflow.ellipsis,
-          ),
-          subTitle: Padding(
-            padding: const EdgeInsets.only(top: 4.0),
-            child: Text(
-              currencyFormatter.format(produk.harga),
-              style: const TextStyle(
-                color: Colors.green,
-                fontWeight: FontWeight.w600,
-                fontSize: 14,
+        shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(6)),
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.stretch,
+          children: [
+            // Image area: gunakan Expanded supaya gambar mengambil sisa ruang yang tersedia
+            Expanded(
+              flex: 3,
+              child: ClipRRect(
+                borderRadius: const BorderRadius.vertical(
+                  top: Radius.circular(6),
+                ),
+                child: Image.asset(
+                  produk.gambar,
+                  width: double.infinity,
+                  fit: BoxFit.cover,
+                ),
               ),
             ),
-          ),
-        ),
-        buttonBar: GFButtonBar(
-          padding: const EdgeInsets.all(8),
-          children: <Widget>[
-            GFButton(
-              onPressed: () {
-                onAddToCart(produk);
-              },
-              text: 'Pesan',
-              icon: const Icon(
-                Icons.add_shopping_cart,
-                color: Colors.white,
-                size: 18,
+
+            // Title + price
+            Padding(
+              padding: const EdgeInsets.symmetric(
+                horizontal: 8.0,
+                vertical: 8.0,
               ),
-              color: Colors.orange,
-              fullWidthButton: true,
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  Text(
+                    produk.nama,
+                    style: const TextStyle(
+                      fontWeight: FontWeight.bold,
+                      fontSize: 14,
+                    ),
+                    maxLines: 1,
+                    overflow: TextOverflow.ellipsis,
+                  ),
+                  const SizedBox(height: 4),
+                  Text(
+                    currencyFormatter.format(produk.harga),
+                    style: const TextStyle(
+                      color: Colors.green,
+                      fontWeight: FontWeight.w600,
+                      fontSize: 13,
+                    ),
+                  ),
+                ],
+              ),
+            ),
+
+            // Button area: gunakan height tetap kecil sehingga tidak memaksa layout
+            Padding(
+              padding: const EdgeInsets.fromLTRB(8, 0, 8, 8),
+              child: SizedBox(
+                height: 5.h,
+                child: ElevatedButton.icon(
+                  onPressed: () => onAddToCart(produk),
+                  icon: const Icon(Icons.add_shopping_cart, size: 16),
+                  label: const Text('Pesan'),
+                  style: ElevatedButton.styleFrom(
+                    backgroundColor: Colors.orange,
+                    foregroundColor: Colors.white,
+                    textStyle: const TextStyle(fontSize: 14),
+                    padding: const EdgeInsets.symmetric(horizontal: 8),
+                    minimumSize: Size.zero,
+                    tapTargetSize: MaterialTapTargetSize.shrinkWrap,
+                  ),
+                ),
+              ),
             ),
           ],
         ),

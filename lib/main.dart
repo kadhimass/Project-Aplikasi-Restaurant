@@ -12,17 +12,22 @@ import 'package:menu_makanan/halaman_appbar.dart';
 import 'package:menu_makanan/providers/theme_provider.dart';
 import 'package:menu_makanan/providers/transaction_provider.dart';
 import 'package:intl/date_symbol_data_local.dart';
+import 'package:sizer/sizer.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
   await initializeDateFormatting('id_ID', null);
   runApp(
-    MultiProvider(
-      providers: [
-        ChangeNotifierProvider(create: (context) => ThemeProvider()),
-        ChangeNotifierProvider(create: (context) => TransactionProvider()),
-      ],
-      child: const MyApp(),
+    Sizer(
+      builder: (context, orientation, deviceType) {
+        return MultiProvider(
+          providers: [
+            ChangeNotifierProvider(create: (context) => ThemeProvider()),
+            ChangeNotifierProvider(create: (context) => TransactionProvider()),
+          ],
+          child: const MyApp(),
+        );
+      },
     ),
   );
 }
@@ -55,14 +60,19 @@ class MyApp extends StatelessWidget {
             "/login": (context) => const HalamanLogin(),
             "/register": (context) => const HalamanRegistrasi(),
             "/forgot": (context) => const HalamanLupaPassword(),
-            "/profil": (context) => const HalamanProfil(email: '',),
-            "/beranda": (context) => HalamanBeranda(email: '', keranjang: Keranjang(), onAddToCart: (Produk p1) {  },),
+            "/profil": (context) => const HalamanProfil(email: ''),
+            "/beranda": (context) => HalamanBeranda(
+              email: '',
+              keranjang: Keranjang(),
+              onAddToCart: (Produk p1) {},
+            ),
             "/main": (context) {
-              final args = ModalRoute.of(context)!.settings.arguments
-                  as Map<String, dynamic>?;
+              final args =
+                  ModalRoute.of(context)!.settings.arguments
+                      as Map<String, dynamic>?;
               final email = args?['email'] ?? '';
               return MainScreen(email: email);
-            }
+            },
           },
         );
       },
@@ -138,26 +148,27 @@ class AuthScaffold extends StatelessWidget {
           child: LayoutBuilder(
             builder: (context, constraints) {
               bool isMobile = constraints.maxWidth < 600;
-              bool isTablet = constraints.maxWidth < 1000;
 
               return Padding(
-                padding: isMobile 
-                  ? const EdgeInsets.all(16.0) 
-                  : const EdgeInsets.all(20.0),
+                padding: isMobile
+                    ? const EdgeInsets.all(16.0)
+                    : const EdgeInsets.all(20.0),
                 child: Center(
                   child: Container(
                     width: isMobile ? double.infinity : 800,
                     height: isMobile ? null : 500, // Auto height untuk mobile
-                    constraints: isMobile 
-                      ? const BoxConstraints(maxWidth: 400) 
-                      : const BoxConstraints(),
+                    constraints: isMobile
+                        ? const BoxConstraints(maxWidth: 400)
+                        : const BoxConstraints(),
                     decoration: BoxDecoration(
-                      color: Colors.white.withOpacity(0.95), // Sedikit lebih opaque untuk mobile
+                      color: Colors.white.withOpacity(
+                        0.95,
+                      ), // Sedikit lebih opaque untuk mobile
                       boxShadow: [
                         BoxShadow(
                           color: Colors.black,
                           blurRadius: isMobile ? 5 : 10,
-                        )
+                        ),
                       ],
                       borderRadius: BorderRadius.circular(isMobile ? 12 : 15),
                     ),
@@ -220,7 +231,7 @@ class AuthScaffold extends StatelessWidget {
               ],
             ),
           ),
-          
+
           // Form section untuk mobile
           Padding(
             padding: const EdgeInsets.all(20.0),
@@ -248,12 +259,7 @@ class AuthScaffold extends StatelessWidget {
   }
 
   Widget _buildDesktopLayout(BuildContext context) {
-    return Row(
-      children: [
-        _buildFormSection(context),
-        _buildOrangeSection(),
-      ],
-    );
+    return Row(children: [_buildFormSection(context), _buildOrangeSection()]);
   }
 
   Widget _buildFormSection(BuildContext context) {
