@@ -1,5 +1,8 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:intl/intl.dart';
+import 'package:menu_makanan/bloc/cart_bloc.dart';
+import 'package:menu_makanan/bloc/cart_state.dart';
 import 'package:menu_makanan/halaman_buktitransaksi.dart';
 import 'package:menu_makanan/model/keranjang.dart';
 import 'package:menu_makanan/model/produk.dart';
@@ -280,164 +283,168 @@ class _HalamanKeranjangState extends State<HalamanKeranjang> {
   @override
   Widget build(BuildContext context) {
     final isSmallScreen = MediaQuery.of(context).size.width < 360;
-    
-    return Scaffold(
-      body: Column(
-        children: [
-          // Banner diskon jika eligible - MOBILE OPTIMIZED
-          if (widget.keranjang.dapatDiskon)
-            Container(
-              width: double.infinity,
-              padding: const EdgeInsets.all(12),
-              margin: const EdgeInsets.all(8),
-              decoration: BoxDecoration(
-                gradient: LinearGradient(
-                  colors: [Colors.green.shade400, Colors.green.shade600],
-                  begin: Alignment.centerLeft,
-                  end: Alignment.centerRight,
-                ),
-                borderRadius: BorderRadius.circular(10),
-                boxShadow: [
-                  BoxShadow(
-                    color: Colors.green.shade300,
-                    blurRadius: 8,
-                    offset: Offset(0, 2),
+
+    return BlocBuilder<CartBloc, CartState>(
+      builder: (context, state) {
+        return Scaffold(
+          body: Column(
+            children: [
+              // Banner diskon jika eligible - MOBILE OPTIMIZED
+              if (state.keranjang.dapatDiskon)
+                Container(
+                  width: double.infinity,
+                  padding: const EdgeInsets.all(12),
+                  margin: const EdgeInsets.all(8),
+                  decoration: BoxDecoration(
+                    gradient: LinearGradient(
+                      colors: [Colors.green.shade400, Colors.green.shade600],
+                      begin: Alignment.centerLeft,
+                      end: Alignment.centerRight,
+                    ),
+                    borderRadius: BorderRadius.circular(10),
+                    boxShadow: [
+                      BoxShadow(
+                        color: Colors.green.shade300,
+                        blurRadius: 8,
+                        offset: Offset(0, 2),
+                      ),
+                    ],
                   ),
-                ],
-              ),
-              child: Row(
-                children: [
-                  Icon(Icons.discount, color: Colors.white, size: 22),
-                  SizedBox(width: 10),
-                  Expanded(
-                    child: Column(
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      children: [
-                        Text(
-                          'Diskon Aktif!',
+                  child: Row(
+                    children: [
+                      Icon(Icons.discount, color: Colors.white, size: 22),
+                      SizedBox(width: 10),
+                      Expanded(
+                        child: Column(
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          children: [
+                            Text(
+                              'Diskon Aktif!',
+                              style: TextStyle(
+                                color: Colors.white,
+                                fontWeight: FontWeight.bold,
+                                fontSize: 14,
+                              ),
+                            ),
+                            Text(
+                              'Potongan Rp10.000',
+                              style: TextStyle(
+                                color: Colors.white.withOpacity(0.9),
+                                fontSize: 12,
+                              ),
+                            ),
+                          ],
+                        ),
+                      ),
+                      Container(
+                        padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 4),
+                        decoration: BoxDecoration(
+                          color: Colors.white.withOpacity(0.2),
+                          borderRadius: BorderRadius.circular(12),
+                        ),
+                        child: Text(
+                          '✓',
                           style: TextStyle(
                             color: Colors.white,
                             fontWeight: FontWeight.bold,
-                            fontSize: 14,
-                          ),
-                        ),
-                        Text(
-                          'Potongan Rp10.000',
-                          style: TextStyle(
-                            color: Colors.white.withOpacity(0.9),
                             fontSize: 12,
                           ),
                         ),
-                      ],
-                    ),
-                  ),
-                  Container(
-                    padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 4),
-                    decoration: BoxDecoration(
-                      color: Colors.white.withOpacity(0.2),
-                      borderRadius: BorderRadius.circular(12),
-                    ),
-                    child: Text(
-                      '✓',
-                      style: TextStyle(
-                        color: Colors.white,
-                        fontWeight: FontWeight.bold,
-                        fontSize: 12,
                       ),
-                    ),
+                    ],
                   ),
-                ],
-              ),
-            ),
+                ),
 
-          // Daftar item keranjang - MOBILE OPTIMIZED
-          Expanded(
-            child: widget.keranjang.items.isEmpty
-                ? _buildEmptyState()
-                : ListView.builder(
-                    padding: const EdgeInsets.symmetric(vertical: 8),
-                    itemCount: widget.keranjang.items.length,
-                    itemBuilder: (context, index) {
-                      final item = widget.keranjang.items[index];
-                      final subtotal = item.produk.harga * item.jumlah;
-                      
-                      return _buildMobileCartItem(item, subtotal, index);
-                    },
-                  ),
-          ),
-          
-          // Footer total dan checkout - MOBILE OPTIMIZED
-          if (widget.keranjang.items.isNotEmpty)
-            Container(
-              padding: const EdgeInsets.all(16),
-              decoration: BoxDecoration(
-                color: Colors.white,
-                border: Border(top: BorderSide(color: Colors.grey.shade300)),
-                boxShadow: [
-                  BoxShadow(
-                    color: Colors.black12,
-                    blurRadius: 8,
-                    offset: Offset(0, -2),
-                  ),
-                ],
-              ),
-              child: Column(
-                children: [
-                  // Ringkasan harga
-                  _buildMobileSummaryRow('Subtotal', widget.keranjang.totalHarga),
-                  _buildMobileSummaryRow(
-                    'Diskon', 
-                    widget.keranjang.dapatDiskon ? -widget.keranjang.jumlahDiskon : 0,
-                    isDiscount: widget.keranjang.dapatDiskon,
-                  ),
-                  
-                  const Divider(height: 14),
-                  
-                  // Total akhir
-                  _buildMobileSummaryRow(
-                    'Total Pembayaran',
-                    widget.keranjang.hargaSetelahDiskon,
-                    isTotal: true,
-                  ),
-                  
-                  const SizedBox(height: 12),
-                  
-                  // Tombol checkout
-                  SizedBox(
-                    width: double.infinity,
-                    height: 40,
-                    child: ElevatedButton(
-                      onPressed: _bayar,
-                      style: ElevatedButton.styleFrom(
-                        backgroundColor: Colors.orange,
-                        foregroundColor: Colors.white,
-                        shape: RoundedRectangleBorder(
-                          borderRadius: BorderRadius.circular(12),
-                        ),
-                        elevation: 4,
-                        shadowColor: Colors.orange.shade300,
+              // Daftar item keranjang - MOBILE OPTIMIZED
+              Expanded(
+                child: state.keranjang.items.isEmpty
+                    ? _buildEmptyState()
+                    : ListView.builder(
+                        padding: const EdgeInsets.symmetric(vertical: 8),
+                        itemCount: state.keranjang.items.length,
+                        itemBuilder: (context, index) {
+                          final item = state.keranjang.items[index];
+                          final subtotal = item.produk.harga * item.jumlah;
+
+                          return _buildMobileCartItem(item, subtotal, index);
+                        },
                       ),
-                      child: Row(
-                        mainAxisAlignment: MainAxisAlignment.center,
-                        children: [
-                          Icon(Icons.payment, size: 20),
-                          SizedBox(width: 8),
-                          Text(
-                            'BAYAR',
-                            style: TextStyle(
-                              fontSize: 16,
-                              fontWeight: FontWeight.bold,
+              ),
+
+              // Footer total dan checkout - MOBILE OPTIMIZED
+              if (state.keranjang.items.isNotEmpty)
+                Container(
+                  padding: const EdgeInsets.all(16),
+                  decoration: BoxDecoration(
+                    color: Colors.white,
+                    border: Border(top: BorderSide(color: Colors.grey.shade300)),
+                    boxShadow: [
+                      BoxShadow(
+                        color: Colors.black12,
+                        blurRadius: 8,
+                        offset: Offset(0, -2),
+                      ),
+                    ],
+                  ),
+                  child: Column(
+                    children: [
+                      // Ringkasan harga
+                      _buildMobileSummaryRow('Subtotal', state.keranjang.totalHarga),
+                      _buildMobileSummaryRow(
+                        'Diskon',
+                        state.keranjang.dapatDiskon ? -state.keranjang.jumlahDiskon : 0,
+                        isDiscount: state.keranjang.dapatDiskon,
+                      ),
+
+                      const Divider(height: 14),
+
+                      // Total akhir
+                      _buildMobileSummaryRow(
+                        'Total Pembayaran',
+                        state.keranjang.hargaSetelahDiskon,
+                        isTotal: true,
+                      ),
+
+                      const SizedBox(height: 12),
+
+                      // Tombol checkout
+                      SizedBox(
+                        width: double.infinity,
+                        height: 40,
+                        child: ElevatedButton(
+                          onPressed: _bayar,
+                          style: ElevatedButton.styleFrom(
+                            backgroundColor: Colors.orange,
+                            foregroundColor: Colors.white,
+                            shape: RoundedRectangleBorder(
+                              borderRadius: BorderRadius.circular(12),
                             ),
+                            elevation: 4,
+                            shadowColor: Colors.orange.shade300,
                           ),
-                        ],
+                          child: Row(
+                            mainAxisAlignment: MainAxisAlignment.center,
+                            children: [
+                              Icon(Icons.payment, size: 20),
+                              SizedBox(width: 8),
+                              Text(
+                                'BAYAR',
+                                style: TextStyle(
+                                  fontSize: 16,
+                                  fontWeight: FontWeight.bold,
+                                ),
+                              ),
+                            ],
+                          ),
+                        ),
                       ),
-                    ),
+                    ],
                   ),
-                ],
-              ),
-            ),
-        ],
-      ),
+                ),
+            ],
+          ),
+        );
+      },
     );
   }
 

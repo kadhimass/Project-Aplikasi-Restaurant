@@ -1,4 +1,6 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:menu_makanan/bloc/cart_bloc.dart';
 import 'package:menu_makanan/halaman_beranda.dart';
 import 'package:menu_makanan/model/keranjang.dart';
 import 'package:menu_makanan/model/produk.dart';
@@ -20,12 +22,17 @@ void main() async {
   runApp(
     Sizer(
       builder: (context, orientation, deviceType) {
-        return MultiProvider(
+        return MultiBlocProvider(
           providers: [
-            ChangeNotifierProvider(create: (context) => ThemeProvider()),
-            ChangeNotifierProvider(create: (context) => TransactionProvider()),
+            BlocProvider(create: (context) => CartBloc()),
           ],
-          child: const MyApp(),
+          child: MultiProvider(
+            providers: [
+              ChangeNotifierProvider(create: (context) => ThemeProvider()),
+              ChangeNotifierProvider(create: (context) => TransactionProvider()),
+            ],
+            child: const MyApp(),
+          ),
         );
       },
     ),

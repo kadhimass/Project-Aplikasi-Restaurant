@@ -1,5 +1,8 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:intl/intl.dart';
+import 'package:menu_makanan/bloc/cart_bloc.dart';
+import 'package:menu_makanan/bloc/cart_state.dart';
 import 'package:menu_makanan/halaman_beranda.dart';
 import 'package:menu_makanan/halaman_keranjang.dart';
 import 'package:menu_makanan/model/keranjang.dart';
@@ -98,115 +101,118 @@ class _MainScreenState extends State<MainScreen> {
   }
 
   List<Widget> _buildAppBarActions() {
-    switch (_selectedIndex) {
-      case 0: // Halaman Beranda
-        return [
-          GestureDetector(
-            onTap: () {
-              setState(() {
-                _selectedIndex = 1; // Pindah ke tab keranjang
-              });
-            },
-            child: Row(
-              children: [
-                Stack(
+    return [
+      BlocBuilder<CartBloc, CartState>(
+        builder: (context, state) {
+          switch (_selectedIndex) {
+            case 0: // Halaman Beranda
+              return GestureDetector(
+                onTap: () {
+                  setState(() {
+                    _selectedIndex = 1; // Pindah ke tab keranjang
+                  });
+                },
+                child: Row(
                   children: [
-                    IconButton(
-                      icon: const Icon(Icons.shopping_cart),
-                      onPressed: () {
-                        setState(() {
-                          _selectedIndex = 1; // Pindah ke tab keranjang
-                        });
-                      },
-                      tooltip: 'Keranjang Belanja',
-                    ),
-                    if (_keranjang.totalItem > 0)
-                      Positioned(
-                        right: 0,
-                        top: 0,
-                        child: Container(
-                          padding: const EdgeInsets.all(2),
-                          decoration: BoxDecoration(
-                            color: Colors.red,
-                            borderRadius: BorderRadius.circular(10),
-                          ),
-                          constraints: const BoxConstraints(
-                            minWidth: 14,
-                            minHeight: 14,
-                          ),
-                          child: Text(
-                            _keranjang.totalItem.toString(),
-                            style: const TextStyle(
-                              color: Colors.white,
-                              fontSize: 8,
-                            ),
-                            textAlign: TextAlign.center,
-                          ),
+                    Stack(
+                      children: [
+                        IconButton(
+                          icon: const Icon(Icons.shopping_cart),
+                          onPressed: () {
+                            setState(() {
+                              _selectedIndex = 1; // Pindah ke tab keranjang
+                            });
+                          },
+                          tooltip: 'Keranjang Belanja',
                         ),
+                        if (state.keranjang.totalItem > 0)
+                          Positioned(
+                            right: 0,
+                            top: 0,
+                            child: Container(
+                              padding: const EdgeInsets.all(2),
+                              decoration: BoxDecoration(
+                                color: Colors.red,
+                                borderRadius: BorderRadius.circular(10),
+                              ),
+                              constraints: const BoxConstraints(
+                                minWidth: 14,
+                                minHeight: 14,
+                              ),
+                              child: Text(
+                                state.keranjang.totalItem.toString(),
+                                style: const TextStyle(
+                                  color: Colors.white,
+                                  fontSize: 8,
+                                ),
+                                textAlign: TextAlign.center,
+                              ),
+                            ),
+                          ),
+                      ],
+                    ),
+                    const SizedBox(width: 2),
+                    Text(
+                      formatRupiah.format(state.keranjang.totalHarga),
+                      style: const TextStyle(
+                        fontSize: 12,
+                        fontWeight: FontWeight.bold,
                       ),
+                    ),
                   ],
                 ),
-                const SizedBox(width: 2),
-                Text(
-                  formatRupiah.format(_keranjang.totalHarga),
-                  style: const TextStyle(
-                    fontSize: 12,
-                    fontWeight: FontWeight.bold,
-                  ),
-                ),
-              ],
-            ),
-          ),
-          const SizedBox(width: 20),
-        ];
-      case 1: // Halaman Keranjang
-        return [
-          if (_keranjang.items.isNotEmpty)
-            IconButton(
-              icon: const Icon(Icons.delete_sweep),
-              onPressed: () {
-                showDialog(
-                  context: context,
-                  builder: (BuildContext context) {
-                    return AlertDialog(
-                      title: const Text('Kosongkan Keranjang'),
-                      content: const Text(
-                        'Yakin ingin mengosongkan seluruh keranjang?',
-                      ),
-                      actions: [
-                        TextButton(
-                          onPressed: () => Navigator.of(context).pop(),
-                          child: const Text('Batal'),
-                        ),
-                        TextButton(
-                          onPressed: () {
-                            Navigator.of(context).pop();
-                            _kosongkanKeranjang();
+              );
+            case 1: // Halaman Keranjang
+              return Row(
+                children: [
+                  if (state.keranjang.items.isNotEmpty)
+                    IconButton(
+                      icon: const Icon(Icons.delete_sweep),
+                      onPressed: () {
+                        showDialog(
+                          context: context,
+                          builder: (BuildContext context) {
+                            return AlertDialog(
+                              title: const Text('Kosongkan Keranjang'),
+                              content: const Text(
+                                'Yakin ingin mengosongkan seluruh keranjang?',
+                              ),
+                              actions: [
+                                TextButton(
+                                  onPressed: () => Navigator.of(context).pop(),
+                                  child: const Text('Batal'),
+                                ),
+                                TextButton(
+                                  onPressed: () {
+                                    Navigator.of(context).pop();
+                                    _kosongkanKeranjang();
+                                  },
+                                  child: const Text('Ya, Kosongkan'),
+                                ),
+                              ],
+                            );
                           },
-                          child: const Text('Ya, Kosongkan'),
-                        ),
-                      ],
-                    );
-                  },
-                );
-              },
-              tooltip: 'Kosongkan Keranjang',
-            ),
-          IconButton(
-            icon: const Icon(Icons.refresh),
-            onPressed: _updateKeranjang,
-            tooltip: 'Refresh Keranjang',
-          ),
-        ];
-      default: // Halaman lain (Profil, Pengaturan)
-        return [
-          IconButton(
-            icon: const Icon(Icons.logout),
-            onPressed: _logout,
-            tooltip: 'Keluar',
-          ),
-        ];
-    }
+                        );
+                      },
+                      tooltip: 'Kosongkan Keranjang',
+                    ),
+                  IconButton(
+                    icon: const Icon(Icons.refresh),
+                    onPressed: _updateKeranjang,
+                    tooltip: 'Refresh Keranjang',
+                  ),
+                ],
+              );
+            default: // Halaman lain (Profil, Pengaturan)
+              return IconButton(
+                icon: const Icon(Icons.logout),
+                onPressed: _logout,
+                tooltip: 'Keluar',
+              );
+          }
+        },
+      ),
+    ];
   }
 
   @override

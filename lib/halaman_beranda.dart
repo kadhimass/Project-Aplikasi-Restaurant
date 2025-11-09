@@ -1,6 +1,10 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:intl/intl.dart';
 import 'package:sizer/sizer.dart';
+import 'package:menu_makanan/bloc/cart_bloc.dart';
+import 'package:menu_makanan/bloc/cart_event.dart';
+import 'package:menu_makanan/bloc/cart_state.dart';
 import 'package:menu_makanan/halaman_detailproduk.dart';
 import 'package:menu_makanan/model/dummydata.dart';
 import 'package:menu_makanan/model/keranjang.dart';
@@ -259,7 +263,7 @@ class HalamanBeranda extends StatelessWidget {
                       height: 4.h,
                       child: ElevatedButton(
                         onPressed: () {
-                          onAddToCart(produk);
+                          context.read<CartBloc>().add(AddToCart(produk));
                         },
                         style: ElevatedButton.styleFrom(
                           backgroundColor: Colors.orange,
@@ -403,7 +407,7 @@ class HalamanBeranda extends StatelessWidget {
               child: SizedBox(
                 height: 5.h,
                 child: ElevatedButton.icon(
-                  onPressed: () => onAddToCart(produk),
+                  onPressed: () => context.read<CartBloc>().add(AddToCart(produk)),
                   icon: const Icon(Icons.add_shopping_cart, size: 16),
                   label: const Text('Pesan'),
                   style: ElevatedButton.styleFrom(
