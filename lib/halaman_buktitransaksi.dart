@@ -435,7 +435,7 @@ class HalamanBuktiTransaksi extends StatelessWidget {
             ),
           ),
           Text(
-            '${formatRupiah.format(subtotal)}',
+            formatRupiah.format(subtotal),
             style: const TextStyle(fontWeight: FontWeight.w500),
           ),
         ],
