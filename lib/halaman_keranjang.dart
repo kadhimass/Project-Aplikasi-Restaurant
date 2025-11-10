@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:intl/intl.dart';
 import 'package:menu_makanan/bloc/cart_bloc.dart';
+import 'package:menu_makanan/bloc/cart_event.dart';
 import 'package:menu_makanan/bloc/cart_state.dart';
 import 'package:menu_makanan/halaman_buktitransaksi.dart';
 import 'package:menu_makanan/model/keranjang.dart';
@@ -11,10 +12,9 @@ import 'package:menu_makanan/providers/transaction_provider.dart';
 import 'package:menu_makanan/model/transaksi.dart';
 
 class HalamanKeranjang extends StatefulWidget {
-  final Keranjang keranjang;
   final String email;
-  
-  const HalamanKeranjang({super.key, required this.keranjang, required this.email});
+
+  const HalamanKeranjang({super.key, required this.email});
 
   @override
   State<HalamanKeranjang> createState() => _HalamanKeranjangState();
@@ -27,40 +27,27 @@ class _HalamanKeranjangState extends State<HalamanKeranjang> {
       decimalDigits: 0,
     );
     
-  // Fungsi untuk update keranjang
-  void _updateKeranjang() {
-    setState(() {});
-  }
-
   // Fungsi untuk menambah item
   void _tambahItem(Produk produk) {
-    setState(() {
-      widget.keranjang.tambahItem(produk);
-    });
+    context.read<CartBloc>().add(AddToCart(produk));
     _showSnackBar('${produk.nama} ditambahkan!', Colors.green);
   }
 
   // Fungsi untuk mengosongkan keranjang
   void _kosongkanKeranjang() {
-    setState(() {
-      widget.keranjang.kosongkan();
-    });
+    context.read<CartBloc>().add(ClearCart());
     _showSnackBar('Keranjang dikosongkan!', Colors.orange);
   }
 
   // Fungsi untuk mengurangi item
   void _kurangiItem(Produk produk) {
-    setState(() {
-      widget.keranjang.kurangiItem(produk);
-    });
+    context.read<CartBloc>().add(DecreaseQuantity(produk));
     _showSnackBar('${produk.nama} dikurangi!', Colors.orange);
   }
 
   // Fungsi untuk menghapus item
   void _hapusItem(Produk produk) {
-    setState(() {
-      widget.keranjang.hapusItem(produk);
-    });
+    context.read<CartBloc>().add(RemoveFromCart(produk));
     _showSnackBar('${produk.nama} dihapus!', Colors.red);
   }
 
@@ -77,7 +64,8 @@ class _HalamanKeranjangState extends State<HalamanKeranjang> {
 
   // Fungsi checkout - MOBILE OPTIMIZED
   void _bayar() {
-    if (widget.keranjang.totalItem == 0) {
+    final cartState = context.read<CartBloc>().state;
+    if (cartState.keranjang.totalItem == 0) {
       ScaffoldMessenger.of(context).showSnackBar(
         const SnackBar(
           content: Text('Keranjang Anda kosong!'),
@@ -124,16 +112,16 @@ class _HalamanKeranjangState extends State<HalamanKeranjang> {
                 const SizedBox(height: 20),
                 
                 // Ringkasan harga
-                _buildMobileSummaryRow('Subtotal', widget.keranjang.totalHarga),
-                
-                if (widget.keranjang.dapatDiskon) 
-                  _buildMobileSummaryRow('Diskon', -widget.keranjang.jumlahDiskon, isDiscount: true),
-                
+                _buildMobileSummaryRow('Subtotal', cartState.keranjang.totalHarga),
+
+                if (cartState.keranjang.dapatDiskon)
+                  _buildMobileSummaryRow('Diskon', -cartState.keranjang.jumlahDiskon, isDiscount: true),
+
                 const Divider(height: 20),
-                
-                _buildMobileSummaryRow('Total', widget.keranjang.hargaSetelahDiskon, isTotal: true),
-                
-                if (widget.keranjang.dapatDiskon) ...[
+
+                _buildMobileSummaryRow('Total', cartState.keranjang.hargaSetelahDiskon, isTotal: true),
+
+                if (cartState.keranjang.dapatDiskon) ...[
                   const SizedBox(height: 12),
                   Container(
                     padding: const EdgeInsets.all(12),
@@ -211,9 +199,10 @@ class _HalamanKeranjangState extends State<HalamanKeranjang> {
 
   // Proses checkout
   void _prosesCheckout() {
+    final cartState = context.read<CartBloc>().state;
     // Simpan data keranjang sebelum dikosongkan
     final keranjangSebelumCheckout = Keranjang(
-      initialItems: widget.keranjang.items.map((item) =>
+      initialItems: cartState.keranjang.items.map((item) =>
         ItemKeranjang(produk: item.produk, jumlah: item.jumlah)
       ).toList(),
     );
@@ -235,7 +224,7 @@ class _HalamanKeranjangState extends State<HalamanKeranjang> {
 
     // Kosongkan keranjang setelah checkout
     _kosongkanKeranjang();
-    
+
     // Navigate to bukti transaksi
     Navigator.push(
       context,

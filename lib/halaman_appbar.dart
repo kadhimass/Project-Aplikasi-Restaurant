@@ -224,7 +224,7 @@ class _MainScreenState extends State<MainScreen> {
         email: widget.email,
         onAddToCart: _addToCart,
       ),
-      HalamanKeranjang(keranjang: _keranjang, email: widget.email),
+      HalamanKeranjang(email: widget.email),
       HalamanProfil(email: widget.email),
       HalamanPengaturan(email: widget.email),
     ];

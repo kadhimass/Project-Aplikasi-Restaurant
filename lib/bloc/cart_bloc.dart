@@ -9,6 +9,7 @@ class CartBloc extends Bloc<CartEvent, CartState> {
     on<RemoveFromCart>(_onRemoveFromCart);
     on<ClearCart>(_onClearCart);
     on<UpdateQuantity>(_onUpdateQuantity);
+    on<DecreaseQuantity>(_onDecreaseQuantity);
   }
 
   void _onAddToCart(AddToCart event, Emitter<CartState> emit) {
@@ -47,6 +48,12 @@ class CartBloc extends Bloc<CartEvent, CartState> {
         newKeranjang.tambahItem(event.produk);
       }
     }
+    emit(state.copyWith(keranjang: newKeranjang));
+  }
+
+  void _onDecreaseQuantity(DecreaseQuantity event, Emitter<CartState> emit) {
+    final newKeranjang = Keranjang(initialItems: List.from(state.keranjang.items));
+    newKeranjang.kurangiItem(event.produk);
     emit(state.copyWith(keranjang: newKeranjang));
   }
 }

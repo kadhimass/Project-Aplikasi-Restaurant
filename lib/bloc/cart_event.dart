@@ -37,3 +37,12 @@ class UpdateQuantity extends CartEvent {
   @override
   List<Object> get props => [produk, quantity];
 }
+
+class DecreaseQuantity extends CartEvent {
+  final Produk produk;
+
+  const DecreaseQuantity(this.produk);
+
+  @override
+  List<Object> get props => [produk];
+}
