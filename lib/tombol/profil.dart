@@ -4,7 +4,7 @@ import 'package:menu_makanan/providers/transaction_provider.dart';
 import 'package:menu_makanan/halaman_webview.dart';
 import 'package:device_info_plus/device_info_plus.dart';
 import 'dart:io';
-
+import 'package:go_router/go_router.dart';
 
 class HalamanProfil extends StatefulWidget {
   final String email;
@@ -20,7 +20,7 @@ class _HalamanProfilState extends State<HalamanProfil> {
   @override
   void initState() {
     super.initState();
-    _getDeviceInfo(); 
+    _getDeviceInfo();
   }
 
   Future<void> _getDeviceInfo() async {
@@ -56,10 +56,7 @@ class _HalamanProfilState extends State<HalamanProfil> {
   Widget build(BuildContext context) {
     return Column(
       children: [
-        Expanded(
-          flex: 1,
-          child: _BagianAtas(email: widget.email),
-        ), 
+        Expanded(flex: 1, child: _BagianAtas(email: widget.email)),
         Expanded(
           flex: 4,
           child: Padding(
@@ -80,17 +77,13 @@ class _HalamanProfilState extends State<HalamanProfil> {
                     FloatingActionButton.extended(
                       onPressed: () {},
                       elevation: 0,
-                      label: const Text(
-                        "Status: Pelanggan Setia",
-                      ), 
+                      label: const Text("Status: Pelanggan Setia"),
                       icon: const Icon(Icons.verified_user_outlined),
                     ),
                   ],
                 ),
                 const SizedBox(height: 16),
-                _BarisInfoProfil(
-                  email: widget.email,
-                ), 
+                _BarisInfoProfil(email: widget.email),
                 const SizedBox(height: 16),
 
                 Card(
@@ -130,7 +123,7 @@ class _HalamanProfilState extends State<HalamanProfil> {
                     ),
                   ),
                 ),
-            
+
                 Card(
                   elevation: 2,
                   margin: const EdgeInsets.symmetric(
@@ -147,16 +140,13 @@ class _HalamanProfilState extends State<HalamanProfil> {
                         title: const Text("Syarat & Ketentuan"),
                         trailing: const Icon(Icons.chevron_right),
                         onTap: () {
-                          Navigator.push(
-                            context,
-                            MaterialPageRoute(
-                              builder: (context) => const HalamanWebView(
-                                title: "Syarat & Ketentuan",
-                                // Ganti dengan URL asli milikmu
-                                url:
-                                    "https://drive.google.com/file/d/1HIqyw2_hWnozTk-qiqHxcvt5VlNIAYYp/view?usp=drivesdk",
-                              ),
-                            ),
+                          context.pushNamed(
+                            'webview',
+                            extra: {
+                              'title': 'Syarat & Ketentuan',
+                              'url':
+                                  'https://drive.google.com/file/d/1HIqyw2_hWnozTk-qiqHxcvt5VlNIAYYp/view?usp=drivesdk',
+                            },
                           );
                         },
                       ),
@@ -169,16 +159,13 @@ class _HalamanProfilState extends State<HalamanProfil> {
                         title: const Text("Kebijakan Privasi"),
                         trailing: const Icon(Icons.chevron_right),
                         onTap: () {
-                          Navigator.push(
-                            context,
-                            MaterialPageRoute(
-                              builder: (context) => const HalamanWebView(
-                                title: "Kebijakan Privasi",
-                                // Ganti dengan URL asli milikmu
-                                url:
-                                    "https://drive.google.com/file/d/1mFrBpbDOFbHiubDACQW1AMvIrCzX8s6g/view?usp=drivesdk",
-                              ),
-                            ),
+                          context.pushNamed(
+                            'webview',
+                            extra: {
+                              'title': 'Kebijakan Privasi',
+                              'url':
+                                  'https://drive.google.com/file/d/1mFrBpbDOFbHiubDACQW1AMvIrCzX8s6g/view?usp=drivesdk',
+                            },
                           );
                         },
                       ),
@@ -194,8 +181,6 @@ class _HalamanProfilState extends State<HalamanProfil> {
     );
   }
 }
-
-
 
 class _BarisInfoProfil extends StatelessWidget {
   final String email;
@@ -268,7 +253,7 @@ class _BagianAtas extends StatelessWidget {
         Container(
           margin: const EdgeInsets.only(bottom: 50),
           decoration: const BoxDecoration(
-            color : Colors.orange,
+            color: Colors.orange,
             borderRadius: BorderRadius.only(
               bottomLeft: Radius.circular(50),
               bottomRight: Radius.circular(50),

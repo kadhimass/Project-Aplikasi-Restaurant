@@ -1,6 +1,7 @@
 import 'package:menu_makanan/halaman_login.dart';
 import 'package:flutter/material.dart';
 import 'main.dart';
+import 'package:go_router/go_router.dart';
 
 class HalamanRegistrasi extends StatefulWidget {
   const HalamanRegistrasi({super.key});
@@ -14,7 +15,7 @@ class _HalamanRegistrasiState extends State<HalamanRegistrasi> {
   final passwordController = TextEditingController();
   bool isPasswordVisible = false;
   String message = "";
-  
+
   void _register() {
     String email = emailController.text.trim();
     String password = passwordController.text.trim();
@@ -30,10 +31,8 @@ class _HalamanRegistrasiState extends State<HalamanRegistrasi> {
     }
 
     fakeDatabase[email] = password;
-    Navigator.pushReplacement(
-      context,
-      animatedRoute(const HalamanLogin(), direction: AxisDirection.down),
-    );
+    // After successful registration, go to login (replace stack)
+    context.goNamed('login');
     //setState(() => message = "Registrasi berhasil! Silakan login.");
   }
 
@@ -54,7 +53,7 @@ class _HalamanRegistrasiState extends State<HalamanRegistrasi> {
             ),
           ),
           const SizedBox(height: 20),
-          
+
           // Password
           TextField(
             controller: passwordController,
@@ -79,20 +78,22 @@ class _HalamanRegistrasiState extends State<HalamanRegistrasi> {
             ),
           ),
           const SizedBox(height: 20),
-          
+
           if (message.isNotEmpty) ...[
             Text(message, style: const TextStyle(color: Colors.red)),
             const SizedBox(height: 20),
           ],
-          
+
           SizedBox(
-                width: double.infinity,
-                height: 45,
-                child: ElevatedButton(
-                  style : ElevatedButton.styleFrom(
-                    backgroundColor: Colors.orange,
-                    shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(10)),
-                  ),
+            width: double.infinity,
+            height: 45,
+            child: ElevatedButton(
+              style: ElevatedButton.styleFrom(
+                backgroundColor: Colors.orange,
+                shape: RoundedRectangleBorder(
+                  borderRadius: BorderRadius.circular(10),
+                ),
+              ),
               onPressed: _register,
               child: const Text("REGISTER"),
             ),
@@ -104,10 +105,7 @@ class _HalamanRegistrasiState extends State<HalamanRegistrasi> {
       bottomText: "Sudah punya akun?",
       bottomButtonText: "Login",
       onBottomButtonPressed: () {
-        Navigator.push(
-          context,
-          animatedRoute(const HalamanLogin(), direction: AxisDirection.down),
-        );
+        context.pushNamed('login');
       },
     );
   }

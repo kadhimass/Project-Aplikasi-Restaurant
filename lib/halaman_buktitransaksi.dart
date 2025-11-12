@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 import 'package:menu_makanan/halaman_appbar.dart';
+import 'package:go_router/go_router.dart';
 import 'package:menu_makanan/model/keranjang.dart';
 
 class HalamanBuktiTransaksi extends StatelessWidget {
@@ -68,7 +69,10 @@ class HalamanBuktiTransaksi extends StatelessWidget {
                   // Tampilkan info diskon jika ada
                   if (dapatDiskon)
                     Container(
-                      padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
+                      padding: const EdgeInsets.symmetric(
+                        horizontal: 16,
+                        vertical: 8,
+                      ),
                       decoration: BoxDecoration(
                         color: Colors.orange.shade50,
                         borderRadius: BorderRadius.circular(20),
@@ -93,10 +97,7 @@ class HalamanBuktiTransaksi extends StatelessWidget {
                   const SizedBox(height: 8),
                   Text(
                     'Terima kasih telah berbelanja di Warung Kita',
-                    style: TextStyle(
-                      fontSize: 16,
-                      color: Colors.grey.shade700,
-                    ),
+                    style: TextStyle(fontSize: 16, color: Colors.grey.shade700),
                     textAlign: TextAlign.center,
                   ),
                 ],
@@ -127,7 +128,7 @@ class HalamanBuktiTransaksi extends StatelessWidget {
                     _buildInfoRow('Email', email),
                     // Tambahan: Status Diskon
                     _buildInfoRow(
-                      'Status Diskon', 
+                      'Status Diskon',
                       dapatDiskon ? 'Dapat Diskon' : 'Tidak Dapat Diskon',
                       valueColor: dapatDiskon ? Colors.green : Colors.grey,
                     ),
@@ -178,23 +179,23 @@ class HalamanBuktiTransaksi extends StatelessWidget {
                       ),
                     ),
                     const SizedBox(height: 16),
-                    
+
                     // Subtotal
                     //formatRupiah.format('Subtotal', jumlahDiskon),
                     _buildSummaryRow('Subtotal', keranjang.totalHarga),
-                    
+
                     // Diskon
                     _buildSummaryRow(
-                      'Diskon', 
+                      'Diskon',
                       dapatDiskon ? -jumlahDiskon : 0,
                       isDiscount: dapatDiskon,
                     ),
-                    
+
                     const Divider(height: 24),
-                    
+
                     // Total Akhir
                     _buildSummaryRow(
-                      'Total Pembayaran', 
+                      'Total Pembayaran',
                       totalAkhir,
                       isTotal: true,
                     ),
@@ -211,7 +212,11 @@ class HalamanBuktiTransaksi extends StatelessWidget {
                         ),
                         child: Row(
                           children: [
-                            Icon(Icons.info_outline, color: Colors.green, size: 20),
+                            Icon(
+                              Icons.info_outline,
+                              color: Colors.green,
+                              size: 20,
+                            ),
                             SizedBox(width: 12),
                             Expanded(
                               child: Column(
@@ -273,13 +278,8 @@ class HalamanBuktiTransaksi extends StatelessWidget {
                 Expanded(
                   child: ElevatedButton(
                     onPressed: () {
-                      Navigator.pushAndRemoveUntil(
-                        context,
-                        MaterialPageRoute(
-                          builder: (context) => MainScreen(email: email),
-                        ),
-                        (route) => false,
-                      );
+                      // Replace the stack and go to main screen
+                      context.goNamed('main', extra: {'email': email});
                     },
                     style: ElevatedButton.styleFrom(
                       backgroundColor: Colors.orange,
@@ -325,18 +325,12 @@ class HalamanBuktiTransaksi extends StatelessWidget {
                   const SizedBox(height: 8),
                   Text(
                     'Pesanan Anda sedang diproses. Silahkan tunggu beberapa menit.',
-                    style: TextStyle(
-                      fontSize: 12,
-                      color: Colors.grey.shade600,
-                    ),
+                    style: TextStyle(fontSize: 12, color: Colors.grey.shade600),
                   ),
                   const SizedBox(height: 4),
                   Text(
                     'Simpan bukti transaksi ini sebagai referensi.',
-                    style: TextStyle(
-                      fontSize: 12,
-                      color: Colors.grey.shade600,
-                    ),
+                    style: TextStyle(fontSize: 12, color: Colors.grey.shade600),
                   ),
                   // Info diskon tambahan
                   if (dapatDiskon) ...[
@@ -367,10 +361,7 @@ class HalamanBuktiTransaksi extends StatelessWidget {
         children: [
           Text(
             label,
-            style: TextStyle(
-              fontSize: 14,
-              color: Colors.grey.shade600,
-            ),
+            style: TextStyle(fontSize: 14, color: Colors.grey.shade600),
           ),
           Text(
             value,
@@ -387,7 +378,7 @@ class HalamanBuktiTransaksi extends StatelessWidget {
 
   Widget _buildItemRow(ItemKeranjang item) {
     final subtotal = item.produk.harga * item.jumlah;
-    final formatRupiah  = NumberFormat.currency(
+    final formatRupiah = NumberFormat.currency(
       locale: 'id_ID',
       symbol: 'Rp ',
       decimalDigits: 0,
@@ -443,8 +434,13 @@ class HalamanBuktiTransaksi extends StatelessWidget {
     );
   }
 
-  Widget _buildSummaryRow(String label, double value, {bool isDiscount = false, bool isTotal = false}) {
-    final formatRupiah  = NumberFormat.currency(
+  Widget _buildSummaryRow(
+    String label,
+    double value, {
+    bool isDiscount = false,
+    bool isTotal = false,
+  }) {
+    final formatRupiah = NumberFormat.currency(
       locale: 'id_ID',
       symbol: 'Rp ',
       decimalDigits: 0,
@@ -470,7 +466,9 @@ class HalamanBuktiTransaksi extends StatelessWidget {
             style: TextStyle(
               fontSize: isTotal ? 16 : 14,
               fontWeight: FontWeight.bold,
-              color: isDiscount ? Colors.green : (isTotal ? Colors.orange : Colors.black),
+              color: isDiscount
+                  ? Colors.green
+                  : (isTotal ? Colors.orange : Colors.black),
             ),
           ),
         ],

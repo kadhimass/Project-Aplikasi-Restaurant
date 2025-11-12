@@ -1,5 +1,8 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:intl/intl.dart';
+import 'package:menu_makanan/bloc/cart_bloc.dart';
+import 'package:menu_makanan/bloc/cart_event.dart';
 import 'package:menu_makanan/model/makanan.dart';
 import 'package:menu_makanan/model/minuman.dart';
 import 'package:menu_makanan/model/produk.dart';
@@ -20,18 +23,15 @@ class HalamanDetail extends StatefulWidget {
 }
 
 class _HalamanDetailState extends State<HalamanDetail> {
-  //late final WebViewController _controller;
-  final bool _isLoading = true;
-
   @override
   Widget build(BuildContext context) {
-  
-  // 2. BUAT OBJECT FORMATTER UNTUK MATA UANG RUPIAH
+    // Format Rupiah
     final formatRupiah = NumberFormat.currency(
-      locale: 'id_ID', 
-      symbol: 'Rp', 
-      decimalDigits: 0
+      locale: 'id_ID',
+      symbol: 'Rp',
+      decimalDigits: 0,
     );
+
     return Scaffold(
       appBar: AppBar(
         title: Text(widget.produk.nama),
@@ -41,6 +41,7 @@ class _HalamanDetailState extends State<HalamanDetail> {
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.stretch,
           children: [
+            // Gambar Produk
             Image.asset(
               widget.produk.gambar,
               height: 250,
@@ -57,11 +58,14 @@ class _HalamanDetailState extends State<HalamanDetail> {
                 );
               },
             ),
+
+            // Detail Produk
             Padding(
               padding: const EdgeInsets.all(16.0),
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
+                  // Nama Produk
                   Text(
                     widget.produk.nama,
                     style: const TextStyle(
@@ -70,6 +74,8 @@ class _HalamanDetailState extends State<HalamanDetail> {
                     ),
                   ),
                   const SizedBox(height: 8),
+
+                  // Rating dan Harga
                   Row(
                     children: [
                       AnimatedRatingStars(
@@ -106,12 +112,14 @@ class _HalamanDetailState extends State<HalamanDetail> {
                         style: const TextStyle(
                           color: Colors.green,
                           fontWeight: FontWeight.w600,
-                          fontSize: 14,
+                          fontSize: 18,
                         ),
                       ),
                     ],
                   ),
                   const SizedBox(height: 16),
+
+                  // Deskripsi
                   const Text(
                     'Deskripsi',
                     style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
@@ -122,35 +130,51 @@ class _HalamanDetailState extends State<HalamanDetail> {
                     style: const TextStyle(fontSize: 16, height: 1.5),
                   ),
                   const SizedBox(height: 16),
+
+                  // Detail Spesifik (Makanan/Minuman)
                   if (widget.produk is Makanan)
                     _buildDetailMakanan(widget.produk as Makanan),
                   if (widget.produk is Minuman)
                     _buildDetailMinuman(widget.produk as Minuman),
                   const SizedBox(height: 24),
-      
+
+                  // TOMBOL TAMBAH KE KERANJANG
                   SizedBox(
                     width: double.infinity,
                     height: 50,
                     child: ElevatedButton(
                       onPressed: () {
-                        if (widget.onTambahKeKeranjang != null) {
-                          widget.onTambahKeKeranjang!();
-                        }
+                        // Tambahkan ke CartBloc
+                        context.read<CartBloc>().add(AddToCart(widget.produk));
+
+                        // Tampilkan SnackBar
                         ScaffoldMessenger.of(context).showSnackBar(
                           SnackBar(
                             content: Text(
                               '${widget.produk.nama} ditambahkan ke keranjang!',
                             ),
                             backgroundColor: Colors.green,
+                            duration: const Duration(seconds: 2),
+                            action: SnackBarAction(
+                              label: 'Lihat',
+                              textColor: Colors.white,
+                              onPressed: () {
+                                Navigator.pop(context);
+                              },
+                            ),
                           ),
                         );
+
+                        // Kembali ke halaman sebelumnya
                         Navigator.pop(context);
                       },
                       style: ElevatedButton.styleFrom(
                         backgroundColor: Colors.orange,
+                        foregroundColor: Colors.white,
                         shape: RoundedRectangleBorder(
                           borderRadius: BorderRadius.circular(12),
                         ),
+                        elevation: 2,
                       ),
                       child: const Text(
                         'TAMBAH KE KERANJANG',

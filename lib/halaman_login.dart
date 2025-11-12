@@ -1,5 +1,6 @@
 import 'package:menu_makanan/halaman_password.dart';
 import 'package:menu_makanan/halaman_registrasi.dart';
+import 'package:go_router/go_router.dart';
 import 'package:flutter/material.dart';
 import 'package:menu_makanan/main.dart';
 import 'package:shared_preferences/shared_preferences.dart'; // <-- 1. IMPORT
@@ -15,25 +16,20 @@ class _HalamanLoginState extends State<HalamanLogin> {
   final passwordController = TextEditingController();
   bool isPasswordVisible = false;
   String errorMessage = "";
-  bool rememberMe = true; 
+  bool rememberMe = true;
 
   void _login() async {
     String email = emailController.text.trim();
     String password = passwordController.text.trim();
 
     if (fakeDatabase.containsKey(email) && fakeDatabase[email] == password) {
-      
       if (rememberMe) {
-        
         final prefs = await SharedPreferences.getInstance();
         await prefs.setString('user_email', email);
       }
-      
-      Navigator.pushReplacementNamed(
-        context,
-        "/main",
-        arguments: {"email": email},
-      );
+
+      // Navigate to main screen (replace) using go_router
+      context.goNamed('main', extra: {'email': email});
     } else {
       setState(() {
         errorMessage = "Email atau password salah!";
@@ -108,27 +104,20 @@ class _HalamanLoginState extends State<HalamanLogin> {
             children: [
               Row(
                 children: [
-                  
                   Checkbox(
                     value: rememberMe,
                     onChanged: (val) {
                       setState(() {
                         rememberMe = val!;
                       });
-                    }
+                    },
                   ),
                   const Text("Ingat Saya"),
                 ],
               ),
               TextButton(
                 onPressed: () {
-                  Navigator.push(
-                    context,
-                    animatedRoute(
-                      const HalamanLupaPassword(),
-                      direction: AxisDirection.left,
-                    ),
-                  );
+                  context.pushNamed('forgot');
                 },
                 child: const Text("Lupa Password?"),
               ),
@@ -139,10 +128,7 @@ class _HalamanLoginState extends State<HalamanLogin> {
       bottomText: "Belum Punya Akun?",
       bottomButtonText: "Buat Akun",
       onBottomButtonPressed: () {
-        Navigator.push(
-          context,
-          animatedRoute(const HalamanRegistrasi(), direction: AxisDirection.up),
-        );
+        context.pushNamed('register');
       },
     );
   }

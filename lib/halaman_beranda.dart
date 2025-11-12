@@ -6,6 +6,7 @@ import 'package:menu_makanan/bloc/cart_bloc.dart';
 import 'package:menu_makanan/bloc/cart_event.dart';
 import 'package:menu_makanan/bloc/cart_state.dart';
 import 'package:menu_makanan/halaman_detailproduk.dart';
+import 'package:go_router/go_router.dart';
 import 'package:menu_makanan/model/dummydata.dart';
 import 'package:menu_makanan/model/keranjang.dart';
 import 'package:menu_makanan/model/produk.dart';
@@ -196,16 +197,9 @@ class HalamanBeranda extends StatelessWidget {
   ) {
     return InkWell(
       onTap: () {
-        Navigator.push(
-          context,
-          MaterialPageRoute(
-            builder: (context) => HalamanDetail(
-              produk: produk,
-              onTambahKeKeranjang: () {
-                onAddToCart(produk);
-              },
-            ),
-          ),
+        context.pushNamed(
+          'detail',
+          extra: {'produk': produk, 'onTambah': () => onAddToCart(produk)},
         );
       },
       child: Card(
@@ -260,7 +254,6 @@ class HalamanBeranda extends StatelessWidget {
                     // Tombol pesan
                     SizedBox(
                       width: double.infinity,
-                      height: 4.h,
                       child: ElevatedButton(
                         onPressed: () {
                           context.read<CartBloc>().add(AddToCart(produk));
@@ -336,16 +329,9 @@ class HalamanBeranda extends StatelessWidget {
   ) {
     return InkWell(
       onTap: () {
-        Navigator.push(
-          context,
-          MaterialPageRoute(
-            builder: (context) => HalamanDetail(
-              produk: produk,
-              onTambahKeKeranjang: () {
-                onAddToCart(produk);
-              },
-            ),
-          ),
+        context.pushNamed(
+          'detail',
+          extra: {'produk': produk, 'onTambah': () => onAddToCart(produk)},
         );
       },
       child: Card(
@@ -407,7 +393,8 @@ class HalamanBeranda extends StatelessWidget {
               child: SizedBox(
                 height: 5.h,
                 child: ElevatedButton.icon(
-                  onPressed: () => context.read<CartBloc>().add(AddToCart(produk)),
+                  onPressed: () =>
+                      context.read<CartBloc>().add(AddToCart(produk)),
                   icon: const Icon(Icons.add_shopping_cart, size: 16),
                   label: const Text('Pesan'),
                   style: ElevatedButton.styleFrom(

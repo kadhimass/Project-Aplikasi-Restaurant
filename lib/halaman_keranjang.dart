@@ -5,6 +5,7 @@ import 'package:menu_makanan/bloc/cart_bloc.dart';
 import 'package:menu_makanan/bloc/cart_event.dart';
 import 'package:menu_makanan/bloc/cart_state.dart';
 import 'package:menu_makanan/halaman_buktitransaksi.dart';
+import 'package:go_router/go_router.dart';
 import 'package:menu_makanan/model/keranjang.dart';
 import 'package:menu_makanan/model/produk.dart';
 import 'package:provider/provider.dart';
@@ -21,12 +22,12 @@ class HalamanKeranjang extends StatefulWidget {
 }
 
 class _HalamanKeranjangState extends State<HalamanKeranjang> {
-  final formatRupiah  = NumberFormat.currency(
-      locale: 'id_ID',
-      symbol: 'Rp ',
-      decimalDigits: 0,
-    );
-    
+  final formatRupiah = NumberFormat.currency(
+    locale: 'id_ID',
+    symbol: 'Rp ',
+    decimalDigits: 0,
+  );
+
   // Fungsi untuk menambah item
   void _tambahItem(Produk produk) {
     context.read<CartBloc>().add(AddToCart(produk));
@@ -79,7 +80,9 @@ class _HalamanKeranjangState extends State<HalamanKeranjang> {
       context: context,
       builder: (BuildContext context) {
         return Dialog(
-          shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(20)),
+          shape: RoundedRectangleBorder(
+            borderRadius: BorderRadius.circular(20),
+          ),
           child: Container(
             padding: const EdgeInsets.all(20),
             child: Column(
@@ -94,7 +97,11 @@ class _HalamanKeranjangState extends State<HalamanKeranjang> {
                   ),
                   child: Row(
                     children: [
-                      Icon(Icons.shopping_cart_checkout, color: Colors.orange, size: 28),
+                      Icon(
+                        Icons.shopping_cart_checkout,
+                        color: Colors.orange,
+                        size: 28,
+                      ),
                       SizedBox(width: 12),
                       Expanded(
                         child: Text(
@@ -110,16 +117,27 @@ class _HalamanKeranjangState extends State<HalamanKeranjang> {
                   ),
                 ),
                 const SizedBox(height: 20),
-                
+
                 // Ringkasan harga
-                _buildMobileSummaryRow('Subtotal', cartState.keranjang.totalHarga),
+                _buildMobileSummaryRow(
+                  'Subtotal',
+                  cartState.keranjang.totalHarga,
+                ),
 
                 if (cartState.keranjang.dapatDiskon)
-                  _buildMobileSummaryRow('Diskon', -cartState.keranjang.jumlahDiskon, isDiscount: true),
+                  _buildMobileSummaryRow(
+                    'Diskon',
+                    -cartState.keranjang.jumlahDiskon,
+                    isDiscount: true,
+                  ),
 
                 const Divider(height: 20),
 
-                _buildMobileSummaryRow('Total', cartState.keranjang.hargaSetelahDiskon, isTotal: true),
+                _buildMobileSummaryRow(
+                  'Total',
+                  cartState.keranjang.hargaSetelahDiskon,
+                  isTotal: true,
+                ),
 
                 if (cartState.keranjang.dapatDiskon) ...[
                   const SizedBox(height: 12),
@@ -148,17 +166,14 @@ class _HalamanKeranjangState extends State<HalamanKeranjang> {
                     ),
                   ),
                 ],
-                
+
                 const SizedBox(height: 20),
                 Text(
                   'Lanjutkan pembayaran?',
-                  style: TextStyle(
-                    fontSize: 14,
-                    color: Colors.grey.shade600,
-                  ),
+                  style: TextStyle(fontSize: 14, color: Colors.grey.shade600),
                 ),
                 const SizedBox(height: 20),
-                
+
                 // Tombol aksi
                 Row(
                   children: [
@@ -167,7 +182,9 @@ class _HalamanKeranjangState extends State<HalamanKeranjang> {
                         onPressed: () => Navigator.of(context).pop(),
                         style: OutlinedButton.styleFrom(
                           padding: const EdgeInsets.symmetric(vertical: 14),
-                          shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(12)),
+                          shape: RoundedRectangleBorder(
+                            borderRadius: BorderRadius.circular(12),
+                          ),
                         ),
                         child: const Text('Batal'),
                       ),
@@ -182,7 +199,9 @@ class _HalamanKeranjangState extends State<HalamanKeranjang> {
                         style: ElevatedButton.styleFrom(
                           backgroundColor: Colors.orange,
                           padding: const EdgeInsets.symmetric(vertical: 14),
-                          shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(12)),
+                          shape: RoundedRectangleBorder(
+                            borderRadius: BorderRadius.circular(12),
+                          ),
                         ),
                         child: const Text('Bayar'),
                       ),
@@ -202,9 +221,11 @@ class _HalamanKeranjangState extends State<HalamanKeranjang> {
     final cartState = context.read<CartBloc>().state;
     // Simpan data keranjang sebelum dikosongkan
     final keranjangSebelumCheckout = Keranjang(
-      initialItems: cartState.keranjang.items.map((item) =>
-        ItemKeranjang(produk: item.produk, jumlah: item.jumlah)
-      ).toList(),
+      initialItems: cartState.keranjang.items
+          .map(
+            (item) => ItemKeranjang(produk: item.produk, jumlah: item.jumlah),
+          )
+          .toList(),
     );
 
     // Generate ID transaksi unik
@@ -220,27 +241,33 @@ class _HalamanKeranjangState extends State<HalamanKeranjang> {
     );
 
     // Add transaction to provider
-    Provider.of<TransactionProvider>(context, listen: false).addTransaction(newTransaction);
+    Provider.of<TransactionProvider>(
+      context,
+      listen: false,
+    ).addTransaction(newTransaction);
 
     // Kosongkan keranjang setelah checkout
     _kosongkanKeranjang();
 
-    // Navigate to bukti transaksi
-    Navigator.push(
-      context,
-      MaterialPageRoute(
-        builder: (context) => HalamanBuktiTransaksi(
-          keranjang: newTransaction.keranjang,
-          email: newTransaction.email,
-          idTransaksi: newTransaction.idTransaksi,
-          waktuTransaksi: newTransaction.waktuTransaksi,
-        ),
-      ),
+    // Navigate to bukti transaksi using go_router
+    context.pushNamed(
+      'bukti',
+      extra: {
+        'keranjang': newTransaction.keranjang,
+        'email': newTransaction.email,
+        'idTransaksi': newTransaction.idTransaksi,
+        'waktuTransaksi': newTransaction.waktuTransaksi,
+      },
     );
   }
 
   // Widget untuk baris ringkasan - MOBILE FRIENDLY
-  Widget _buildMobileSummaryRow(String label, double value, {bool isDiscount = false, bool isTotal = false}) {
+  Widget _buildMobileSummaryRow(
+    String label,
+    double value, {
+    bool isDiscount = false,
+    bool isTotal = false,
+  }) {
     return Padding(
       padding: const EdgeInsets.symmetric(vertical: 3),
       child: Row(
@@ -255,20 +282,22 @@ class _HalamanKeranjangState extends State<HalamanKeranjang> {
             ),
           ),
           Text(
-            isDiscount && value < 0 
-              ? '-${formatRupiah.format(value.abs())}'
-              : formatRupiah.format(value),
+            isDiscount && value < 0
+                ? '-${formatRupiah.format(value.abs())}'
+                : formatRupiah.format(value),
             style: TextStyle(
               fontSize: isTotal ? 16 : 14,
               fontWeight: FontWeight.bold,
-              color: isDiscount ? Colors.green : (isTotal ? Colors.orange : Colors.black),
+              color: isDiscount
+                  ? Colors.green
+                  : (isTotal ? Colors.orange : Colors.black),
             ),
           ),
         ],
       ),
     );
   }
-  
+
   @override
   Widget build(BuildContext context) {
     final isSmallScreen = MediaQuery.of(context).size.width < 360;
@@ -326,7 +355,10 @@ class _HalamanKeranjangState extends State<HalamanKeranjang> {
                         ),
                       ),
                       Container(
-                        padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 4),
+                        padding: const EdgeInsets.symmetric(
+                          horizontal: 8,
+                          vertical: 4,
+                        ),
                         decoration: BoxDecoration(
                           color: Colors.white.withOpacity(0.2),
                           borderRadius: BorderRadius.circular(12),
@@ -366,7 +398,9 @@ class _HalamanKeranjangState extends State<HalamanKeranjang> {
                   padding: const EdgeInsets.all(16),
                   decoration: BoxDecoration(
                     color: Colors.white,
-                    border: Border(top: BorderSide(color: Colors.grey.shade300)),
+                    border: Border(
+                      top: BorderSide(color: Colors.grey.shade300),
+                    ),
                     boxShadow: [
                       BoxShadow(
                         color: Colors.black12,
@@ -378,10 +412,15 @@ class _HalamanKeranjangState extends State<HalamanKeranjang> {
                   child: Column(
                     children: [
                       // Ringkasan harga
-                      _buildMobileSummaryRow('Subtotal', state.keranjang.totalHarga),
+                      _buildMobileSummaryRow(
+                        'Subtotal',
+                        state.keranjang.totalHarga,
+                      ),
                       _buildMobileSummaryRow(
                         'Diskon',
-                        state.keranjang.dapatDiskon ? -state.keranjang.jumlahDiskon : 0,
+                        state.keranjang.dapatDiskon
+                            ? -state.keranjang.jumlahDiskon
+                            : 0,
                         isDiscount: state.keranjang.dapatDiskon,
                       ),
 
@@ -444,23 +483,27 @@ class _HalamanKeranjangState extends State<HalamanKeranjang> {
         padding: const EdgeInsets.all(32.0),
         child: Column(
           mainAxisAlignment: MainAxisAlignment.center,
-            children: [
+          children: [
             Container(
               width: 120,
               height: 120,
               decoration: BoxDecoration(
-              color: Colors.grey.shade100,
-              shape: BoxShape.circle,
+                color: Colors.grey.shade100,
+                shape: BoxShape.circle,
               ),
-              child: Icon(Icons.shopping_cart_outlined, size: 60, color: Colors.grey.shade400),
+              child: Icon(
+                Icons.shopping_cart_outlined,
+                size: 60,
+                color: Colors.grey.shade400,
+              ),
             ),
             const SizedBox(height: 24),
             Text(
               'Keranjang Kosong',
               style: TextStyle(
-              fontSize: 20,
-              fontWeight: FontWeight.bold,
-              color: Colors.grey.shade600,
+                fontSize: 20,
+                fontWeight: FontWeight.bold,
+                color: Colors.grey.shade600,
               ),
             ),
             const SizedBox(height: 12),
@@ -468,9 +511,9 @@ class _HalamanKeranjangState extends State<HalamanKeranjang> {
               'Tambahkan makanan favorit Anda\ndari menu beranda',
               textAlign: TextAlign.center,
               style: TextStyle(
-              fontSize: 14,
-              color: Colors.grey.shade500,
-              height: 1.4,
+                fontSize: 14,
+                color: Colors.grey.shade500,
+                height: 1.4,
               ),
             ),
             const SizedBox(height: 24),
@@ -480,223 +523,222 @@ class _HalamanKeranjangState extends State<HalamanKeranjang> {
     );
   }
 
+  Widget _buildMobileCartItem(ItemKeranjang item, double subtotal, int index) {
+    final isSmallScreen = MediaQuery.of(context).size.width < 360;
 
-Widget _buildMobileCartItem(ItemKeranjang item, double subtotal, int index) {
-  final isSmallScreen = MediaQuery.of(context).size.width < 360;
-  
-  return Dismissible(
-    key: Key('${item.produk.id}_$index'),
-    background: Container(
-      color: Colors.red,
-      alignment: Alignment.centerRight,
-      padding: const EdgeInsets.only(right: 20),
-      child: const Icon(Icons.delete_forever, color: Colors.white, size: 28),
-    ),
-    direction: DismissDirection.endToStart,
-    confirmDismiss: (direction) async {
-      return await showDialog(
-        context: context,
-        builder: (BuildContext context) {
-          return AlertDialog(
-            title: const Text('Hapus Item?'),
-            content: Text('Hapus ${item.produk.nama} dari keranjang?'),
-            actions: [
-              TextButton(
-                onPressed: () => Navigator.of(context).pop(false),
-                child: const Text('Batal'),
-              ),
-              TextButton(
-                onPressed: () => Navigator.of(context).pop(true),
-                child: const Text('Hapus', style: TextStyle(color: Colors.red)),
-              ),
-            ],
-          );
-        },
-      );
-    },
-    onDismissed: (direction) {
-      _hapusItem(item.produk);
-    },
-    child: Container(
-      margin: const EdgeInsets.symmetric(horizontal: 12, vertical: 6),
-      decoration: BoxDecoration(
-        color: Colors.white,
-        borderRadius: BorderRadius.circular(16),
-        boxShadow: [
-          BoxShadow(
-            color: Colors.black.withOpacity(0.1),
-            blurRadius: 8,
-            offset: const Offset(0, 2),
-          ),
-        ],
+    return Dismissible(
+      key: Key('${item.produk.id}_$index'),
+      background: Container(
+        color: Colors.red,
+        alignment: Alignment.centerRight,
+        padding: const EdgeInsets.only(right: 20),
+        child: const Icon(Icons.delete_forever, color: Colors.white, size: 28),
       ),
-      child: Padding(
-        padding: const EdgeInsets.all(12),
-        child: Row(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
-            Container(
-              width: 80,
-              height: 80,
-              decoration: BoxDecoration(
-                borderRadius: BorderRadius.circular(12),
-                color : Colors.grey.shade100,
-              ),
-              child: ClipRRect(
-                borderRadius: BorderRadius.circular(12),
-                child: _buildSimpleImage(item.produk.gambar),
-              ),
+      direction: DismissDirection.endToStart,
+      confirmDismiss: (direction) async {
+        return await showDialog(
+          context: context,
+          builder: (BuildContext context) {
+            return AlertDialog(
+              title: const Text('Hapus Item?'),
+              content: Text('Hapus ${item.produk.nama} dari keranjang?'),
+              actions: [
+                TextButton(
+                  onPressed: () => Navigator.of(context).pop(false),
+                  child: const Text('Batal'),
+                ),
+                TextButton(
+                  onPressed: () => Navigator.of(context).pop(true),
+                  child: const Text(
+                    'Hapus',
+                    style: TextStyle(color: Colors.red),
+                  ),
+                ),
+              ],
+            );
+          },
+        );
+      },
+      onDismissed: (direction) {
+        _hapusItem(item.produk);
+      },
+      child: Container(
+        margin: const EdgeInsets.symmetric(horizontal: 12, vertical: 6),
+        decoration: BoxDecoration(
+          color: Colors.white,
+          borderRadius: BorderRadius.circular(16),
+          boxShadow: [
+            BoxShadow(
+              color: Colors.black.withOpacity(0.1),
+              blurRadius: 8,
+              offset: const Offset(0, 2),
             ),
-            
-            const SizedBox(width: 12),
-            
-            // Info produk - layout vertikal untuk mobile
-            Expanded(
-              child: Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  // Nama produk
-                  Text(
-                    item.produk.nama,
-                    style: const TextStyle(
-                      fontWeight: FontWeight.bold,
-                      fontSize: 16,
+          ],
+        ),
+        child: Padding(
+          padding: const EdgeInsets.all(12),
+          child: Row(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              Container(
+                width: 80,
+                height: 80,
+                decoration: BoxDecoration(
+                  borderRadius: BorderRadius.circular(12),
+                  color: Colors.grey.shade100,
+                ),
+                child: ClipRRect(
+                  borderRadius: BorderRadius.circular(12),
+                  child: _buildSimpleImage(item.produk.gambar),
+                ),
+              ),
+
+              const SizedBox(width: 12),
+
+              // Info produk - layout vertikal untuk mobile
+              Expanded(
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    // Nama produk
+                    Text(
+                      item.produk.nama,
+                      style: const TextStyle(
+                        fontWeight: FontWeight.bold,
+                        fontSize: 16,
+                      ),
+                      maxLines: 2,
+                      overflow: TextOverflow.ellipsis,
                     ),
-                    maxLines: 2,
-                    overflow: TextOverflow.ellipsis,
-                  ),
-                  
-                  const SizedBox(height: 4),
-                  
-                  // Harga satuan
-                  Text(
-                    '${formatRupiah.format(item.produk.harga)}/Item',
-                    style: TextStyle(
-                      fontSize: 12,
-                      color: Colors.grey.shade600,
+
+                    const SizedBox(height: 4),
+
+                    // Harga satuan
+                    Text(
+                      '${formatRupiah.format(item.produk.harga)}/Item',
+                      style: TextStyle(
+                        fontSize: 12,
+                        color: Colors.grey.shade600,
+                      ),
                     ),
-                  ),
-                  
-                  const SizedBox(height: 8),
-                  
-                  // Kontrol jumlah dan subtotal
-                  Row(
-                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                    children: [
-                      // Kontrol jumlah
-                      Container(
-                        decoration: BoxDecoration(
-                          color: Colors.grey.shade50,
-                          borderRadius: BorderRadius.circular(20),
-                          border: Border.all(color: Colors.grey.shade300),
-                        ),
-                        child: Row(
-                          children: [
-                            // Tombol kurang
-                            IconButton(
-                              icon: const Icon(Icons.remove, size: 18),
-                              color: Colors.red,
-                              onPressed: () => _kurangiItem(item.produk),
-                              padding: const EdgeInsets.all(4),
-                              constraints: const BoxConstraints(
-                                minWidth: 36,
-                                minHeight: 36,
-                              ),
-                            ),
-                            
-                            // Jumlah
-                            Container(
-                              padding: const EdgeInsets.symmetric(horizontal: 12),
-                              child: Text(
-                                item.jumlah.toString(),
-                                style: const TextStyle(
-                                  fontWeight: FontWeight.bold,
-                                  fontSize: 14,
+
+                    const SizedBox(height: 8),
+
+                    // Kontrol jumlah dan subtotal
+                    Row(
+                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                      children: [
+                        // Kontrol jumlah
+                        Container(
+                          decoration: BoxDecoration(
+                            color: Colors.grey.shade50,
+                            borderRadius: BorderRadius.circular(20),
+                            border: Border.all(color: Colors.grey.shade300),
+                          ),
+                          child: Row(
+                            children: [
+                              // Tombol kurang
+                              IconButton(
+                                icon: const Icon(Icons.remove, size: 18),
+                                color: Colors.red,
+                                onPressed: () => _kurangiItem(item.produk),
+                                padding: const EdgeInsets.all(4),
+                                constraints: const BoxConstraints(
+                                  minWidth: 36,
+                                  minHeight: 36,
                                 ),
                               ),
+
+                              // Jumlah
+                              Container(
+                                padding: const EdgeInsets.symmetric(
+                                  horizontal: 12,
+                                ),
+                                child: Text(
+                                  item.jumlah.toString(),
+                                  style: const TextStyle(
+                                    fontWeight: FontWeight.bold,
+                                    fontSize: 14,
+                                  ),
+                                ),
+                              ),
+
+                              // Tombol tambah
+                              IconButton(
+                                icon: const Icon(Icons.add, size: 18),
+                                color: Colors.green,
+                                onPressed: () => _tambahItem(item.produk),
+                                padding: const EdgeInsets.all(4),
+                                constraints: const BoxConstraints(
+                                  minWidth: 36,
+                                  minHeight: 36,
+                                ),
+                              ),
+                            ],
+                          ),
+                        ),
+
+                        // Subtotal
+                        Column(
+                          crossAxisAlignment: CrossAxisAlignment.end,
+                          children: [
+                            Text(
+                              'Subtotal',
+                              style: TextStyle(
+                                fontSize: 10,
+                                color: Colors.grey.shade500,
+                              ),
                             ),
-                            
-                            // Tombol tambah
-                            IconButton(
-                              icon: const Icon(Icons.add, size: 18),
-                              color: Colors.green,
-                              onPressed: () => _tambahItem(item.produk),
-                              padding: const EdgeInsets.all(4),
-                              constraints: const BoxConstraints(
-                                minWidth: 36,
-                                minHeight: 36,
+                            Text(
+                              formatRupiah.format(subtotal),
+                              style: const TextStyle(
+                                fontSize: 16,
+                                fontWeight: FontWeight.bold,
+                                color: Colors.orange,
                               ),
                             ),
                           ],
                         ),
-                      ),
-                      
-                      // Subtotal
-                      Column(
-                        crossAxisAlignment: CrossAxisAlignment.end,
-                        children: [
-                          Text(
-                            'Subtotal',
-                            style: TextStyle(
-                              fontSize: 10,
-                              color: Colors.grey.shade500,
-                            ),
-                          ),
-                          Text(
-                            formatRupiah.format(subtotal),
-                            style: const TextStyle(
-                              fontSize: 16,
-                              fontWeight: FontWeight.bold,  
-                              color: Colors.orange,
-                            ),
-                          ),
-                        ],
-                      ),
-                    ],
-                  ),
-                ],
+                      ],
+                    ),
+                  ],
+                ),
               ),
-            ),
-          ],
+            ],
+          ),
         ),
       ),
-    ),
-  );
-}
-  
-  Widget _buildSimpleImage(String gambarPath) {
-  try {
-    if (gambarPath.startsWith('http')) {
-      return Image.network(
-        gambarPath,
-        fit: BoxFit.cover,
-        errorBuilder: (context, error, stackTrace) {
-          return _buildPlaceholder();
-        },
-      );
-    } else {
-      return Image.asset(
-        gambarPath,
-        fit: BoxFit.cover,
-        errorBuilder: (context, error, stackTrace) {
-          return _buildPlaceholder();
-        },
-      );
-    }
-  } catch (e) {
-    return _buildPlaceholder();
+    );
   }
-}
 
-Widget _buildPlaceholder() {
-  return Container(
-    color: Colors.grey.shade200,
-    child: const Icon(
-      Icons.fastfood,
-      color: Colors.grey,
-      size: 32,
-    ),
-  );
-}
-  
+  Widget _buildSimpleImage(String gambarPath) {
+    try {
+      if (gambarPath.startsWith('http')) {
+        return Image.network(
+          gambarPath,
+          fit: BoxFit.cover,
+          errorBuilder: (context, error, stackTrace) {
+            return _buildPlaceholder();
+          },
+        );
+      } else {
+        return Image.asset(
+          gambarPath,
+          fit: BoxFit.cover,
+          errorBuilder: (context, error, stackTrace) {
+            return _buildPlaceholder();
+          },
+        );
+      }
+    } catch (e) {
+      return _buildPlaceholder();
+    }
+  }
+
+  Widget _buildPlaceholder() {
+    return Container(
+      color: Colors.grey.shade200,
+      child: const Icon(Icons.fastfood, color: Colors.grey, size: 32),
+    );
+  }
 }

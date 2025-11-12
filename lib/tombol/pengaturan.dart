@@ -5,6 +5,7 @@ import 'package:menu_makanan/main.dart';
 import 'package:provider/provider.dart';
 import 'package:menu_makanan/providers/theme_provider.dart';
 import '../halaman_webview.dart';
+import 'package:go_router/go_router.dart';
 
 class HalamanPengaturan extends StatefulWidget {
   final String email;
@@ -30,7 +31,8 @@ class _HalamanPengaturanState extends State<HalamanPengaturan> {
             TextButton(
               onPressed: () {
                 Navigator.of(context).pop();
-                Navigator.pushReplacementNamed(context, '/login');
+                // Replace stack and go to login
+                context.goNamed('login');
               },
               child: const Text('Keluar'),
             ),
@@ -67,18 +69,15 @@ class _HalamanPengaturanState extends State<HalamanPengaturan> {
                     Icons.security_outlined,
                     color: Colors.orange,
                   ),
-                  title: const Text ("Status Keamanan"),
+                  title: const Text("Status Keamanan"),
                   onTap: () {
-                    Navigator.push(
-                      context,
-                      MaterialPageRoute(
-                        builder: (context) => const HalamanWebView(
-                          title: "Status Keamanan",
-                          // Ganti dengan URL asli milikmu
-                          url:
-                          "https://drive.google.com/drive/folders/1YUHXOt886dwnQr8IpQN9u4GtCKXp5PL_?usp=sharing",
-                        ),
-                      ),
+                    context.pushNamed(
+                      'webview',
+                      extra: {
+                        'title': 'Status Keamanan',
+                        'url':
+                            'https://drive.google.com/drive/folders/1YUHXOt886dwnQr8IpQN9u4GtCKXp5PL_?usp=sharing',
+                      },
                     );
                   },
                 ),
@@ -94,8 +93,8 @@ class _HalamanPengaturanState extends State<HalamanPengaturan> {
                     color: Colors.orange,
                   ),
                   title: const Text("Profil"),
-                  onTap:(){
-                    Navigator.pushNamed(context, '/profil');  
+                  onTap: () {
+                    context.pushNamed('profil', extra: {'email': widget.email});
                   },
                 ),
                 ListTile(
@@ -105,11 +104,9 @@ class _HalamanPengaturanState extends State<HalamanPengaturan> {
                   ),
                   title: const Text("Riwayat Transaksi"),
                   onTap: () {
-                    Navigator.push(
-                      context,
-                      MaterialPageRoute(
-                        builder: (context) => HalamanRiwayat(email: widget.email),
-                      ),
+                    context.pushNamed(
+                      'riwayat',
+                      extra: {'email': widget.email},
                     );
                   },
                 ),
@@ -125,18 +122,7 @@ class _HalamanPengaturanState extends State<HalamanPengaturan> {
                   ),
                   title: const Text("About Us"),
                   onTap: () {
-                    Navigator.push(
-                      context,
-                      animatedRoute(const AboutUs(), direction: AxisDirection.down),
-                      /*MaterialPageRoute(
-                        builder: (context) => const HalamanWebView(
-                          title: "About Us",
-                          // Ganti dengan URL asli milikmu
-                          url:
-                          "https://drive.google.com/drive/folders/1YUHXOt886dwnQr8IpQN9u4GtCKXp5PL_?usp=sharing",
-                        ),
-                      ),*/
-                    );
+                    context.pushNamed('about');
                   },
                 ),
                 ListTile(
@@ -144,7 +130,7 @@ class _HalamanPengaturanState extends State<HalamanPengaturan> {
                     Icons.exit_to_app_rounded,
                     color: Colors.orange,
                   ),
-                  title: const Text ("Tentang Aplikasi"),
+                  title: const Text("Tentang Aplikasi"),
                   onTap: _tentangaplikasi,
                 ),
                 ListTile(
@@ -152,7 +138,7 @@ class _HalamanPengaturanState extends State<HalamanPengaturan> {
                     Icons.exit_to_app_rounded,
                     color: Colors.orange,
                   ),
-                  title: const Text ("Keluar"),
+                  title: const Text("Keluar"),
                   onTap: _logout,
                 ),
               ],
@@ -173,14 +159,13 @@ class _HalamanPengaturanState extends State<HalamanPengaturan> {
         const Padding(
           padding: EdgeInsets.only(top: 15),
           child: Text(
-              'Aplikasi Menu Makanan adalah platform yang menyediakan berbagai pilihan menu makanan lezat dan bergizi untuk memenuhi kebutuhan kuliner Anda.'),
+            'Aplikasi Menu Makanan adalah platform yang menyediakan berbagai pilihan menu makanan lezat dan bergizi untuk memenuhi kebutuhan kuliner Anda.',
+          ),
         ),
       ],
     );
   }
-
 }
-
 
 class _SingleSection extends StatelessWidget {
   final String? title;

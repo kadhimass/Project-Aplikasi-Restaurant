@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:menu_makanan/halaman_buktitransaksi.dart';
+import 'package:go_router/go_router.dart';
 import 'package:intl/intl.dart';
 import 'package:provider/provider.dart';
 import 'package:menu_makanan/providers/transaction_provider.dart';
@@ -17,7 +18,7 @@ class _HalamanRiwayatState extends State<HalamanRiwayat> {
   Widget build(BuildContext context) {
     final transactionProvider = Provider.of<TransactionProvider>(context);
     final transactions = transactionProvider.transactionsForUser(widget.email);
-    final formatRupiah  = NumberFormat.currency(
+    final formatRupiah = NumberFormat.currency(
       locale: 'id_ID',
       symbol: 'Rp',
       decimalDigits: 0,
@@ -32,9 +33,7 @@ class _HalamanRiwayatState extends State<HalamanRiwayat> {
         ),
       ),
       body: transactions.isEmpty
-          ? const Center(
-              child: Text('Belum ada riwayat transaksi.'),
-            )
+          ? const Center(child: Text('Belum ada riwayat transaksi.'))
           : ListView.builder(
               padding: const EdgeInsets.all(8.0),
               itemCount: transactions.length,
@@ -55,7 +54,9 @@ class _HalamanRiwayatState extends State<HalamanRiwayat> {
                       builder: (BuildContext context) {
                         return AlertDialog(
                           title: const Text("Konfirmasi Hapus"),
-                          content: const Text("Apakah Anda yakin ingin menghapus transaksi ini?"),
+                          content: const Text(
+                            "Apakah Anda yakin ingin menghapus transaksi ini?",
+                          ),
                           actions: <Widget>[
                             TextButton(
                               onPressed: () => Navigator.of(context).pop(false),
@@ -71,9 +72,15 @@ class _HalamanRiwayatState extends State<HalamanRiwayat> {
                     );
                   },
                   onDismissed: (direction) {
-                    transactionProvider.removeTransaction(transaksi.idTransaksi);
+                    transactionProvider.removeTransaction(
+                      transaksi.idTransaksi,
+                    );
                     ScaffoldMessenger.of(context).showSnackBar(
-                      SnackBar(content: Text('Transaksi ${transaksi.idTransaksi} dihapus')),
+                      SnackBar(
+                        content: Text(
+                          'Transaksi ${transaksi.idTransaksi} dihapus',
+                        ),
+                      ),
                     );
                   },
                   child: Card(
@@ -81,24 +88,26 @@ class _HalamanRiwayatState extends State<HalamanRiwayat> {
                     elevation: 2,
                     child: ListTile(
                       onTap: () {
-                        Navigator.push(
-                          context,
-                          MaterialPageRoute(
-                            builder: (context) => HalamanBuktiTransaksi(
-                              keranjang: transaksi.keranjang,
-                              email: transaksi.email,
-                              idTransaksi: transaksi.idTransaksi,
-                              waktuTransaksi: transaksi.waktuTransaksi,
-                            ),
-                          ),
+                        context.pushNamed(
+                          'bukti',
+                          extra: {
+                            'keranjang': transaksi.keranjang,
+                            'email': transaksi.email,
+                            'idTransaksi': transaksi.idTransaksi,
+                            'waktuTransaksi': transaksi.waktuTransaksi,
+                          },
                         );
                       },
                       title: Text('ID Transaksi: ${transaksi.idTransaksi}'),
                       subtitle: Column(
                         crossAxisAlignment: CrossAxisAlignment.start,
                         children: [
-                          Text('Tanggal: ${DateFormat('dd MMMM yyyy, HH:mm').format(transaksi.waktuTransaksi)}'),
-                          Text('Total: ${formatRupiah.format(transaksi.keranjang.totalHarga)}'),
+                          Text(
+                            'Tanggal: ${DateFormat('dd MMMM yyyy, HH:mm').format(transaksi.waktuTransaksi)}',
+                          ),
+                          Text(
+                            'Total: ${formatRupiah.format(transaksi.keranjang.totalHarga)}',
+                          ),
                         ],
                       ),
                       trailing: const Icon(Icons.arrow_forward_ios),

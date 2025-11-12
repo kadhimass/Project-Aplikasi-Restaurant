@@ -1,6 +1,7 @@
 import 'package:menu_makanan/halaman_login.dart';
 import 'package:flutter/material.dart';
 import 'main.dart';
+import 'package:go_router/go_router.dart';
 
 class HalamanLupaPassword extends StatefulWidget {
   const HalamanLupaPassword({super.key});
@@ -73,10 +74,7 @@ class _HalamanLupaPasswordState extends State<HalamanLupaPassword> {
       bottomText: "Ingat kata sandi Anda?",
       bottomButtonText: "Kembali Login",
       onBottomButtonPressed: () {
-        Navigator.push(
-          context,
-          animatedRoute(const HalamanLogin(), direction: AxisDirection.right),
-        );
+        context.pushNamed('login');
       },
     );
   }

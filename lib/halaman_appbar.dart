@@ -2,12 +2,14 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:intl/intl.dart';
 import 'package:menu_makanan/bloc/cart_bloc.dart';
+import 'package:menu_makanan/bloc/cart_event.dart';
 import 'package:menu_makanan/bloc/cart_state.dart';
 import 'package:menu_makanan/halaman_beranda.dart';
 import 'package:menu_makanan/halaman_keranjang.dart';
-import 'package:menu_makanan/model/keranjang.dart';
+// Keranjang model now taken from CartBloc state; no direct import needed here
 import 'package:menu_makanan/tombol/profil.dart';
 import 'package:menu_makanan/tombol/pengaturan.dart';
+import 'package:go_router/go_router.dart';
 
 class MainScreen extends StatefulWidget {
   final String email;
@@ -19,7 +21,7 @@ class MainScreen extends StatefulWidget {
 
 class _MainScreenState extends State<MainScreen> {
   int _selectedIndex = 0;
-  final Keranjang _keranjang = Keranjang();
+  // Keranjang lokal dihapus — gunakan CartBloc untuk menyimpan state keranjang
   final formatRupiah = NumberFormat.currency(
     locale: 'id_ID',
     symbol: 'Rp',
@@ -46,10 +48,9 @@ class _MainScreenState extends State<MainScreen> {
   }
 
   void _addToCart(produk) {
-    setState(() {
-      _keranjang.tambahItem(produk);
-      _showSnackBar('${produk.nama} ditambahkan ke keranjang!', Colors.green);
-    });
+    // Gunakan CartBloc untuk menambah item agar state terpusat
+    context.read<CartBloc>().add(AddToCart(produk));
+    _showSnackBar('${produk.nama} ditambahkan ke keranjang!', Colors.green);
   }
 
   void _showSnackBar(String message, Color color) {
@@ -63,9 +64,8 @@ class _MainScreenState extends State<MainScreen> {
   }
 
   void _kosongkanKeranjang() {
-    setState(() {
-      _keranjang.kosongkan();
-    });
+    // Kosongkan melalui CartBloc sehingga semua listener ter-update
+    context.read<CartBloc>().add(ClearCart());
     _showSnackBar('Keranjang berhasil dikosongkan!', Colors.orange);
   }
 
@@ -90,7 +90,7 @@ class _MainScreenState extends State<MainScreen> {
             TextButton(
               onPressed: () {
                 Navigator.of(context).pop();
-                Navigator.pushReplacementNamed(context, '/login');
+                context.goNamed('login');
               },
               child: const Text('Keluar'),
             ),
@@ -217,10 +217,13 @@ class _MainScreenState extends State<MainScreen> {
 
   @override
   Widget build(BuildContext context) {
+    // Ambil keranjang dari Bloc agar UI selalu sinkron
+    final keranjangDariBloc = context.watch<CartBloc>().state.keranjang;
+
     // Definisikan halaman di sini agar selalu mendapatkan data terbaru
     final List<Widget> pages = [
       HalamanBeranda(
-        keranjang: _keranjang,
+        keranjang: keranjangDariBloc,
         email: widget.email,
         onAddToCart: _addToCart,
       ),

@@ -57,6 +57,7 @@ dependencies:
   shared_preferences: ^2.2.3
   flutter_side_menu: ^0.5.41
   pull_down_button: ^0.9.3
+  go_router: ^7.0.1
 
 
 dev_dependencies:
@@ -106,6 +107,11 @@ flutter:
     - assets/Pana Cotta Mangga.jpg
     - assets/Classic Rib-Eye Steak.jpg
     - assets/pann cotta.jpg
+    - assets/spaghetti carbonara.jpg
+    - assets/puding gyukaku.jpg
+    - assets/French fries.jpg
+    - assets/caffe latte.jpg
+
   #fonts:
    # - family: Poppin-Regular
     #  fonts:

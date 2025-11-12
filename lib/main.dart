@@ -2,6 +2,11 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:menu_makanan/bloc/cart_bloc.dart';
 import 'package:menu_makanan/halaman_beranda.dart';
+import 'package:menu_makanan/halaman_detailproduk.dart';
+import 'package:menu_makanan/halaman_buktitransaksi.dart';
+import 'package:menu_makanan/halaman_webview.dart';
+import 'package:menu_makanan/halaman_about_us.dart';
+import 'package:menu_makanan/halaman_riwayat.dart';
 import 'package:menu_makanan/model/keranjang.dart';
 import 'package:menu_makanan/model/produk.dart';
 import 'package:menu_makanan/tombol/profil.dart';
@@ -15,6 +20,7 @@ import 'package:menu_makanan/providers/theme_provider.dart';
 import 'package:menu_makanan/providers/transaction_provider.dart';
 import 'package:intl/date_symbol_data_local.dart';
 import 'package:sizer/sizer.dart';
+import 'package:go_router/go_router.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
@@ -23,13 +29,13 @@ void main() async {
     Sizer(
       builder: (context, orientation, deviceType) {
         return MultiBlocProvider(
-          providers: [
-            BlocProvider(create: (context) => CartBloc()),
-          ],
+          providers: [BlocProvider(create: (context) => CartBloc())],
           child: MultiProvider(
             providers: [
               ChangeNotifierProvider(create: (context) => ThemeProvider()),
-              ChangeNotifierProvider(create: (context) => TransactionProvider()),
+              ChangeNotifierProvider(
+                create: (context) => TransactionProvider(),
+              ),
             ],
             child: const MyApp(),
           ),
@@ -44,9 +50,117 @@ class MyApp extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final GoRouter _router = GoRouter(
+      initialLocation: '/splash',
+      routes: [
+        GoRoute(
+          name: 'splash',
+          path: '/splash',
+          builder: (context, state) => const Loading(),
+        ),
+        GoRoute(
+          name: 'login',
+          path: '/login',
+          builder: (context, state) => const HalamanLogin(),
+        ),
+        GoRoute(
+          name: 'register',
+          path: '/register',
+          builder: (context, state) => const HalamanRegistrasi(),
+        ),
+        GoRoute(
+          name: 'forgot',
+          path: '/forgot',
+          builder: (context, state) => const HalamanLupaPassword(),
+        ),
+        GoRoute(
+          name: 'profil',
+          path: '/profil',
+          builder: (context, state) {
+            final extra = state.extra as Map<String, dynamic>?;
+            final email = extra?['email'] as String? ?? '';
+            return HalamanProfil(email: email);
+          },
+        ),
+        GoRoute(
+          name: 'beranda',
+          path: '/beranda',
+          builder: (context, state) => HalamanBeranda(
+            email: '',
+            keranjang: Keranjang(),
+            onAddToCart: (Produk p1) {},
+          ),
+        ),
+        GoRoute(
+          name: 'riwayat',
+          path: '/riwayat',
+          builder: (context, state) {
+            final extra = state.extra as Map<String, dynamic>?;
+            final email = extra?['email'] as String? ?? '';
+            return HalamanRiwayat(email: email);
+          },
+        ),
+        GoRoute(
+          name: 'detail',
+          path: '/detail',
+          builder: (context, state) {
+            final extra = state.extra as Map<String, dynamic>?;
+            final produk = extra?['produk'] as Produk?;
+            final onTambah = extra?['onTambah'] as VoidCallback?;
+            return HalamanDetail(
+              produk: produk!,
+              onTambahKeKeranjang: onTambah,
+            );
+          },
+        ),
+        GoRoute(
+          name: 'webview',
+          path: '/webview',
+          builder: (context, state) {
+            final extra = state.extra as Map<String, dynamic>?;
+            final title = extra?['title'] as String? ?? '';
+            final url = extra?['url'] as String? ?? '';
+            return HalamanWebView(title: title, url: url);
+          },
+        ),
+        GoRoute(
+          name: 'bukti',
+          path: '/bukti',
+          builder: (context, state) {
+            final extra = state.extra as Map<String, dynamic>?;
+            final keranjang = extra?['keranjang'];
+            final email = extra?['email'] as String? ?? '';
+            final idTransaksi = extra?['idTransaksi'] as String? ?? '';
+            final waktuTransaksi =
+                extra?['waktuTransaksi'] as DateTime? ?? DateTime.now();
+            return HalamanBuktiTransaksi(
+              keranjang: keranjang,
+              email: email,
+              idTransaksi: idTransaksi,
+              waktuTransaksi: waktuTransaksi,
+            );
+          },
+        ),
+        GoRoute(
+          name: 'about',
+          path: '/about',
+          builder: (context, state) => const AboutUs(),
+        ),
+        GoRoute(
+          name: 'main',
+          path: '/main',
+          builder: (context, state) {
+            final extra = state.extra as Map<String, dynamic>?;
+            final email = extra?['email'] as String? ?? '';
+            return MainScreen(email: email);
+          },
+        ),
+      ],
+    );
+
     return Consumer<ThemeProvider>(
       builder: (context, themeProvider, child) {
-        return MaterialApp(
+        return MaterialApp.router(
           debugShowCheckedModeBanner: false,
           title: 'Warung Kita',
           themeMode: themeProvider.themeMode,
@@ -61,26 +175,7 @@ class MyApp extends StatelessWidget {
             brightness: Brightness.dark,
             visualDensity: VisualDensity.adaptivePlatformDensity,
           ),
-          initialRoute: "/splash",
-          routes: {
-            "/splash": (context) => const Loading(),
-            "/login": (context) => const HalamanLogin(),
-            "/register": (context) => const HalamanRegistrasi(),
-            "/forgot": (context) => const HalamanLupaPassword(),
-            "/profil": (context) => const HalamanProfil(email: ''),
-            "/beranda": (context) => HalamanBeranda(
-              email: '',
-              keranjang: Keranjang(),
-              onAddToCart: (Produk p1) {},
-            ),
-            "/main": (context) {
-              final args =
-                  ModalRoute.of(context)!.settings.arguments
-                      as Map<String, dynamic>?;
-              final email = args?['email'] ?? '';
-              return MainScreen(email: email);
-            },
-          },
+          routerConfig: _router,
         );
       },
     );
