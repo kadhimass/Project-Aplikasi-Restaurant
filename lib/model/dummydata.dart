@@ -173,7 +173,7 @@ class DummyData {
       ),
       Makanan(
         id: '16',
-        nama: 'French fries',
+        nama: 'French Fries',
         deskripsi: 'Kentang goreng renyah yang disajikan dengan saus tomat atau mayones.',
         harga: 12000,
         gambar: 'assets/French fries.jpg',
@@ -184,7 +184,7 @@ class DummyData {
       ),
       Minuman(
         id: '17',
-        nama: 'caffe latte',
+        nama: 'Caffe Latte',
         deskripsi: 'minuman kopi susu yang terdiri dari satu atau dua shot espresso, banyak susu panas, dan sedikit busa susu di atasnya.',
         harga: 17000,
         gambar: 'assets/caffe latte.jpg',
@@ -195,7 +195,7 @@ class DummyData {
       ),
       Makanan(
         id: '18',
-        nama: 'spaghetti carbonara',
+        nama: 'Spaghetti Carbonara',
         deskripsi: 'Hidangan pasta klasik Italia yang terbuat dari spaghetti, telur, keju Pecorino Romano, pancetta, dan Lada Hitam.',
         harga: 25000,
         gambar: 'assets/spaghetti carbonara.jpg',
@@ -206,7 +206,7 @@ class DummyData {
       ),
       Makanan(
         id: '19',
-        nama: 'puding gyukaku',
+        nama: 'Pudding Gyukaku',
         deskripsi: 'hidangan penutup populer ala Jepang yang terkenal karena teksturnya yang sangat lembut, creamy, dan seperti meleleh di mulut.',
         harga: 18000,
         gambar: 'assets/puding gyukaku.jpg',

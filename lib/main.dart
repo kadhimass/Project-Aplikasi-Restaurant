@@ -197,9 +197,6 @@ class MyApp extends StatelessWidget {
 
 Map<String, String> fakeDatabase = {};
 
-// ======================================================
-// ANIMATED ROUTE (CUSTOM SLIDE TRANSITION)
-// ======================================================
 Route animatedRoute(
   Widget page, {
   AxisDirection direction = AxisDirection.right,

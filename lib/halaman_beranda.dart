@@ -4,14 +4,12 @@ import 'package:intl/intl.dart';
 import 'package:sizer/sizer.dart';
 import 'package:menu_makanan/bloc/cart_bloc.dart';
 import 'package:menu_makanan/bloc/cart_event.dart';
-import 'package:menu_makanan/bloc/cart_state.dart';
-import 'package:menu_makanan/halaman_detailproduk.dart';
 import 'package:go_router/go_router.dart';
 import 'package:menu_makanan/model/dummydata.dart';
 import 'package:menu_makanan/model/keranjang.dart';
 import 'package:menu_makanan/model/produk.dart';
 
-class HalamanBeranda extends StatelessWidget {
+class HalamanBeranda extends StatefulWidget {
   final Keranjang keranjang;
   final String email;
   final Function(Produk) onAddToCart;
@@ -24,8 +22,53 @@ class HalamanBeranda extends StatelessWidget {
   });
 
   @override
+  State<HalamanBeranda> createState() => _HalamanBerandaState();
+}
+
+class _HalamanBerandaState extends State<HalamanBeranda> {
+  String _searchQuery = '';
+  String _sortOption = 'nama'; // 'nama', 'harga_asc', 'harga_desc', 'rating'
+  final TextEditingController _searchController = TextEditingController();
+
+  @override
+  void dispose() {
+    _searchController.dispose();
+    super.dispose();
+  }
+
+  /// Filter dan sort produk berdasarkan search query dan sort option
+  List<Produk> _getFilteredAndSortedProducts(List<Produk> produkList) {
+    // Filter berdasarkan search query
+    List<Produk> filtered = produkList.where((produk) {
+      return produk.nama.toLowerCase().contains(_searchQuery.toLowerCase()) ||
+          produk.deskripsi.toLowerCase().contains(_searchQuery.toLowerCase());
+    }).toList();
+
+    // Sort berdasarkan pilihan
+    switch (_sortOption) {
+      case 'harga_asc':
+        filtered.sort((a, b) => a.harga.compareTo(b.harga));
+        break;
+      case 'harga_desc':
+        filtered.sort((a, b) => b.harga.compareTo(a.harga));
+        break;
+      case 'rating':
+        filtered.sort((a, b) => b.rating.compareTo(a.rating));
+        break;
+      case 'nama':
+      default:
+        filtered.sort((a, b) => a.nama.compareTo(b.nama));
+        break;
+    }
+
+    return filtered;
+  }
+
+  @override
   Widget build(BuildContext context) {
     List<Produk> produkList = DummyData.getProdukList();
+    List<Produk> filteredProdukList = _getFilteredAndSortedProducts(produkList);
+
     final formatRupiah = NumberFormat.currency(
       locale: 'id_ID',
       symbol: 'Rp',
@@ -52,6 +95,93 @@ class HalamanBeranda extends StatelessWidget {
           ),
         ),
 
+        // Search Box
+        Container(
+          padding: const EdgeInsets.all(12),
+          child: TextField(
+            controller: _searchController,
+            onChanged: (value) {
+              setState(() {
+                _searchQuery = value;
+              });
+            },
+            decoration: InputDecoration(
+              hintText: 'Cari produk...',
+              prefixIcon: const Icon(Icons.search),
+              suffixIcon: _searchQuery.isNotEmpty
+                  ? IconButton(
+                      icon: const Icon(Icons.clear),
+                      onPressed: () {
+                        _searchController.clear();
+                        setState(() {
+                          _searchQuery = '';
+                        });
+                      },
+                    )
+                  : null,
+              border: OutlineInputBorder(
+                borderRadius: BorderRadius.circular(8),
+              ),
+              contentPadding: const EdgeInsets.symmetric(
+                horizontal: 12,
+                vertical: 8,
+              ),
+            ),
+          ),
+        ),
+
+        // Sort Dropdown
+        Container(
+          padding: const EdgeInsets.all(12),
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              const Text(
+                'Urutkan:',
+                style: TextStyle(fontWeight: FontWeight.w500, fontSize: 14),
+              ),
+              const SizedBox(height: 8),
+              Container(
+                width: double.infinity,
+                height:
+                    48, // Fixed height agar tidak bergeser saat dropdown dibuka
+                decoration: BoxDecoration(
+                  border: Border.all(color: Colors.grey.shade400),
+                  borderRadius: BorderRadius.circular(4),
+                ),
+                child: DropdownButton<String>(
+                  value: _sortOption,
+                  isExpanded: true,
+                  underline: const SizedBox(), // Hapus underline bawaan
+                  padding: const EdgeInsets.symmetric(horizontal: 12),
+                  items: const [
+                    DropdownMenuItem(value: 'nama', child: Text('Nama (A-Z)')),
+                    DropdownMenuItem(
+                      value: 'harga_asc',
+                      child: Text('Harga (Terendah)'),
+                    ),
+                    DropdownMenuItem(
+                      value: 'harga_desc',
+                      child: Text('Harga (Tertinggi)'),
+                    ),
+                    DropdownMenuItem(
+                      value: 'rating',
+                      child: Text('Rating (Tertinggi)'),
+                    ),
+                  ],
+                  onChanged: (value) {
+                    if (value != null) {
+                      setState(() {
+                        _sortOption = value;
+                      });
+                    }
+                  },
+                ),
+              ),
+            ],
+          ),
+        ),
+
         // Daftar produk dengan layout responsif
         Expanded(
           child: LayoutBuilder(
@@ -60,16 +190,16 @@ class HalamanBeranda extends StatelessWidget {
               final isMobile = screenWidth < 600;
 
               if (isMobile) {
-                // MOBILE: Setiap baris 5 kolom, scroll vertikal untuk baris berikutnya
+                // MOBILE: Grid 2 kolom
                 return _buildMobileVerticalScroll(
-                  produkList,
+                  filteredProdukList,
                   formatRupiah,
                   context,
                 );
               } else {
                 // DESKTOP/TABLET: Grid traditional
                 return _buildDesktopLayout(
-                  produkList,
+                  filteredProdukList,
                   formatRupiah,
                   context,
                   screenWidth,
@@ -199,7 +329,10 @@ class HalamanBeranda extends StatelessWidget {
       onTap: () {
         context.pushNamed(
           'detail',
-          extra: {'produk': produk, 'onTambah': () => onAddToCart(produk)},
+          extra: {
+            'produk': produk,
+            'onTambah': () => widget.onAddToCart(produk),
+          },
         );
       },
       child: Card(
@@ -331,7 +464,10 @@ class HalamanBeranda extends StatelessWidget {
       onTap: () {
         context.pushNamed(
           'detail',
-          extra: {'produk': produk, 'onTambah': () => onAddToCart(produk)},
+          extra: {
+            'produk': produk,
+            'onTambah': () => widget.onAddToCart(produk),
+          },
         );
       },
       child: Card(

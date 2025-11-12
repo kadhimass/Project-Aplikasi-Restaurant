@@ -31,14 +31,80 @@
 
   <title>menu_makanan</title>
   <link rel="manifest" href="manifest.json">
-  <!--
-    Add your Google Maps JavaScript API key here for web builds.
-    Get an API key at: https://developers.google.com/maps/documentation/javascript/get-api-key
-    Replace YOUR_API_KEY_HERE with your key. Do NOT commit your production API key to source control.
-  -->
-  <script src="https://maps.googleapis.com/maps/api/js?key=YOUR_API_KEY_HERE"></script>
+  <!-- Maps loader: the full loader runs from the body to ensure Flutter bootstraps only after
+       the Maps script load attempt completes (see bottom of file). -->
 </head>
 <body>
-  <script src="flutter_bootstrap.js" async></script>
+  <!-- flutter_bootstrap.js will be loaded after the Maps script load attempt completes
+       (either onload or onerror). This prevents a race where Flutter initializes and
+       tries to access `window.google.maps` before the Maps JS has finished loading. -->
+  <script>
+    (function () {
+      function appendFlutterBootstrap() {
+        try {
+          var fb = document.createElement('script');
+          fb.src = 'flutter_bootstrap.js';
+          fb.async = true;
+          document.body.appendChild(fb);
+        } catch (e) {
+          console.error('Failed to append flutter_bootstrap.js', e);
+        }
+      }
+
+      function createGoogleMapsStub() {
+        try {
+          // Minimal stub so code checking window.google.maps doesn't throw.
+          // This prevents a hard crash during Flutter bootstrap when Maps isn't available.
+          window.google = window.google || {};
+          if (!window.google.maps) {
+            window.google.maps = {};
+          }
+        } catch (e) {
+          // ignore
+        }
+      }
+
+      function insertMapsScript(key, cb) {
+        if (!key) {
+          // No key provided — create a stub and continue loading the app so it can show meaningful errors
+          createGoogleMapsStub();
+          if (typeof cb === 'function') cb();
+          return;
+        }
+        var s = document.createElement('script');
+        s.src = 'https://maps.googleapis.com/maps/api/js?key=' + encodeURIComponent(key) + '&libraries=places';
+        s.async = true;
+        s.onload = function () {
+          if (typeof cb === 'function') cb();
+        };
+        s.onerror = function () {
+          // Maps failed to load (network, key, or config issue). Create a safe stub so
+          // Flutter code that checks `window.google.maps` won't crash, then continue.
+          createGoogleMapsStub();
+          if (typeof cb === 'function') cb();
+        };
+        document.head.appendChild(s);
+      }
+
+      // Try to load a local key file if available. The file should set window.GOOGLE_MAPS_API_KEY.
+      var head = document.getElementsByTagName('head')[0];
+      var script = document.createElement('script');
+      script.src = 'google_maps_key.js';
+      script.onload = function () {
+        try {
+          insertMapsScript(window.GOOGLE_MAPS_API_KEY, appendFlutterBootstrap);
+        } catch (e) {
+          console.warn('Failed to insert Maps script after loading local key file', e);
+          appendFlutterBootstrap();
+        }
+      };
+      script.onerror = function () {
+        // Local key file not found — continue loading the Flutter app so the UI can show guidance/errors.
+        console.info('No local google_maps_key.js found. Maps API will not load until a valid key is provided.');
+        appendFlutterBootstrap();
+      };
+      head.appendChild(script);
+    })();
+  </script>
 </body>
 </html>

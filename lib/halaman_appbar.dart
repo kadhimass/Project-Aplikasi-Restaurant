@@ -112,54 +112,62 @@ class _MainScreenState extends State<MainScreen> {
                     _selectedIndex = 1; // Pindah ke tab keranjang
                   });
                 },
-                child: Row(
-                  children: [
-                    Stack(
-                      children: [
-                        IconButton(
-                          icon: const Icon(Icons.shopping_cart),
-                          onPressed: () {
-                            setState(() {
-                              _selectedIndex = 1; // Pindah ke tab keranjang
-                            });
-                          },
-                          tooltip: 'Keranjang Belanja',
-                        ),
-                        if (state.keranjang.totalItem > 0)
-                          Positioned(
-                            right: 0,
-                            top: 0,
-                            child: Container(
-                              padding: const EdgeInsets.all(2),
-                              decoration: BoxDecoration(
-                                color: Colors.red,
-                                borderRadius: BorderRadius.circular(10),
-                              ),
-                              constraints: const BoxConstraints(
-                                minWidth: 14,
-                                minHeight: 14,
-                              ),
-                              child: Text(
-                                state.keranjang.totalItem.toString(),
-                                style: const TextStyle(
-                                  color: Colors.white,
-                                  fontSize: 8,
+                child: Padding(
+                  padding: const EdgeInsets.only(right: 8.0),
+                  child: Row(
+                    mainAxisSize: MainAxisSize.min,
+                    mainAxisAlignment: MainAxisAlignment.end,
+                    children: [
+                      Stack(
+                        children: [
+                          IconButton(
+                            icon: const Icon(Icons.shopping_cart),
+                            onPressed: () {
+                              setState(() {
+                                _selectedIndex = 1; // Pindah ke tab keranjang
+                              });
+                            },
+                            tooltip: 'Keranjang Belanja',
+                          ),
+                          if (state.keranjang.totalItem > 0)
+                            Positioned(
+                              right: 0,
+                              top: 0,
+                              child: Container(
+                                padding: const EdgeInsets.all(2),
+                                decoration: BoxDecoration(
+                                  color: Colors.red,
+                                  borderRadius: BorderRadius.circular(10),
                                 ),
-                                textAlign: TextAlign.center,
+                                constraints: const BoxConstraints(
+                                  minWidth: 14,
+                                  minHeight: 14,
+                                ),
+                                child: Text(
+                                  state.keranjang.totalItem.toString(),
+                                  style: const TextStyle(
+                                    color: Colors.white,
+                                    fontSize: 8,
+                                  ),
+                                  textAlign: TextAlign.center,
+                                ),
                               ),
                             ),
-                          ),
-                      ],
-                    ),
-                    const SizedBox(width: 2),
-                    Text(
-                      formatRupiah.format(state.keranjang.totalHarga),
-                      style: const TextStyle(
-                        fontSize: 12,
-                        fontWeight: FontWeight.bold,
+                        ],
                       ),
-                    ),
-                  ],
+                      const SizedBox(width: 4),
+                      Flexible(
+                        child: Text(
+                          formatRupiah.format(state.keranjang.totalHarga),
+                          style: const TextStyle(
+                            fontSize: 12,
+                            fontWeight: FontWeight.bold,
+                          ),
+                          overflow: TextOverflow.ellipsis,
+                        ),
+                      ),
+                    ],
+                  ),
                 ),
               );
             case 1: // Halaman Keranjang

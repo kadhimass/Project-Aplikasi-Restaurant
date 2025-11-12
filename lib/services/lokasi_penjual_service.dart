@@ -3,8 +3,6 @@ import 'dart:math' as math;
 
 // Service untuk data lokasi penjual
 class LokasiPenjualService {
-  // Dummy data lokasi penjual (dalam produksi, ambil dari API backend)
-  // Anda bisa mengganti ini dengan API call ke server Anda
 
   static final List<LokasiPenjual> _dummyLokasiPenjual = [
     LokasiPenjual(

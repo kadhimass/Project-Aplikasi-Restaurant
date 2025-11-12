@@ -147,7 +147,7 @@ class _LoadingState extends State<Loading> with SingleTickerProviderStateMixin {
 
                     // Credit text dengan font size lebih kecil untuk mobile
                     Text(
-                      'By Qolbun Halim Hidayatulloh\n24111814065',
+                      'Dibuat Oleh Kelompok 4',
                       textAlign: TextAlign.center,
                       style: TextStyle(
                         color: Colors.white70,
