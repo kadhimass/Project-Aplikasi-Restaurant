@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
 import 'package:location/location.dart';
+import 'package:flutter/foundation.dart' show kIsWeb;
 import 'package:menu_makanan/model/lokasi_penjual.dart';
 import 'package:menu_makanan/services/lokasi_penjual_service.dart';
 
@@ -12,7 +13,7 @@ class HalamanLokasi extends StatefulWidget {
 }
 
 class _HalamanLokasiState extends State<HalamanLokasi> {
-  late GoogleMapController mapController;
+  GoogleMapController? mapController;
   final Location _location = Location();
 
   Set<Marker> markers = {};
@@ -26,7 +27,10 @@ class _HalamanLokasiState extends State<HalamanLokasi> {
   void initState() {
     super.initState();
     _loadLokasiPenjual();
-    _requestLocationPermission();
+    // Only request device location on mobile/desktop — skip on web
+    if (!kIsWeb) {
+      _requestLocationPermission();
+    }
   }
 
   Future<void> _requestLocationPermission() async {
@@ -415,7 +419,8 @@ class _HalamanLokasiState extends State<HalamanLokasi> {
 
   @override
   void dispose() {
-    mapController.dispose();
+    // Dispose controller if initialized
+    mapController?.dispose();
     super.dispose();
   }
 }
