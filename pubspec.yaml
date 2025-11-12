@@ -45,6 +45,9 @@ dependencies:
   flutter_lints: ^6.0.0
   flutter_screenutil: ^5.8.4
   sizer: ^2.0.15
+  google_maps_flutter: ^2.8.0
+  location: ^6.0.2
+  http: ^1.1.0
   google_fonts: ^6.0.0
   animated_rating_stars: ^1.0.1
   webview_flutter: ^4.7.0
