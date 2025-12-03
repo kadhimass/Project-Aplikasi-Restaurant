@@ -5,6 +5,7 @@ import 'package:menu_makanan/router/app_router.dart';
 import 'package:provider/provider.dart';
 import 'package:menu_makanan/providers/theme_provider.dart';
 import 'package:menu_makanan/providers/transaction_provider.dart';
+import 'package:menu_makanan/providers/payment_provider.dart';
 import 'package:intl/date_symbol_data_local.dart';
 import 'package:sizer/sizer.dart';
 import 'package:go_router/go_router.dart';
@@ -23,6 +24,7 @@ void main() async {
               ChangeNotifierProvider(
                 create: (context) => TransactionProvider(),
               ),
+              ChangeNotifierProvider(create: (context) => PaymentProvider()),
             ],
             child: const MyApp(),
           ),

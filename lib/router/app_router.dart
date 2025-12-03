@@ -96,11 +96,13 @@ GoRouter createAppRouter() {
           final idTransaksi = extra?['idTransaksi'] as String? ?? '';
           final waktuTransaksi =
               extra?['waktuTransaksi'] as DateTime? ?? DateTime.now();
+          final metodePembayaran = extra?['metodePembayaran'] as String?;
           return HalamanBuktiTransaksi(
             keranjang: keranjang,
             email: email,
             idTransaksi: idTransaksi,
             waktuTransaksi: waktuTransaksi,
+            metodePembayaran: metodePembayaran,
           );
         },
       ),

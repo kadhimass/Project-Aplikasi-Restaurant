@@ -9,6 +9,7 @@ import 'package:menu_makanan/model/keranjang.dart';
 import 'package:menu_makanan/model/produk.dart';
 import 'package:provider/provider.dart';
 import 'package:menu_makanan/providers/transaction_provider.dart';
+import 'package:menu_makanan/pages/payment_method_page.dart';
 import 'package:menu_makanan/model/transaksi.dart';
 
 class HalamanKeranjang extends StatefulWidget {
@@ -62,7 +63,7 @@ class _HalamanKeranjangState extends State<HalamanKeranjang> {
     );
   }
 
-  // Fungsi checkout - MOBILE OPTIMIZED
+  // Fungsi checkout - buka pilihan metode pembayaran
   void _bayar() {
     final cartState = context.read<CartBloc>().state;
     if (cartState.keranjang.totalItem == 0) {
@@ -75,143 +76,15 @@ class _HalamanKeranjangState extends State<HalamanKeranjang> {
       return;
     }
 
-    showDialog(
-      context: context,
-      builder: (BuildContext context) {
-        return Dialog(
-          shape: RoundedRectangleBorder(
-            borderRadius: BorderRadius.circular(20),
-          ),
-          child: Container(
-            padding: const EdgeInsets.all(20),
-            child: Column(
-              mainAxisSize: MainAxisSize.min,
-              children: [
-                // Header
-                Container(
-                  padding: const EdgeInsets.all(16),
-                  decoration: BoxDecoration(
-                    color: Colors.orange.shade50,
-                    borderRadius: BorderRadius.circular(12),
-                  ),
-                  child: Row(
-                    children: [
-                      Icon(
-                        Icons.shopping_cart_checkout,
-                        color: Colors.orange,
-                        size: 28,
-                      ),
-                      SizedBox(width: 12),
-                      Expanded(
-                        child: Text(
-                          'Konfirmasi Pembayaran',
-                          style: TextStyle(
-                            fontSize: 18,
-                            fontWeight: FontWeight.bold,
-                            color: Colors.orange.shade800,
-                          ),
-                        ),
-                      ),
-                    ],
-                  ),
-                ),
-                const SizedBox(height: 20),
+    // Kirimkan objek Keranjang langsung ke halaman pembayaran
+    final keranjangSaatIni = cartState.keranjang;
 
-                // Ringkasan harga
-                _buildMobileSummaryRow(
-                  'Subtotal',
-                  cartState.keranjang.totalHarga,
-                ),
-
-                if (cartState.keranjang.dapatDiskon)
-                  _buildMobileSummaryRow(
-                    'Diskon',
-                    -cartState.keranjang.jumlahDiskon,
-                    isDiscount: true,
-                  ),
-
-                const Divider(height: 20),
-
-                _buildMobileSummaryRow(
-                  'Total',
-                  cartState.keranjang.hargaSetelahDiskon,
-                  isTotal: true,
-                ),
-
-                if (cartState.keranjang.dapatDiskon) ...[
-                  const SizedBox(height: 12),
-                  Container(
-                    padding: const EdgeInsets.all(12),
-                    decoration: BoxDecoration(
-                      color: Colors.green.shade50,
-                      borderRadius: BorderRadius.circular(10),
-                      border: Border.all(color: Colors.green.shade200),
-                    ),
-                    child: Row(
-                      children: [
-                        Icon(Icons.celebration, color: Colors.green, size: 20),
-                        SizedBox(width: 8),
-                        Expanded(
-                          child: Text(
-                            'Hemat Rp10.000!',
-                            style: TextStyle(
-                              color: Colors.green.shade800,
-                              fontWeight: FontWeight.bold,
-                              fontSize: 14,
-                            ),
-                          ),
-                        ),
-                      ],
-                    ),
-                  ),
-                ],
-
-                const SizedBox(height: 20),
-                Text(
-                  'Lanjutkan pembayaran?',
-                  style: TextStyle(fontSize: 14, color: Colors.grey.shade600),
-                ),
-                const SizedBox(height: 20),
-
-                // Tombol aksi
-                Row(
-                  children: [
-                    Expanded(
-                      child: OutlinedButton(
-                        onPressed: () => Navigator.of(context).pop(),
-                        style: OutlinedButton.styleFrom(
-                          padding: const EdgeInsets.symmetric(vertical: 14),
-                          shape: RoundedRectangleBorder(
-                            borderRadius: BorderRadius.circular(12),
-                          ),
-                        ),
-                        child: const Text('Batal'),
-                      ),
-                    ),
-                    const SizedBox(width: 12),
-                    Expanded(
-                      child: ElevatedButton(
-                        onPressed: () {
-                          Navigator.of(context).pop();
-                          _prosesCheckout();
-                        },
-                        style: ElevatedButton.styleFrom(
-                          backgroundColor: Colors.orange,
-                          padding: const EdgeInsets.symmetric(vertical: 14),
-                          shape: RoundedRectangleBorder(
-                            borderRadius: BorderRadius.circular(12),
-                          ),
-                        ),
-                        child: const Text('Bayar'),
-                      ),
-                    ),
-                  ],
-                ),
-              ],
-            ),
-          ),
-        );
-      },
+    Navigator.push(
+      context,
+      MaterialPageRoute(
+        builder: (_) =>
+            PaymentMethodPage(keranjang: keranjangSaatIni, email: widget.email),
+      ),
     );
   }
 
