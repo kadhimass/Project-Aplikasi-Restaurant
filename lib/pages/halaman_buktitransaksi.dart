@@ -38,7 +38,7 @@ class HalamanBuktiTransaksi extends StatelessWidget {
         leading: IconButton(
           icon: const Icon(Icons.arrow_back),
           onPressed: () {
-            Navigator.of(context).popUntil((route) => route.isFirst);
+            context.goNamed('main', extra: {'email': email});
           },
         ),
       ),

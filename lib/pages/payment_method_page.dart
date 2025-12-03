@@ -18,7 +18,10 @@ class PaymentMethodPage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(title: const Text('Pilih Metode Pembayaran')),
+      appBar: AppBar(
+        title: const Text('Pilih Metode Pembayaran'),
+        automaticallyImplyLeading: true,
+      ),
       body: Consumer<PaymentProvider>(
         builder: (context, paymentProvider, child) {
           return Padding(

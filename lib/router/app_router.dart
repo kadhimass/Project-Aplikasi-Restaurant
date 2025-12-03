@@ -1,4 +1,3 @@
-import 'package:flutter/widgets.dart';
 import 'package:go_router/go_router.dart';
 import 'package:menu_makanan/features/produk/presentation/pages/produk_list_page.dart';
 import 'package:menu_makanan/pages/halaman_login.dart';
@@ -13,6 +12,8 @@ import 'package:menu_makanan/pages/loading.dart';
 import 'package:menu_makanan/pages/halaman_appbar.dart' show MainScreen;
 import 'package:menu_makanan/tombol/profil.dart' show HalamanProfil;
 import 'package:menu_makanan/model/produk.dart';
+import 'package:menu_makanan/pages/payment_method_page.dart';
+import 'package:menu_makanan/pages/order_details_page.dart';
 
 GoRouter createAppRouter() {
   return GoRouter(
@@ -82,6 +83,31 @@ GoRouter createAppRouter() {
           final title = extra?['title'] as String? ?? '';
           final url = extra?['url'] as String? ?? '';
           return HalamanWebView(title: title, url: url);
+        },
+      ),
+      GoRoute(
+        name: 'payment',
+        path: '/payment',
+        builder: (context, state) {
+          final extra = state.extra as Map<String, dynamic>?;
+          final keranjang = extra?['keranjang'];
+          final email = extra?['email'] as String? ?? '';
+          return PaymentMethodPage(keranjang: keranjang, email: email);
+        },
+      ),
+      GoRoute(
+        name: 'order-details',
+        path: '/order-details',
+        builder: (context, state) {
+          final extra = state.extra as Map<String, dynamic>?;
+          final keranjang = extra?['keranjang'];
+          final paymentMethod = extra?['paymentMethod'];
+          final email = extra?['email'] as String? ?? '';
+          return OrderDetailsPage(
+            keranjang: keranjang,
+            paymentMethod: paymentMethod,
+            email: email,
+          );
         },
       ),
       GoRoute(

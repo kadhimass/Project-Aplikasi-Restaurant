@@ -7,7 +7,7 @@ import 'package:menu_makanan/model/keranjang.dart';
 import 'package:menu_makanan/model/transaksi.dart';
 import 'package:menu_makanan/providers/transaction_provider.dart';
 import 'package:provider/provider.dart';
-import 'package:go_router/go_router.dart';
+import 'package:menu_makanan/pages/halaman_buktitransaksi.dart';
 
 class OrderDetailsPage extends StatelessWidget {
   final Keranjang keranjang;
@@ -26,7 +26,10 @@ class OrderDetailsPage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(title: const Text('Detail Pesanan')),
+      appBar: AppBar(
+        title: const Text('Detail Pesanan'),
+        automaticallyImplyLeading: true,
+      ),
       body: Column(
         children: [
           Expanded(
@@ -117,16 +120,18 @@ class OrderDetailsPage extends StatelessWidget {
                   // kosongkan keranjang melalui bloc
                   context.read<CartBloc>().add(ClearCart());
 
-                  // navigate to bukti page (keep bukti page behavior: shows success and allows download)
-                  context.pushNamed(
-                    'bukti',
-                    extra: {
-                      'keranjang': transaksi.keranjang,
-                      'email': transaksi.email,
-                      'idTransaksi': transaksi.idTransaksi,
-                      'waktuTransaksi': transaksi.waktuTransaksi,
-                      'metodePembayaran': paymentMethod.displayName,
-                    },
+                  // navigate to bukti page menggunakan Navigator
+                  Navigator.pushReplacement(
+                    context,
+                    MaterialPageRoute(
+                      builder: (_) => HalamanBuktiTransaksi(
+                        keranjang: transaksi.keranjang,
+                        email: transaksi.email,
+                        idTransaksi: transaksi.idTransaksi,
+                        waktuTransaksi: transaksi.waktuTransaksi,
+                        metodePembayaran: paymentMethod.displayName,
+                      ),
+                    ),
                   );
                 },
                 child: const Text('Konfirmasi Pesanan'),

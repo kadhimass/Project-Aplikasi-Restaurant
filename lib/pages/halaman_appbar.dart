@@ -235,6 +235,17 @@ class _MainScreenState extends State<MainScreen> {
         title: Text(_judulAppBar[_selectedIndex]),
         backgroundColor: Colors.orange,
         automaticallyImplyLeading: false,
+        leading: _selectedIndex != 0
+            ? IconButton(
+                icon: const Icon(Icons.arrow_back),
+                onPressed: () {
+                  setState(() {
+                    _selectedIndex = 0; // Kembali ke beranda
+                  });
+                },
+                tooltip: 'Kembali ke Beranda',
+              )
+            : null,
         actions: _buildAppBarActions(),
       ),
       body: IndexedStack(index: _selectedIndex, children: pages),

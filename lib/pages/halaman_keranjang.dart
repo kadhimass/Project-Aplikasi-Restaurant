@@ -7,11 +7,6 @@ import 'package:menu_makanan/bloc/cart_state.dart';
 import 'package:go_router/go_router.dart';
 import 'package:menu_makanan/model/keranjang.dart';
 import 'package:menu_makanan/model/produk.dart';
-import 'package:provider/provider.dart';
-import 'package:menu_makanan/providers/transaction_provider.dart';
-import 'package:menu_makanan/pages/payment_method_page.dart';
-import 'package:menu_makanan/model/transaksi.dart';
-import 'package:menu_makanan/services/cart_service.dart';
 
 class HalamanKeranjang extends StatefulWidget {
   final String email;
@@ -33,12 +28,6 @@ class _HalamanKeranjangState extends State<HalamanKeranjang> {
   void _tambahItem(Produk produk) {
     context.read<CartBloc>().add(AddToCart(produk));
     _showSnackBar('${produk.nama} ditambahkan!', Colors.green);
-  }
-
-  // Fungsi untuk mengosongkan keranjang
-  void _kosongkanKeranjang() {
-    context.read<CartBloc>().add(ClearCart());
-    _showSnackBar('Keranjang dikosongkan!', Colors.orange);
   }
 
   // Fungsi untuk mengurangi item
@@ -77,46 +66,12 @@ class _HalamanKeranjangState extends State<HalamanKeranjang> {
       return;
     }
 
-    // Kirimkan objek Keranjang langsung ke halaman pembayaran
+    // Kirimkan objek Keranjang langsung ke halaman pembayaran menggunakan go_router
     final keranjangSaatIni = cartState.keranjang;
 
-    Navigator.push(
-      context,
-      MaterialPageRoute(
-        builder: (_) =>
-            PaymentMethodPage(keranjang: keranjangSaatIni, email: widget.email),
-      ),
-    );
-  }
-
-  // Proses checkout menggunakan CartService
-  void _prosesCheckout() {
-    final cartState = context.read<CartBloc>().state;
-
-    // Create transaction menggunakan CartService
-    final newTransaction = CartService.createTransaction(
-      keranjang: cartState.keranjang,
-      email: widget.email,
-    );
-
-    // Add transaction to provider
-    Provider.of<TransactionProvider>(
-      context,
-      listen: false,
-    ).addTransaction(newTransaction);
-
-    // Kosongkan keranjang setelah checkout
-    _kosongkanKeranjang();
-
-    // Navigate to bukti transaksi using go_router
     context.pushNamed(
-      'bukti',
-      extra: {
-        'keranjang': newTransaction.keranjang,
-        'email': newTransaction.email,
-        'idTransaksi': newTransaction.idTransaksi,
-        'waktuTransaksi': newTransaction.waktuTransaksi,
-      },
+      'payment',
+      extra: {'keranjang': keranjangSaatIni, 'email': widget.email},
     );
   }
 

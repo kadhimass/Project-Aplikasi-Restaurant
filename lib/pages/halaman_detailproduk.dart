@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:intl/intl.dart';
-import 'package:menu_makanan/bloc/cart_bloc.dart';
-import 'package:menu_makanan/bloc/cart_event.dart';
+import 'package:menu_makanan/features/cart/presentation/bloc/cart_bloc.dart';
+import 'package:menu_makanan/features/cart/presentation/bloc/cart_event.dart';
 import 'package:menu_makanan/model/produk.dart';
 import 'package:animated_rating_stars/animated_rating_stars.dart';
 import 'package:flutter_rating_bar/flutter_rating_bar.dart';
@@ -50,7 +50,9 @@ class _HalamanDetailState extends State<HalamanDetail> {
       });
       ScaffoldMessenger.of(context).showSnackBar(
         SnackBar(
-          content: Text('Rating berhasil disimpan: ${rating.toStringAsFixed(1)} ⭐'),
+          content: Text(
+            'Rating berhasil disimpan: ${rating.toStringAsFixed(1)} ⭐',
+          ),
           backgroundColor: Colors.green,
           duration: const Duration(seconds: 2),
         ),
@@ -97,178 +99,168 @@ class _HalamanDetailState extends State<HalamanDetail> {
         crossAxisAlignment: CrossAxisAlignment.stretch,
         children: [
           // Gambar Produk
-          Image.asset(
-            widget.produk.gambar,
-            height: 250,
-            fit: BoxFit.cover,
-            errorBuilder: (context, error, stackTrace) {
-              return Container(
-                height: 250,
-                color: Colors.grey[300],
-                child: const Icon(
-                  Icons.fastfood,
-                  color: Colors.grey,
-                  size: 64,
-                ),
-              );
-            },
-          ),
+          _buildProductImage(widget.produk.gambar, 250),
 
           // Detail Produk
           const SizedBox(height: 16),
           Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              // Nama Produk
+              Text(
+                widget.produk.nama,
+                style: const TextStyle(
+                  fontSize: 24,
+                  fontWeight: FontWeight.bold,
+                ),
+              ),
+              const SizedBox(height: 8),
+
+              // Rating Pengguna (Interaktif)
+              Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
-                  // Nama Produk
+                  const Text(
+                    'Beri Rating:',
+                    style: TextStyle(fontSize: 16, fontWeight: FontWeight.w600),
+                  ),
+                  const SizedBox(height: 8),
+                  RatingBar.builder(
+                    initialRating: _userRating ?? 0,
+                    minRating: 0,
+                    direction: Axis.horizontal,
+                    allowHalfRating: true,
+                    itemCount: 5,
+                    itemSize: 40,
+                    itemPadding: const EdgeInsets.symmetric(horizontal: 2.0),
+                    itemBuilder: (context, _) =>
+                        const Icon(Icons.star, color: Colors.amber),
+                    onRatingUpdate: (rating) {
+                      _saveUserRating(rating);
+                    },
+                    glow: true,
+                    glowColor: Colors.amber.withOpacity(0.5),
+                  ),
+                  if (_userRating != null)
+                    Padding(
+                      padding: const EdgeInsets.only(top: 4.0),
+                      child: Text(
+                        'Rating Anda: ${_userRating!.toStringAsFixed(1)} ⭐',
+                        style: TextStyle(
+                          fontSize: 14,
+                          color: Colors.grey.shade700,
+                          fontWeight: FontWeight.w500,
+                        ),
+                      ),
+                    ),
+                ],
+              ),
+              const SizedBox(height: 12),
+
+              // Harga
+              Row(
+                children: [
                   Text(
-                    widget.produk.nama,
+                    formatRupiah.format(widget.produk.harga),
                     style: const TextStyle(
-                      fontSize: 24,
-                      fontWeight: FontWeight.bold,
+                      color: Colors.green,
+                      fontWeight: FontWeight.w600,
+                      fontSize: 20,
                     ),
                   ),
-                  const SizedBox(height: 8),
+                ],
+              ),
+              const SizedBox(height: 16),
 
-                  // Rating Pengguna (Interaktif)
-                  Column(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: [
-                      const Text(
-                        'Beri Rating:',
-                        style: TextStyle(fontSize: 16, fontWeight: FontWeight.w600),
-                      ),
-                      const SizedBox(height: 8),
-                      RatingBar.builder(
-                        initialRating: _userRating ?? 0,
-                        minRating: 0,
-                        direction: Axis.horizontal,
-                        allowHalfRating: true,
-                        itemCount: 5,
-                        itemSize: 40,
-                        itemPadding: const EdgeInsets.symmetric(horizontal: 2.0),
-                        itemBuilder: (context, _) => const Icon(
-                          Icons.star,
-                          color: Colors.amber,
-                        ),
-                        onRatingUpdate: (rating) {
-                          _saveUserRating(rating);
-                        },
-                        glow: true,
-                        glowColor: Colors.amber.withOpacity(0.5),
-                      ),
-                      if (_userRating != null)
-                        Padding(
-                          padding: const EdgeInsets.only(top: 4.0),
-                          child: Text(
-                            'Rating Anda: ${_userRating!.toStringAsFixed(1)} ⭐',
-                            style: TextStyle(
-                              fontSize: 14,
-                              color: Colors.grey.shade700,
-                              fontWeight: FontWeight.w500,
-                            ),
-                          ),
-                        ),
-                    ],
-                  ),
-                  const SizedBox(height: 12),
-                  
-                  // Harga
-                  Row(
-                    children: [
-                      Text(
-                        formatRupiah.format(widget.produk.harga),
-                        style: const TextStyle(
-                          color: Colors.green,
-                          fontWeight: FontWeight.w600,
-                          fontSize: 20,
-                        ),
-                      ),
-                    ],
-                  ),
-                  const SizedBox(height: 16),
+              // Deskripsi
+              const Text(
+                'Deskripsi',
+                style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
+              ),
+              const SizedBox(height: 8),
+              Text(
+                widget.produk.deskripsi,
+                style: const TextStyle(fontSize: 16, height: 1.5),
+              ),
+              const SizedBox(height: 16),
 
-                  // Deskripsi
-                  const Text(
-                    'Deskripsi',
-                    style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
-                  ),
-                  const SizedBox(height: 8),
-                  Text(
-                    widget.produk.deskripsi,
-                    style: const TextStyle(fontSize: 16, height: 1.5),
-                  ),
-                  const SizedBox(height: 16),
+              // Detail Spesifik (Makanan/Minuman)
+              if (widget.produk is Makanan)
+                _buildDetailMakanan(widget.produk as Makanan),
+              if (widget.produk is Minuman)
+                _buildDetailMinuman(widget.produk as Minuman),
+              const SizedBox(height: 24),
 
-                  // Detail Spesifik (Makanan/Minuman)
-                  if (widget.produk is Makanan)
-                    _buildDetailMakanan(widget.produk as Makanan),
-                  if (widget.produk is Minuman)
-                    _buildDetailMinuman(widget.produk as Minuman),
-                  const SizedBox(height: 24),
+              // TOMBOL TAMBAH KE KERANJANG
+              Row(
+                children: [
+                  Expanded(
+                    child: SizedBox(
+                      height: 50,
+                      child: ElevatedButton(
+                        onPressed: () {
+                          try {
+                            // Tambahkan ke CartBloc
+                            context.read<CartBloc>().add(
+                              AddToCart(widget.produk),
+                            );
 
-                  // TOMBOL TAMBAH KE KERANJANG
-                  Row(
-                    children: [
-                      Expanded(
-                        child: SizedBox(
-                          height: 50,
-                          child: ElevatedButton(
-                            onPressed: () {
-                              // Tambahkan ke CartBloc
-                              context.read<CartBloc>().add(
-                                AddToCart(widget.produk),
-                              );
-
-                              // Tampilkan SnackBar
-                              ScaffoldMessenger.of(context).showSnackBar(
-                                SnackBar(
-                                  content: Text(
-                                    '${widget.produk.nama} ditambahkan ke keranjang!',
-                                  ),
-                                  backgroundColor: Colors.green,
-                                  duration: const Duration(seconds: 2),
-                                  action: SnackBarAction(
-                                    label: 'Lihat',
-                                    textColor: Colors.white,
-                                    onPressed: () {
-                                      Navigator.pop(context);
-                                    },
-                                  ),
+                            // Tampilkan SnackBar berhasil
+                            ScaffoldMessenger.of(context).showSnackBar(
+                              SnackBar(
+                                content: Text(
+                                  '${widget.produk.nama} ditambahkan ke keranjang! ✓',
                                 ),
-                              );
+                                backgroundColor: Colors.green,
+                                duration: const Duration(seconds: 2),
+                              ),
+                            );
 
-                              // Kembali ke halaman sebelumnya
-                              Navigator.pop(context);
-                            },
-                            style: ElevatedButton.styleFrom(
-                              backgroundColor: Colors.orange,
-                              foregroundColor: Colors.white,
-                              shape: RoundedRectangleBorder(
-                                borderRadius: BorderRadius.circular(12),
+                            // Kembali ke halaman sebelumnya setelah delay
+                            Future.delayed(
+                              const Duration(milliseconds: 500),
+                              () {
+                                if (mounted) {
+                                  Navigator.pop(context);
+                                }
+                              },
+                            );
+                          } catch (e) {
+                            // Handle error jika ada
+                            ScaffoldMessenger.of(context).showSnackBar(
+                              SnackBar(
+                                content: Text('Gagal menambahkan: $e'),
+                                backgroundColor: Colors.red,
                               ),
-                              elevation: 2,
-                            ),
-                            child: const Text(
-                              'TAMBAH KE KERANJANG',
-                              style: TextStyle(
-                                fontSize: 16,
-                                fontWeight: FontWeight.bold,
-                              ),
-                            ),
+                            );
+                          }
+                        },
+                        style: ElevatedButton.styleFrom(
+                          backgroundColor: Colors.orange,
+                          foregroundColor: Colors.white,
+                          shape: RoundedRectangleBorder(
+                            borderRadius: BorderRadius.circular(12),
+                          ),
+                          elevation: 2,
+                        ),
+                        child: const Text(
+                          'TAMBAH KE KERANJANG',
+                          style: TextStyle(
+                            fontSize: 16,
+                            fontWeight: FontWeight.bold,
                           ),
                         ),
                       ),
-                    ],
+                    ),
                   ),
-                  const SizedBox(height: 8),
                 ],
               ),
               const SizedBox(height: 8),
             ],
-          ), // Close inner Column
-        ], // Close outer Column children
-      ), // Close outer Column
-    ); // Close Padding
+          ),
+        ],
+      ),
+    );
   }
 
   Widget _buildDesktopLayout(NumberFormat formatRupiah, double padding) {
@@ -282,21 +274,7 @@ class _HalamanDetailState extends State<HalamanDetail> {
             flex: 2,
             child: ClipRRect(
               borderRadius: BorderRadius.circular(16),
-              child: Image.asset(
-                widget.produk.gambar,
-                fit: BoxFit.cover,
-                errorBuilder: (context, error, stackTrace) {
-                  return Container(
-                    height: 500,
-                    color: Colors.grey[300],
-                    child: const Icon(
-                      Icons.fastfood,
-                      color: Colors.grey,
-                      size: 64,
-                    ),
-                  );
-                },
-              ),
+              child: _buildProductImage(widget.produk.gambar, 500),
             ),
           ),
           SizedBox(width: padding * 2),
@@ -316,14 +294,17 @@ class _HalamanDetailState extends State<HalamanDetail> {
                     ),
                   ),
                   const SizedBox(height: 16),
-                  
+
                   // User Rating
                   Column(
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
                       const Text(
                         'Beri Rating:',
-                        style: TextStyle(fontSize: 18, fontWeight: FontWeight.w600),
+                        style: TextStyle(
+                          fontSize: 18,
+                          fontWeight: FontWeight.w600,
+                        ),
                       ),
                       const SizedBox(height: 12),
                       RatingBar.builder(
@@ -333,11 +314,11 @@ class _HalamanDetailState extends State<HalamanDetail> {
                         allowHalfRating: true,
                         itemCount: 5,
                         itemSize: 45,
-                        itemPadding: const EdgeInsets.symmetric(horizontal: 4.0),
-                        itemBuilder: (context, _) => const Icon(
-                          Icons.star,
-                          color: Colors.amber,
+                        itemPadding: const EdgeInsets.symmetric(
+                          horizontal: 4.0,
                         ),
+                        itemBuilder: (context, _) =>
+                            const Icon(Icons.star, color: Colors.amber),
                         onRatingUpdate: (rating) {
                           _saveUserRating(rating);
                         },
@@ -359,7 +340,7 @@ class _HalamanDetailState extends State<HalamanDetail> {
                     ],
                   ),
                   const SizedBox(height: 16),
-                  
+
                   // Price
                   Text(
                     formatRupiah.format(widget.produk.harga),
@@ -370,7 +351,7 @@ class _HalamanDetailState extends State<HalamanDetail> {
                     ),
                   ),
                   const SizedBox(height: 24),
-                  
+
                   // Description
                   const Text(
                     'Deskripsi',
@@ -382,34 +363,52 @@ class _HalamanDetailState extends State<HalamanDetail> {
                     style: const TextStyle(fontSize: 16, height: 1.6),
                   ),
                   const SizedBox(height: 24),
-                  
+
                   // Product-specific details
                   if (widget.produk is Makanan)
                     _buildDetailMakanan(widget.produk as Makanan),
                   if (widget.produk is Minuman)
                     _buildDetailMinuman(widget.produk as Minuman),
                   const SizedBox(height: 32),
-                  
+
                   // Add to Cart Button
                   SizedBox(
                     width: double.infinity,
                     height: 56,
                     child: ElevatedButton(
                       onPressed: () {
-                        context.read<CartBloc>().add(AddToCart(widget.produk));
-                        ScaffoldMessenger.of(context).showSnackBar(
-                          SnackBar(
-                            content: Text('${widget.produk.nama} ditambahkan ke keranjang!'),
-                            backgroundColor: Colors.green,
-                            duration: const Duration(seconds: 2),
-                            action: SnackBarAction(
-                              label: 'Lihat',
-                              textColor: Colors.white,
-                              onPressed: () => Navigator.pop(context),
+                        try {
+                          // Tambahkan ke CartBloc
+                          context.read<CartBloc>().add(
+                            AddToCart(widget.produk),
+                          );
+
+                          // Tampilkan SnackBar berhasil
+                          ScaffoldMessenger.of(context).showSnackBar(
+                            SnackBar(
+                              content: Text(
+                                '${widget.produk.nama} ditambahkan ke keranjang! ✓',
+                              ),
+                              backgroundColor: Colors.green,
+                              duration: const Duration(seconds: 2),
                             ),
-                          ),
-                        );
-                        Navigator.pop(context);
+                          );
+
+                          // Kembali ke halaman sebelumnya setelah delay
+                          Future.delayed(const Duration(milliseconds: 500), () {
+                            if (mounted) {
+                              Navigator.pop(context);
+                            }
+                          });
+                        } catch (e) {
+                          // Handle error jika ada
+                          ScaffoldMessenger.of(context).showSnackBar(
+                            SnackBar(
+                              content: Text('Gagal menambahkan: $e'),
+                              backgroundColor: Colors.red,
+                            ),
+                          );
+                        }
                       },
                       style: ElevatedButton.styleFrom(
                         backgroundColor: Colors.orange,
@@ -505,5 +504,40 @@ class _HalamanDetailState extends State<HalamanDetail> {
         ),
       ],
     );
+  }
+
+  Widget _buildProductImage(String imagePath, double height) {
+    // Check if it's a network URL or local asset
+    final isNetworkImage = imagePath.startsWith('http');
+
+    if (isNetworkImage) {
+      // Display network image
+      return Image.network(
+        imagePath,
+        height: height,
+        fit: BoxFit.cover,
+        errorBuilder: (context, error, stackTrace) {
+          return Container(
+            height: height,
+            color: Colors.grey[300],
+            child: const Icon(Icons.fastfood, color: Colors.grey, size: 64),
+          );
+        },
+      );
+    } else {
+      // Display asset image
+      return Image.asset(
+        imagePath,
+        height: height,
+        fit: BoxFit.cover,
+        errorBuilder: (context, error, stackTrace) {
+          return Container(
+            height: height,
+            color: Colors.grey[300],
+            child: const Icon(Icons.fastfood, color: Colors.grey, size: 64),
+          );
+        },
+      );
+    }
   }
 }
