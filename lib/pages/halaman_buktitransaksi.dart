@@ -8,6 +8,7 @@ class HalamanBuktiTransaksi extends StatelessWidget {
   final String email;
   final String idTransaksi;
   final DateTime waktuTransaksi;
+  final String? metodePembayaran;
 
   const HalamanBuktiTransaksi({
     super.key,
@@ -15,6 +16,7 @@ class HalamanBuktiTransaksi extends StatelessWidget {
     required this.email,
     required this.idTransaksi,
     required this.waktuTransaksi,
+    this.metodePembayaran,
   });
 
   @override
@@ -125,6 +127,8 @@ class HalamanBuktiTransaksi extends StatelessWidget {
                     _buildInfoRow('Tanggal', _formatTanggal(waktuTransaksi)),
                     _buildInfoRow('Waktu', _formatWaktu(waktuTransaksi)),
                     _buildInfoRow('Email', email),
+                    if (metodePembayaran != null)
+                      _buildInfoRow('Metode', metodePembayaran!),
                     // Tambahan: Status Diskon
                     _buildInfoRow(
                       'Status Diskon',
