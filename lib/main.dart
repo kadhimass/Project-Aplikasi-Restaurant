@@ -45,6 +45,7 @@ void main() async {
           providers: [
             ChangeNotifierProvider(create: (_) => TransactionProvider()),
             ChangeNotifierProvider(create: (_) => ThemeProvider()),
+            ChangeNotifierProvider(create: (_) => PaymentProvider()),
             BlocProvider(create: (_) => CartBloc(cartRepository: CartRepositoryImpl())),
             BlocProvider(
               create: (_) => ProdukCubit(
@@ -56,10 +57,6 @@ void main() async {
             ),
           ],
           child: const MyApp(),
-              ChangeNotifierProvider(create: (context) => PaymentProvider()),
-            ],
-            child: const MyApp(),
-          ),
         );
       },
     ),
