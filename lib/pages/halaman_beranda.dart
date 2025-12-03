@@ -30,6 +30,7 @@ class HalamanBeranda extends StatefulWidget {
 class _HalamanBerandaState extends State<HalamanBeranda> {
   String _searchQuery = '';
   String _sortOption = 'nama'; // 'nama', 'harga_asc', 'harga_desc', 'rating'
+  String _filterType = 'semua'; // 'semua', 'makanan', 'minuman'
   final TextEditingController _searchController = TextEditingController();
 
   @override
@@ -38,10 +39,20 @@ class _HalamanBerandaState extends State<HalamanBeranda> {
     super.dispose();
   }
 
-  /// Filter dan sort produk berdasarkan search query dan sort option
+  /// Filter dan sort produk berdasarkan search query, tipe (makanan/minuman), dan sort option
   List<Produk> _getFilteredAndSortedProducts(List<Produk> produkList) {
-    // Filter berdasarkan search query
+    // Filter berdasarkan tipe produk (makanan, minuman, atau semua)
     List<Produk> filtered = produkList.where((produk) {
+      if (_filterType == 'makanan') {
+        return produk.runtimeType.toString() == 'Makanan';
+      } else if (_filterType == 'minuman') {
+        return produk.runtimeType.toString() == 'Minuman';
+      }
+      return true; // 'semua'
+    }).toList();
+
+    // Filter berdasarkan search query
+    filtered = filtered.where((produk) {
       return produk.nama.toLowerCase().contains(_searchQuery.toLowerCase()) ||
           produk.deskripsi.toLowerCase().contains(_searchQuery.toLowerCase());
     }).toList();
@@ -135,7 +146,64 @@ class _HalamanBerandaState extends State<HalamanBeranda> {
         // Latest meals from TheMealDB (connected to the same search box)
         MealFromApiWidget(searchQuery: _searchQuery),
 
-        // Sort Dropdown
+        // Filter Tabs (Makanan / Minuman / Semua)
+        Container(
+          padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 8),
+          child: SingleChildScrollView(
+            scrollDirection: Axis.horizontal,
+            child: Row(
+              children: [
+                FilterChip(
+                  label: const Text('Semua'),
+                  selected: _filterType == 'semua',
+                  onSelected: (selected) {
+                    setState(() {
+                      _filterType = 'semua';
+                    });
+                  },
+                  backgroundColor: Colors.grey.shade200,
+                  selectedColor: Colors.orange,
+                  labelStyle: TextStyle(
+                    color: _filterType == 'semua' ? Colors.white : Colors.black,
+                    fontWeight: FontWeight.w500,
+                  ),
+                ),
+                const SizedBox(width: 8),
+                FilterChip(
+                  label: const Text('Makanan'),
+                  selected: _filterType == 'makanan',
+                  onSelected: (selected) {
+                    setState(() {
+                      _filterType = 'makanan';
+                    });
+                  },
+                  backgroundColor: Colors.grey.shade200,
+                  selectedColor: Colors.orange,
+                  labelStyle: TextStyle(
+                    color: _filterType == 'makanan' ? Colors.white : Colors.black,
+                    fontWeight: FontWeight.w500,
+                  ),
+                ),
+                const SizedBox(width: 8),
+                FilterChip(
+                  label: const Text('Minuman'),
+                  selected: _filterType == 'minuman',
+                  onSelected: (selected) {
+                    setState(() {
+                      _filterType = 'minuman';
+                    });
+                  },
+                  backgroundColor: Colors.grey.shade200,
+                  selectedColor: Colors.orange,
+                  labelStyle: TextStyle(
+                    color: _filterType == 'minuman' ? Colors.white : Colors.black,
+                    fontWeight: FontWeight.w500,
+                  ),
+                ),
+              ],
+            ),
+          ),
+        ),
         Container(
           padding: const EdgeInsets.all(12),
           child: Column(
