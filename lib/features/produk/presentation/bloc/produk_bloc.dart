@@ -1,62 +1,54 @@
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:menu_makanan/features/produk/domain/entities/produk_entity.dart';
 import 'package:menu_makanan/features/produk/domain/usecases/get_all_produk_usecase.dart';
+import 'package:menu_makanan/features/produk/domain/usecases/get_all_minuman_usecase.dart';
 import 'package:menu_makanan/features/produk/domain/usecases/search_produk_usecase.dart';
+import 'package:menu_makanan/features/produk/domain/usecases/search_minuman_usecase.dart';
+import 'package:menu_makanan/features/produk/presentation/bloc/produk_event.dart';
+import 'package:menu_makanan/features/produk/presentation/bloc/produk_state.dart';
 
-/// Events untuk ProdukBloc
-abstract class ProdukEvent {}
-
-class GetAllProdukEvent extends ProdukEvent {}
-
-class SearchProdukEvent extends ProdukEvent {
-  final String query;
-  SearchProdukEvent(this.query);
-}
-
-/// States untuk ProdukBloc
-abstract class ProdukState {}
-
-class ProdukInitial extends ProdukState {}
-
-class ProdukLoading extends ProdukState {}
-
-class ProdukLoaded extends ProdukState {
-  final List<ProdukEntity> produkList;
-  ProdukLoaded(this.produkList);
-}
-
-class ProdukError extends ProdukState {
-  final String message;
-  ProdukError(this.message);
-}
-
-/// Bloc untuk manage produk state
 class ProdukBloc extends Bloc<ProdukEvent, ProdukState> {
   final GetAllProdukUseCase getAllProdukUseCase;
+  final GetAllMinumanUseCase getAllMinumanUseCase;
   final SearchProdukUseCase searchProdukUseCase;
+  final SearchMinumanUseCase searchMinumanUseCase;
 
   ProdukBloc({
     required this.getAllProdukUseCase,
+    required this.getAllMinumanUseCase,
     required this.searchProdukUseCase,
+    required this.searchMinumanUseCase,
   }) : super(ProdukInitial()) {
-    on<GetAllProdukEvent>((event, emit) async {
-      emit(ProdukLoading());
-      try {
-        final produkList = await getAllProdukUseCase.call();
-        emit(ProdukLoaded(produkList));
-      } catch (e) {
-        emit(ProdukError(e.toString()));
-      }
-    });
+    on<GetProdukEvent>(_onGetProduk);
+    on<SearchProdukEvent>(_onSearchProduk);
+  }
 
-    on<SearchProdukEvent>((event, emit) async {
-      emit(ProdukLoading());
-      try {
-        final produkList = await searchProdukUseCase.call(event.query);
-        emit(ProdukLoaded(produkList));
-      } catch (e) {
-        emit(ProdukError(e.toString()));
-      }
-    });
+  Future<void> _onGetProduk(
+    GetProdukEvent event,
+    Emitter<ProdukState> emit,
+  ) async {
+    emit(ProdukLoading());
+    final result = event.category == ProdukCategory.makanan
+        ? await getAllProdukUseCase()
+        : await getAllMinumanUseCase();
+
+    result.fold(
+      (failure) => emit(ProdukError(failure.message)),
+      (produkList) => emit(ProdukLoaded(produkList)),
+    );
+  }
+
+  Future<void> _onSearchProduk(
+    SearchProdukEvent event,
+    Emitter<ProdukState> emit,
+  ) async {
+    emit(ProdukLoading());
+    final result = event.category == ProdukCategory.makanan
+        ? await searchProdukUseCase(event.query)
+        : await searchMinumanUseCase(event.query);
+
+    result.fold(
+      (failure) => emit(ProdukError(failure.message)),
+      (produkList) => emit(ProdukLoaded(produkList)),
+    );
   }
 }

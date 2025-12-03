@@ -178,12 +178,3 @@ class MealService {
   }
 }
 
-// Usage example:
-// try {
-//   final meals = await MealService.fetchSemuaMeal();
-//   // meals adalah list of meal objects dari TheMealDB
-//   final searchResults = await MealService.searchByName('Pasta');
-//   final byIngredient = await MealService.searchByIngredient('Chicken');
-// } catch (e) {
-//   print('Error: $e');
-// }

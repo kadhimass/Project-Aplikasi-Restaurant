@@ -10,6 +10,7 @@ import 'package:menu_makanan/model/produk.dart';
 import 'package:provider/provider.dart';
 import 'package:menu_makanan/providers/transaction_provider.dart';
 import 'package:menu_makanan/model/transaksi.dart';
+import 'package:menu_makanan/services/cart_service.dart';
 
 class HalamanKeranjang extends StatefulWidget {
   final String email;
@@ -215,28 +216,14 @@ class _HalamanKeranjangState extends State<HalamanKeranjang> {
     );
   }
 
-  // Proses checkout
+  // Proses checkout menggunakan CartService
   void _prosesCheckout() {
     final cartState = context.read<CartBloc>().state;
-    // Simpan data keranjang sebelum dikosongkan
-    final keranjangSebelumCheckout = Keranjang(
-      initialItems: cartState.keranjang.items
-          .map(
-            (item) => ItemKeranjang(produk: item.produk, jumlah: item.jumlah),
-          )
-          .toList(),
-    );
 
-    // Generate ID transaksi unik
-    final idTransaksi = 'WRKT${DateTime.now().millisecondsSinceEpoch}';
-    final waktuTransaksi = DateTime.now();
-
-    // Create Transaksi object
-    final newTransaction = Transaksi(
-      keranjang: keranjangSebelumCheckout,
+    // Create transaction menggunakan CartService
+    final newTransaction = CartService.createTransaction(
+      keranjang: cartState.keranjang,
       email: widget.email,
-      idTransaksi: idTransaksi,
-      waktuTransaksi: waktuTransaksi,
     );
 
     // Add transaction to provider

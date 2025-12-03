@@ -1,38 +1,68 @@
-import 'package:menu_makanan/features/produk/data/datasources/produk_datasource.dart';
+import 'package:flutter/foundation.dart';
+import 'package:fpdart/fpdart.dart';
+import 'package:menu_makanan/core/errors/exceptions.dart';
+import 'package:menu_makanan/core/errors/failures.dart';
+import 'package:menu_makanan/features/produk/data/datasources/produk_remote_datasource.dart';
 import 'package:menu_makanan/features/produk/domain/entities/produk_entity.dart';
 import 'package:menu_makanan/features/produk/domain/repositories/produk_repository.dart';
 
-/// Concrete Repository Implementation
-/// Mengimplementasikan domain repository interface menggunakan data source
 class ProdukRepositoryImpl implements ProdukRepository {
-  final ProdukDataSource dataSource;
+  final ProdukRemoteDataSource remoteDataSource;
 
-  ProdukRepositoryImpl({required this.dataSource});
+  ProdukRepositoryImpl({required this.remoteDataSource});
 
   @override
-  Future<List<ProdukEntity>> getAllProduk() async {
+  Future<Either<Failure, List<ProdukEntity>>> getAllProduk() async {
     try {
-      return await dataSource.getAllProduk();
+      final result = await remoteDataSource.searchProduk('');
+      return Right(result);
+    } on ServerException {
+      return Left(ServerFailure('Server Error'));
     } catch (e) {
-      rethrow;
+      return Left(ConnectionFailure('Connection Error'));
     }
   }
 
   @override
-  Future<ProdukEntity> getProdukById(String id) async {
+  Future<Either<Failure, ProdukEntity>> getProdukById(String id) {
+    // TODO: implement getProdukById
+    throw UnimplementedError();
+  }
+
+  @override
+  Future<Either<Failure, List<ProdukEntity>>> searchProduk(String query) async {
     try {
-      return await dataSource.getProdukById(id);
+      final result = await remoteDataSource.searchProduk(query);
+      return Right(result);
+    } on ServerException {
+      return Left(ServerFailure('Server Error'));
     } catch (e) {
-      rethrow;
+      return Left(ConnectionFailure('Connection Error'));
     }
   }
 
   @override
-  Future<List<ProdukEntity>> searchProduk(String query) async {
+  Future<Either<Failure, List<ProdukEntity>>> getMinuman() async {
     try {
-      return await dataSource.searchProduk(query);
+      final result = await remoteDataSource.getMinuman();
+      return Right(result);
+    } on ServerException {
+      return Left(ServerFailure('Server Error'));
     } catch (e) {
-      rethrow;
+      return Left(ConnectionFailure('Connection Error'));
+    }
+  }
+
+  @override
+  Future<Either<Failure, List<ProdukEntity>>> searchMinuman(String query) async {
+    try {
+      final result = await remoteDataSource.searchMinuman(query);
+      return Right(result);
+    } on ServerException {
+      return Left(ServerFailure('Server Error'));
+    } catch (e) {
+      debugPrint('Error in getMinuman: $e');
+      return Left(ConnectionFailure('Connection Error: $e'));
     }
   }
 }

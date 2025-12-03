@@ -4,6 +4,7 @@ import 'package:intl/intl.dart';
 import 'package:sizer/sizer.dart';
 import 'package:menu_makanan/bloc/cart_bloc.dart';
 import 'package:menu_makanan/bloc/cart_event.dart';
+import 'package:menu_makanan/services/produk_filter_service.dart';
 
 import 'package:go_router/go_router.dart';
 import 'package:menu_makanan/model/dummydata.dart';
@@ -39,42 +40,15 @@ class _HalamanBerandaState extends State<HalamanBeranda> {
     super.dispose();
   }
 
-  /// Filter dan sort produk berdasarkan search query, tipe (makanan/minuman), dan sort option
+  /// Filter dan sort produk menggunakan ProdukFilterService
+  /// Memisahkan business logic dari UI layer
   List<Produk> _getFilteredAndSortedProducts(List<Produk> produkList) {
-    // Filter berdasarkan tipe produk (makanan, minuman, atau semua)
-    List<Produk> filtered = produkList.where((produk) {
-      if (_filterType == 'makanan') {
-        return produk.runtimeType.toString() == 'Makanan';
-      } else if (_filterType == 'minuman') {
-        return produk.runtimeType.toString() == 'Minuman';
-      }
-      return true; // 'semua'
-    }).toList();
-
-    // Filter berdasarkan search query
-    filtered = filtered.where((produk) {
-      return produk.nama.toLowerCase().contains(_searchQuery.toLowerCase()) ||
-          produk.deskripsi.toLowerCase().contains(_searchQuery.toLowerCase());
-    }).toList();
-
-    // Sort berdasarkan pilihan
-    switch (_sortOption) {
-      case 'harga_asc':
-        filtered.sort((a, b) => a.harga.compareTo(b.harga));
-        break;
-      case 'harga_desc':
-        filtered.sort((a, b) => b.harga.compareTo(a.harga));
-        break;
-      case 'rating':
-        filtered.sort((a, b) => b.rating.compareTo(a.rating));
-        break;
-      case 'nama':
-      default:
-        filtered.sort((a, b) => a.nama.compareTo(b.nama));
-        break;
-    }
-
-    return filtered;
+    return ProdukFilterService.filterAndSort(
+      produkList,
+      _filterType,
+      _searchQuery,
+      _sortOption,
+    );
   }
 
   @override
@@ -180,7 +154,9 @@ class _HalamanBerandaState extends State<HalamanBeranda> {
                   backgroundColor: Colors.grey.shade200,
                   selectedColor: Colors.orange,
                   labelStyle: TextStyle(
-                    color: _filterType == 'makanan' ? Colors.white : Colors.black,
+                    color: _filterType == 'makanan'
+                        ? Colors.white
+                        : Colors.black,
                     fontWeight: FontWeight.w500,
                   ),
                 ),
@@ -196,7 +172,9 @@ class _HalamanBerandaState extends State<HalamanBeranda> {
                   backgroundColor: Colors.grey.shade200,
                   selectedColor: Colors.orange,
                   labelStyle: TextStyle(
-                    color: _filterType == 'minuman' ? Colors.white : Colors.black,
+                    color: _filterType == 'minuman'
+                        ? Colors.white
+                        : Colors.black,
                     fontWeight: FontWeight.w500,
                   ),
                 ),

@@ -1,12 +1,12 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:intl/intl.dart';
-import 'package:menu_makanan/bloc/cart_bloc.dart';
-import 'package:menu_makanan/bloc/cart_event.dart';
-import 'package:menu_makanan/bloc/cart_state.dart';
-import 'package:menu_makanan/pages/halaman_beranda.dart';
-import 'package:menu_makanan/pages/halaman_keranjang.dart';
-// Keranjang model now taken from CartBloc state; no direct import needed here
+import 'package:menu_makanan/features/cart/presentation/bloc/cart_bloc.dart';
+import 'package:menu_makanan/features/cart/presentation/bloc/cart_event.dart';
+import 'package:menu_makanan/features/cart/presentation/bloc/cart_state.dart';
+import 'package:menu_makanan/features/produk/presentation/pages/produk_list_page.dart';
+import 'package:menu_makanan/features/cart/presentation/pages/cart_page.dart'
+    as cart_pages;
 import 'package:menu_makanan/tombol/profil.dart';
 import 'package:menu_makanan/tombol/pengaturan.dart';
 import 'package:go_router/go_router.dart';
@@ -45,12 +45,6 @@ class _MainScreenState extends State<MainScreen> {
     setState(() {
       _selectedIndex = index;
     });
-  }
-
-  void _addToCart(produk) {
-    // Gunakan CartBloc untuk menambah item agar state terpusat
-    context.read<CartBloc>().add(AddToCart(produk));
-    _showSnackBar('${produk.nama} ditambahkan ke keranjang!', Colors.green);
   }
 
   void _showSnackBar(String message, Color color) {
@@ -129,7 +123,7 @@ class _MainScreenState extends State<MainScreen> {
                             },
                             tooltip: 'Keranjang Belanja',
                           ),
-                          if (state.keranjang.totalItem > 0)
+                          if (state.cart.totalItem > 0)
                             Positioned(
                               right: 0,
                               top: 0,
@@ -144,7 +138,7 @@ class _MainScreenState extends State<MainScreen> {
                                   minHeight: 14,
                                 ),
                                 child: Text(
-                                  state.keranjang.totalItem.toString(),
+                                  state.cart.totalItem.toString(),
                                   style: const TextStyle(
                                     color: Colors.white,
                                     fontSize: 8,
@@ -158,7 +152,7 @@ class _MainScreenState extends State<MainScreen> {
                       const SizedBox(width: 4),
                       Flexible(
                         child: Text(
-                          formatRupiah.format(state.keranjang.totalHarga),
+                          formatRupiah.format(state.cart.totalHarga),
                           style: const TextStyle(
                             fontSize: 12,
                             fontWeight: FontWeight.bold,
@@ -173,7 +167,7 @@ class _MainScreenState extends State<MainScreen> {
             case 1: // Halaman Keranjang
               return Row(
                 children: [
-                  if (state.keranjang.items.isNotEmpty)
+                  if (state.cart.items.isNotEmpty)
                     IconButton(
                       icon: const Icon(Icons.delete_sweep),
                       onPressed: () {
@@ -225,17 +219,13 @@ class _MainScreenState extends State<MainScreen> {
 
   @override
   Widget build(BuildContext context) {
-    // Ambil keranjang dari Bloc agar UI selalu sinkron
-    final keranjangDariBloc = context.watch<CartBloc>().state.keranjang;
+    // Ambil cart dari Bloc agar UI selalu sinkron
+    context.watch<CartBloc>(); // Watch for cart updates
 
     // Definisikan halaman di sini agar selalu mendapatkan data terbaru
     final List<Widget> pages = [
-      HalamanBeranda(
-        keranjang: keranjangDariBloc,
-        email: widget.email,
-        onAddToCart: _addToCart,
-      ),
-      HalamanKeranjang(email: widget.email),
+      ProdukListPage(email: widget.email),
+      cart_pages.HalamanKeranjangPage(email: widget.email),
       HalamanProfil(email: widget.email),
       HalamanPengaturan(email: widget.email),
     ];

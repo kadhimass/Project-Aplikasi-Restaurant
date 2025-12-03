@@ -1,6 +1,6 @@
 import 'package:flutter/widgets.dart';
 import 'package:go_router/go_router.dart';
-import 'package:menu_makanan/pages/halaman_beranda.dart';
+import 'package:menu_makanan/features/produk/presentation/pages/produk_list_page.dart';
 import 'package:menu_makanan/pages/halaman_login.dart';
 import 'package:menu_makanan/pages/halaman_registrasi.dart';
 import 'package:menu_makanan/pages/halaman_password.dart';
@@ -12,7 +12,6 @@ import 'package:menu_makanan/pages/halaman_buktitransaksi.dart';
 import 'package:menu_makanan/pages/loading.dart';
 import 'package:menu_makanan/pages/halaman_appbar.dart' show MainScreen;
 import 'package:menu_makanan/tombol/profil.dart' show HalamanProfil;
-import 'package:menu_makanan/model/keranjang.dart';
 import 'package:menu_makanan/model/produk.dart';
 
 GoRouter createAppRouter() {
@@ -51,11 +50,11 @@ GoRouter createAppRouter() {
       GoRoute(
         name: 'beranda',
         path: '/beranda',
-        builder: (context, state) => HalamanBeranda(
-          email: '',
-          keranjang: Keranjang(),
-          onAddToCart: (Produk p1) {},
-        ),
+        builder: (context, state) {
+          final extra = state.extra as Map<String, dynamic>?;
+          final email = extra?['email'] as String? ?? '';
+          return ProdukListPage(email: email);
+        },
       ),
       GoRoute(
         name: 'riwayat',
@@ -72,8 +71,7 @@ GoRouter createAppRouter() {
         builder: (context, state) {
           final extra = state.extra as Map<String, dynamic>?;
           final produk = extra?['produk'] as Produk?;
-          final onTambah = extra?['onTambah'] as VoidCallback?;
-          return HalamanDetail(produk: produk!, onTambahKeKeranjang: onTambah);
+          return HalamanDetail(produk: produk!);
         },
       ),
       GoRoute(

@@ -1,7 +1,9 @@
 
 
+
+// Parent Class (Inheritance)
 class Produk {
-  // Properti privat (diawali dengan _)
+  // Properti privat (Encapsulation)
   final String _id;
   final String _nama;
   final String _deskripsi;
@@ -9,9 +11,8 @@ class Produk {
   final String _gambar;
   final double _rating;
   final String _linkWeb;
+  final List<String> _bahan;
 
-
-  // Konstruktor tetap sama, namun menginisialisasi properti privat
   Produk({
     required String id,
     required String nama,
@@ -20,15 +21,17 @@ class Produk {
     required String gambar,
     required double rating,
     required String linkWeb,
+    List<String> bahan = const [],
   })  : _id = id,
         _nama = nama,
         _deskripsi = deskripsi,
         _harga = harga,
         _gambar = gambar,
         _rating = rating,
-        _linkWeb = linkWeb;
+        _linkWeb = linkWeb,
+        _bahan = bahan;
 
-  // Getter publik untuk mengakses properti privat (Enkapsulasi)
+  // Getter publik
   String get id => _id;
   String get nama => _nama;
   String get deskripsi => _deskripsi;
@@ -36,11 +39,56 @@ class Produk {
   String get gambar => _gambar;
   double get rating => _rating;
   String get linkWeb => _linkWeb;
+  List<String> get bahan => _bahan;
 
+  // Polymorphism: Method ini akan di-override oleh subclass
+  String get kategori => "Umum";
 
-  // Method untuk menampilkan info produk (akan di-override oleh subclass)
   String tampilkanInfo() {
-    // Menggunakan getter atau properti privat secara langsung
-    return "$nama - Rp${harga.toStringAsFixed(0)}";
+    return "$nama - Rp${harga.toStringAsFixed(0)} ($kategori)";
   }
+}
+
+// Subclass Makanan (Inheritance)
+class Makanan extends Produk {
+  final bool pedas;
+
+  Makanan({
+    required super.id,
+    required super.nama,
+    required super.deskripsi,
+    required super.harga,
+    required super.gambar,
+    required super.rating,
+    required super.linkWeb,
+    super.bahan,
+    this.pedas = false, // Default value
+  });
+
+  // Polymorphism: Override getter kategori
+  @override
+  String get kategori => "Makanan";
+}
+
+// Subclass Minuman (Inheritance)
+class Minuman extends Produk {
+  final bool dingin;
+  final String ukuran;
+
+  Minuman({
+    required super.id,
+    required super.nama,
+    required super.deskripsi,
+    required super.harga,
+    required super.gambar,
+    required super.rating,
+    required super.linkWeb,
+    super.bahan,
+    this.dingin = true, // Default value
+    this.ukuran = "Regular", // Default value
+  });
+
+  // Polymorphism: Override getter kategori
+  @override
+  String get kategori => "Minuman";
 }

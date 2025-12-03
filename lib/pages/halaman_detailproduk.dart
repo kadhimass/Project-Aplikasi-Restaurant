@@ -3,10 +3,10 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:intl/intl.dart';
 import 'package:menu_makanan/bloc/cart_bloc.dart';
 import 'package:menu_makanan/bloc/cart_event.dart';
-import 'package:menu_makanan/model/makanan.dart';
-import 'package:menu_makanan/model/minuman.dart';
 import 'package:menu_makanan/model/produk.dart';
 import 'package:animated_rating_stars/animated_rating_stars.dart';
+import 'package:flutter_rating_bar/flutter_rating_bar.dart';
+import 'package:menu_makanan/services/rating_service.dart';
 
 class HalamanDetail extends StatefulWidget {
   final Produk produk;
@@ -23,6 +23,40 @@ class HalamanDetail extends StatefulWidget {
 }
 
 class _HalamanDetailState extends State<HalamanDetail> {
+  final RatingService _ratingService = RatingService();
+  double? _userRating;
+
+  @override
+  void initState() {
+    super.initState();
+    _loadUserRating();
+  }
+
+  Future<void> _loadUserRating() async {
+    final rating = await _ratingService.getRating(widget.produk.id);
+    if (mounted) {
+      setState(() {
+        _userRating = rating;
+      });
+    }
+  }
+
+  Future<void> _saveUserRating(double rating) async {
+    await _ratingService.saveRating(widget.produk.id, rating);
+    if (mounted) {
+      setState(() {
+        _userRating = rating;
+      });
+      ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(
+          content: Text('Rating berhasil disimpan: ${rating.toStringAsFixed(1)} ⭐'),
+          backgroundColor: Colors.green,
+          duration: const Duration(seconds: 2),
+        ),
+      );
+    }
+  }
+
   @override
   Widget build(BuildContext context) {
     // Format Rupiah
@@ -75,44 +109,58 @@ class _HalamanDetailState extends State<HalamanDetail> {
                   ),
                   const SizedBox(height: 8),
 
-                  // Rating dan Harga
+                  // Rating Pengguna (Interaktif)
+                  Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      const Text(
+                        'Beri Rating:',
+                        style: TextStyle(fontSize: 16, fontWeight: FontWeight.w600),
+                      ),
+                      const SizedBox(height: 8),
+                      RatingBar.builder(
+                        initialRating: _userRating ?? 0,
+                        minRating: 0,
+                        direction: Axis.horizontal,
+                        allowHalfRating: true,
+                        itemCount: 5,
+                        itemSize: 40,
+                        itemPadding: const EdgeInsets.symmetric(horizontal: 2.0),
+                        itemBuilder: (context, _) => const Icon(
+                          Icons.star,
+                          color: Colors.amber,
+                        ),
+                        onRatingUpdate: (rating) {
+                          _saveUserRating(rating);
+                        },
+                        glow: true,
+                        glowColor: Colors.amber.withOpacity(0.5),
+                      ),
+                      if (_userRating != null)
+                        Padding(
+                          padding: const EdgeInsets.only(top: 4.0),
+                          child: Text(
+                            'Rating Anda: ${_userRating!.toStringAsFixed(1)} ⭐',
+                            style: TextStyle(
+                              fontSize: 14,
+                              color: Colors.grey.shade700,
+                              fontWeight: FontWeight.w500,
+                            ),
+                          ),
+                        ),
+                    ],
+                  ),
+                  const SizedBox(height: 12),
+                  
+                  // Harga
                   Row(
                     children: [
-                      AnimatedRatingStars(
-                        initialRating: widget.produk.rating.toDouble(),
-                        minRating: 0.0,
-                        maxRating: 5.0,
-                        filledColor: Colors.amber,
-                        emptyColor: Colors.grey,
-                        filledIcon: Icons.star,
-                        halfFilledIcon: Icons.star_half,
-                        emptyIcon: Icons.star_border,
-                        onChanged: (double rating) {},
-                        displayRatingValue: true,
-                        interactiveTooltips: true,
-                        customFilledIcon: Icons.star,
-                        customHalfFilledIcon: Icons.star_half,
-                        customEmptyIcon: Icons.star_border,
-                        starSize: 30.0,
-                        animationDuration: const Duration(milliseconds: 300),
-                        animationCurve: Curves.easeInOut,
-                        readOnly: true,
-                      ),
-                      const SizedBox(width: 8),
-                      Text(
-                        widget.produk.rating.toString(),
-                        style: TextStyle(
-                          fontSize: 12,
-                          color: Colors.grey.shade600,
-                        ),
-                      ),
-                      const Spacer(),
                       Text(
                         formatRupiah.format(widget.produk.harga),
                         style: const TextStyle(
                           color: Colors.green,
                           fontWeight: FontWeight.w600,
-                          fontSize: 18,
+                          fontSize: 20,
                         ),
                       ),
                     ],

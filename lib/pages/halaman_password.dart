@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:menu_makanan/widgets/auth_scaffold.dart';
 import 'package:menu_makanan/main.dart';
 import 'package:go_router/go_router.dart';
 
