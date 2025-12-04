@@ -1,3 +1,18 @@
+import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:intl/intl.dart';
+import 'package:go_router/go_router.dart';
+import 'package:menu_makanan/features/cart/presentation/bloc/cart_bloc.dart';
+import 'package:menu_makanan/features/cart/presentation/bloc/cart_event.dart';
+import 'package:menu_makanan/features/cart/presentation/bloc/cart_state.dart';
+import 'package:menu_makanan/features/cart/domain/entities/cart.dart';
+import 'package:menu_makanan/features/cart/domain/entities/cart_item.dart';
+import 'package:menu_makanan/features/product/domain/entities/product.dart';
+
+class HalamanKeranjang extends StatefulWidget {
+  final String email;
+
+  const HalamanKeranjang({super.key, required this.email});
 
   @override
   State<HalamanKeranjang> createState() => _HalamanKeranjangState();
