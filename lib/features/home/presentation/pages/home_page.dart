@@ -5,21 +5,13 @@ import 'package:sizer/sizer.dart';
 import 'package:menu_makanan/features/cart/presentation/bloc/cart_bloc.dart';
 import 'package:menu_makanan/features/cart/presentation/bloc/cart_event.dart';
 import 'package:menu_makanan/features/product/domain/usecases/product_filter_service.dart';
-
 import 'package:go_router/go_router.dart';
-import 'package:menu_makanan/features/product/data/datasources/dummydata.dart'; // Assuming moved here
 import 'package:menu_makanan/features/cart/domain/entities/cart.dart';
 import 'package:menu_makanan/features/product/domain/entities/product.dart';
-import 'package:menu_makanan/features/home/presentation/pages/meal_search_page.dart'; // Replaced example api with actual search page or similar?
-import 'package:menu_makanan/services/produk_filter_service.dart';
-import 'package:menu_makanan/features/cart/presentation/bloc/cart_bloc.dart';
-import 'package:menu_makanan/features/cart/presentation/bloc/cart_event.dart';
-import 'package:go_router/go_router.dart';
-import 'package:menu_makanan/model/keranjang.dart';
-import 'package:menu_makanan/model/produk.dart';
+import 'package:menu_makanan/features/home/presentation/pages/meal_search_page.dart';
 
 class HalamanBeranda extends StatefulWidget {
-  final Keranjang keranjang;
+  final Cart keranjang;
   final String email;
   final Function(Produk) onAddToCart;
 
@@ -216,7 +208,7 @@ class _HalamanBerandaState extends State<HalamanBeranda> {
                   underline: const SizedBox(), // Hapus underline bawaan
                   padding: const EdgeInsets.symmetric(horizontal: 12),
                   items: const [
-                    DropdownMenuItem(value: 'nama', child: Text('Nama (A-Z)')),
+                    DropdownMenuItem(value: 'nama', child: Text('Nama (A-Z)' )),
                     DropdownMenuItem(
                       value: 'harga_asc',
                       child: Text('Harga (Terendah)'),

@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:menu_makanan/services/meal_service.dart';
+import 'package:menu_makanan/features/product/data/datasources/meal_service.dart';
 
 class HalamanDetailMeal extends StatefulWidget {
   final String mealId;

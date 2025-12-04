@@ -1,8 +1,8 @@
-import 'package:menu_makanan/model/keranjang.dart';
+import 'package:menu_makanan/features/cart/domain/entities/cart.dart';
 // Import Produk
 
 class Transaksi {
-  final Keranjang keranjang;
+  final Cart keranjang;
   final String email;
   final String idTransaksi;
   final DateTime waktuTransaksi;

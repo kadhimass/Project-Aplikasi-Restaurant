@@ -1,6 +1,8 @@
 import 'package:menu_makanan/features/cart/domain/entities/cart.dart';
 import 'package:menu_makanan/features/cart/domain/entities/cart_item.dart';
-import 'package:menu_makanan/model/produk.dart';
+import 'package:menu_makanan/features/product/domain/entities/product.dart';
+import 'package:menu_makanan/features/product/domain/entities/food.dart';
+import 'package:menu_makanan/features/product/domain/entities/drink.dart';
 
 class CartModel {
   final List<CartItemModel> items;
@@ -82,11 +84,8 @@ Map<String, dynamic> _produkToJson(Produk produk) {
 
   if (produk is Makanan) {
     json['type'] = 'makanan';
-    json['pedas'] = produk.pedas;
   } else if (produk is Minuman) {
     json['type'] = 'minuman';
-    json['dingin'] = produk.dingin;
-    json['ukuran'] = produk.ukuran;
   } else {
     json['type'] = 'produk';
   }
@@ -107,7 +106,6 @@ Produk _produkFromJson(Map<String, dynamic> json) {
       rating: (json['rating'] as num).toDouble(),
       linkWeb: json['linkWeb'] ?? '',
       bahan: List<String>.from(json['bahan'] ?? []),
-      pedas: json['pedas'] ?? false,
     );
   } else if (type == 'minuman') {
     return Minuman(
@@ -119,8 +117,6 @@ Produk _produkFromJson(Map<String, dynamic> json) {
       rating: (json['rating'] as num).toDouble(),
       linkWeb: json['linkWeb'] ?? '',
       bahan: List<String>.from(json['bahan'] ?? []),
-      dingin: json['dingin'] ?? true,
-      ukuran: json['ukuran'] ?? 'Regular',
     );
   } else {
     return Produk(

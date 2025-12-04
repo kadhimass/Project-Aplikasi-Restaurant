@@ -1,0 +1,59 @@
+﻿Analyzing Project-Aplikasi-Restaurant...                        
+
+   info - Parameter 'message' could be a super parameter - lib\core\errors\failures.dart:21:9 - use_super_parameters
+   info - Don't use 'BuildContext's across async gaps - lib\features\auth\presentation\pages\login_page.dart:31:7 - use_build_context_synchronously
+warning - Unused import: 'package:menu_makanan/features/cart/domain/entities/cart.dart' - lib\features\cart\presentation\pages\cart_page.dart:8:8 - unused_import
+   info - 'withOpacity' is deprecated and shouldn't be used. Use .withValues() to avoid precision loss - lib\features\cart\presentation\pages\cart_page.dart:163:53 - deprecated_member_use
+   info - 'withOpacity' is deprecated and shouldn't be used. Use .withValues() to avoid precision loss - lib\features\cart\presentation\pages\cart_page.dart:176:47 - deprecated_member_use
+   info - 'withOpacity' is deprecated and shouldn't be used. Use .withValues() to avoid precision loss - lib\features\cart\presentation\pages\cart_page.dart:383:35 - deprecated_member_use
+warning - Unused import: 'package:menu_makanan/features/history/presentation/pages/order_details_page.dart' - lib\features\cart\presentation\pages\payment_method_page.dart:7:8 - unused_import
+   info - 'groupValue' is deprecated and shouldn't be used. Use a RadioGroup ancestor to manage group value instead. This feature was deprecated after v3.32.0-0.0.pre - lib\features\cart\presentation\pages\payment_method_page.dart:44:29 - deprecated_member_use
+   info - 'onChanged' is deprecated and shouldn't be used. Use RadioGroup to handle value change instead. This feature was deprecated after v3.32.0-0.0.pre - lib\features\cart\presentation\pages\payment_method_page.dart:45:29 - deprecated_member_use
+   info - 'withOpacity' is deprecated and shouldn't be used. Use .withValues() to avoid precision loss - lib\features\common\presentation\pages\splash_screen.dart:115:49 - deprecated_member_use
+   info - The import of 'package:flutter_bloc/flutter_bloc.dart' is unnecessary because all of the used elements are also provided by the import of 'package:provider/provider.dart' - lib\features\history\presentation\pages\order_details_page.dart:3:8 - unnecessary_import
+warning - Unused import: 'package:menu_makanan/features/history/presentation/pages/transaction_proof_page.dart' - lib\features\history\presentation\pages\order_details_page.dart:11:8 - unused_import
+warning - Unused import: 'package:menu_makanan/features/home/presentation/pages/meal_search_page.dart' - lib\features\home\presentation\pages\home_page.dart:11:8 - unused_import
+warning - The value of the field '_getFilteredAndSorted' isn't used - lib\features\home\presentation\pages\home_page.dart:43:16 - unused_field
+  error - Expected to find ';' - lib\features\home\presentation\pages\home_page.dart:43:16 - expected_token
+  error - Non-nullable instance field '_getFilteredAndSorted' must be initialized - lib\features\home\presentation\pages\home_page.dart:43:16 - not_initialized_non_nullable_instance_field
+   info - Missing type annotation - lib\features\home\presentation\pages\home_page.dart:43:38 - strict_top_level_inference
+   info - The variable name 'Products' isn't a lowerCamelCase identifier - lib\features\home\presentation\pages\home_page.dart:43:38 - non_constant_identifier_names
+  error - The method '_getFilteredAndSortedProducts' isn't defined for the type '_HalamanBerandaState' - lib\features\home\presentation\pages\home_page.dart:56:39 - undefined_method
+   info - 'withOpacity' is deprecated and shouldn't be used. Use .withValues() to avoid precision loss - lib\features\home\presentation\pages\meal_search_page.dart:165:61 - deprecated_member_use
+warning - Dead code - lib\features\product\data\datasources\produk_local_datasource.dart:31:5 - dead_code
+warning - Dead code - lib\features\product\data\datasources\produk_local_datasource.dart:54:5 - dead_code
+warning - Dead code - lib\features\product\data\datasources\produk_local_datasource.dart:82:5 - dead_code
+warning - Unused import: 'package:menu_makanan/features/product/domain/entities/product.dart' - lib\features\product\data\datasources\produk_remote_datasource.dart:4:8 - unused_import
+   info - Parameters ''id', 'nama', 'deskripsi', 'harga', 'gambar', 'rating', 'bahan', and 'linkWeb'' could be super parameters - lib\features\product\data\models\produk_model.dart:5:9 - use_super_parameters
+warning - Unused import: 'package:menu_makanan/features/product/domain/entities/product.dart' - lib\features\product\presentation\cubit\produk_cubit.dart:2:8 - unused_import
+warning - Unused import: 'package:animated_rating_stars/animated_rating_stars.dart' - lib\features\product\presentation\pages\product_detail_page.dart:7:8 - unused_import
+   info - 'withOpacity' is deprecated and shouldn't be used. Use .withValues() to avoid precision loss - lib\features\product\presentation\pages\product_detail_page.dart:142:45 - deprecated_member_use
+   info - 'withOpacity' is deprecated and shouldn't be used. Use .withValues() to avoid precision loss - lib\features\product\presentation\pages\product_detail_page.dart:324:49 - deprecated_member_use
+   info - Don't use 'BuildContext's across async gaps - lib\features\profile\presentation\pages\about_us_page.dart:210:30 - use_build_context_synchronously
+   info - Don't use 'BuildContext's across async gaps - lib\features\profile\presentation\pages\about_us_page.dart:216:9 - use_build_context_synchronously
+   info - 'withOpacity' is deprecated and shouldn't be used. Use .withValues() to avoid precision loss - lib\features\profile\presentation\pages\about_us_page.dart:233:33 - deprecated_member_use
+warning - Unused import: 'package:menu_makanan/core/errors/failures.dart' - test\features\product\domain\usecases\get_all_produk_usecase_test.dart:4:8 - unused_import
+   info - Don't invoke 'print' in production code - test\produk_equality_test.dart:25:5 - avoid_print
+   info - Don't invoke 'print' in production code - test\produk_equality_test.dart:26:5 - avoid_print
+   info - Don't invoke 'print' in production code - test\produk_equality_test.dart:27:5 - avoid_print
+   info - Don't invoke 'print' in production code - test\produk_equality_test.dart:28:5 - avoid_print
+   info - Don't invoke 'print' in production code - test\produk_equality_test.dart:29:5 - avoid_print
+
+flutter : 38 issues 
+found. (ran in 3.3s)
+At line:1 char:1
++ flutter analyze 
+2>&1 | Out-File 
+-FilePath "analyze_out
+put_final.txt"  ...
++ ~~~~~~~~~~~~~~~~~~~~
+    + CategoryInfo    
+          : NotSpeci  
+  fied: (38 issues    
+ found. (ran in 3.    
+3s):String) [], R    
+emoteException
+    + FullyQualifiedE 
+   rrorId : NativeCo  
+  mmandError
+ 

@@ -1,5 +1,5 @@
 import 'package:intl/intl.dart';
-import 'package:menu_makanan/model/keranjang.dart';
+import 'package:menu_makanan/features/cart/domain/entities/cart.dart';
 import 'package:menu_makanan/model/transaksi.dart';
 
 /// CartService provides cart-related calculations and formatting operations.
@@ -10,7 +10,7 @@ class CartService {
   static const double discountAmount = 10000.0;
 
   /// Calculate subtotal from cart items
-  static double calculateSubtotal(Keranjang keranjang) {
+  static double calculateSubtotal(Cart keranjang) {
     double total = 0;
     for (var item in keranjang.items) {
       total += item.produk.harga * item.jumlah;
@@ -50,7 +50,7 @@ class CartService {
   }
 
   /// Get cart summary data for checkout
-  static CartSummary getCartSummary(Keranjang keranjang) {
+  static CartSummary getCartSummary(Cart keranjang) {
     final subtotal = calculateSubtotal(keranjang);
     final discount = calculateDiscount(subtotal);
     final finalPrice = calculateFinalPrice(subtotal);
@@ -66,7 +66,7 @@ class CartService {
 
   /// Create transaction from cart and checkout data
   static Transaksi createTransaction({
-    required Keranjang keranjang,
+    required Cart keranjang,
     required String email,
   }) {
     return Transaksi(

@@ -1,9 +1,6 @@
-Analyzing lib...                                                
+﻿Analyzing Project-Aplikasi-Restaurant...                        
 
-   info - Parameter 'message' could be a super parameter - lib\core\errors\failures.dart:13:9 - use_super_parameters
-   info - Parameter 'message' could be a super parameter - lib\core\errors\failures.dart:17:9 - use_super_parameters
    info - Parameter 'message' could be a super parameter - lib\core\errors\failures.dart:21:9 - use_super_parameters
-   info - The type parameter name 'Type' matches a visible type name - lib\core\usecase.dart:2:24 - avoid_types_as_parameter_names
    info - Don't use 'BuildContext's across async gaps - lib\features\auth\presentation\pages\login_page.dart:31:7 - use_build_context_synchronously
   error - Target of URI doesn't exist: 'package:menu_makanan/model/keranjang.dart' - lib\features\cart\data\datasources\cart_service.dart:2:8 - uri_does_not_exist
   error - Undefined class 'Keranjang' - lib\features\cart\data\datasources\cart_service.dart:13:35 - undefined_class
@@ -22,30 +19,26 @@ warning - Unused import: 'package:menu_makanan/features/cart/domain/entities/car
    info - 'withOpacity' is deprecated and shouldn't be used. Use .withValues() to avoid precision loss - lib\features\cart\presentation\pages\cart_page.dart:163:53 - deprecated_member_use
    info - 'withOpacity' is deprecated and shouldn't be used. Use .withValues() to avoid precision loss - lib\features\cart\presentation\pages\cart_page.dart:176:47 - deprecated_member_use
    info - 'withOpacity' is deprecated and shouldn't be used. Use .withValues() to avoid precision loss - lib\features\cart\presentation\pages\cart_page.dart:383:35 - deprecated_member_use
-   info - Parameter 'key' could be a super parameter - lib\features\cart\presentation\pages\order_success_page.dart:4:9 - use_super_parameters
-   info - Parameter 'key' could be a super parameter - lib\features\cart\presentation\pages\payment_method_page.dart:12:9 - use_super_parameters
-   info - 'groupValue' is deprecated and shouldn't be used. Use a RadioGroup ancestor to manage group value instead. This feature was deprecated after v3.32.0-0.0.pre - lib\features\cart\presentation\pages\payment_method_page.dart:43:29 - deprecated_member_use
-   info - 'onChanged' is deprecated and shouldn't be used. Use RadioGroup to handle value change instead. This feature was deprecated after v3.32.0-0.0.pre - lib\features\cart\presentation\pages\payment_method_page.dart:44:29 - deprecated_member_use
-   info - Statements in an if should be enclosed in a block - lib\features\cart\presentation\pages\payment_method_page.dart:46:33 - curly_braces_in_flow_control_structures
+warning - Unused import: 'package:menu_makanan/features/history/presentation/pages/order_details_page.dart' - lib\features\cart\presentation\pages\payment_method_page.dart:7:8 - unused_import
+   info - 'groupValue' is deprecated and shouldn't be used. Use a RadioGroup ancestor to manage group value instead. This feature was deprecated after v3.32.0-0.0.pre - lib\features\cart\presentation\pages\payment_method_page.dart:44:29 - deprecated_member_use
+   info - 'onChanged' is deprecated and shouldn't be used. Use RadioGroup to handle value change instead. This feature was deprecated after v3.32.0-0.0.pre - lib\features\cart\presentation\pages\payment_method_page.dart:45:29 - deprecated_member_use
    info - 'withOpacity' is deprecated and shouldn't be used. Use .withValues() to avoid precision loss - lib\features\common\presentation\pages\splash_screen.dart:115:49 - deprecated_member_use
   error - Target of URI doesn't exist: 'package:menu_makanan/model/keranjang.dart' - lib\features\history\domain\entities\transaction.dart:1:8 - uri_does_not_exist
   error - Undefined class 'Keranjang' - lib\features\history\domain\entities\transaction.dart:5:9 - undefined_class
    info - The import of 'package:flutter_bloc/flutter_bloc.dart' is unnecessary because all of the used elements are also provided by the import of 'package:provider/provider.dart' - lib\features\history\presentation\pages\order_details_page.dart:3:8 - unnecessary_import
-   info - Parameter 'key' could be a super parameter - lib\features\history\presentation\pages\order_details_page.dart:17:9 - use_super_parameters
-   info - Unnecessary use of multiple underscores - lib\features\history\presentation\pages\order_details_page.dart:51:45 - unnecessary_underscores
-  error - Undefined class 'Keranjang' - lib\features\home\presentation\pages\home_page.dart:16:9 - undefined_class
-  error - Target of URI doesn't exist: 'package:menu_makanan/tombol/profil.dart' - lib\features\home\presentation\pages\main_screen.dart:10:8 - uri_does_not_exist
-  error - The argument type 'dynamic Function()' can't be assigned to the parameter type 'BuildContext'.  - lib\features\home\presentation\pages\main_screen.dart:51:26 - argument_type_not_assignable
-  error - The method 'read' isn't defined for the type 'Function' - lib\features\home\presentation\pages\main_screen.dart:62:13 - undefined_method
-  error - The argument type 'dynamic Function()' can't be assigned to the parameter type 'BuildContext'.  - lib\features\home\presentation\pages\main_screen.dart:74:16 - argument_type_not_assignable
-  error - The method 'ProdukListPage' isn't defined for the type '_MainScreenState' - lib\features\home\presentation\pages\main_screen.dart:227:7 - undefined_method
-  error - The function 'HalamanKeranjangPage' isn't defined - lib\features\home\presentation\pages\main_screen.dart:228:18 - undefined_function
-  error - The method 'HalamanProfil' isn't defined for the type '_MainScreenState' - lib\features\home\presentation\pages\main_screen.dart:229:7 - undefined_method
+warning - Unused import: 'package:menu_makanan/features/history/presentation/pages/transaction_proof_page.dart' - lib\features\history\presentation\pages\order_details_page.dart:11:8 - unused_import
+  error - Target of URI doesn't exist: 'package:menu_makanan/services/produk_filter_service.dart' - lib\features\home\presentation\pages\home_page.dart:14:8 - uri_does_not_exist
+  error - Target of URI doesn't exist: 'package:menu_makanan/model/keranjang.dart' - lib\features\home\presentation\pages\home_page.dart:18:8 - uri_does_not_exist
+  error - Target of URI doesn't exist: 'package:menu_makanan/model/produk.dart' - lib\features\home\presentation\pages\home_page.dart:19:8 - uri_does_not_exist
+  error - Undefined class 'Keranjang' - lib\features\home\presentation\pages\home_page.dart:22:9 - undefined_class
   error - Target of URI doesn't exist: 'package:menu_makanan/services/meal_service.dart' - lib\features\home\presentation\pages\meal_search_page.dart:2:8 - uri_does_not_exist
   error - Undefined name 'MealService' - lib\features\home\presentation\pages\meal_search_page.dart:23:20 - undefined_identifier
   error - Undefined name 'MealService' - lib\features\home\presentation\pages\meal_search_page.dart:38:24 - undefined_identifier
   error - Undefined name 'MealService' - lib\features\home\presentation\pages\meal_search_page.dart:41:24 - undefined_identifier
    info - 'withOpacity' is deprecated and shouldn't be used. Use .withValues() to avoid precision loss - lib\features\home\presentation\pages\meal_search_page.dart:165:61 - deprecated_member_use
+warning - Dead code - lib\features\product\data\datasources\produk_local_datasource.dart:31:5 - dead_code
+warning - Dead code - lib\features\product\data\datasources\produk_local_datasource.dart:54:5 - dead_code
+warning - Dead code - lib\features\product\data\datasources\produk_local_datasource.dart:82:5 - dead_code
 warning - Unused import: 'package:menu_makanan/features/product/domain/entities/product.dart' - lib\features\product\data\datasources\produk_remote_datasource.dart:4:8 - unused_import
    info - Parameters ''id', 'nama', 'deskripsi', 'harga', 'gambar', 'rating', 'bahan', and 'linkWeb'' could be super parameters - lib\features\product\data\models\produk_model.dart:5:9 - use_super_parameters
   error - Target of URI doesn't exist: 'package:menu_makanan/model/produk.dart' - lib\features\product\domain\usecases\product_filter_service.dart:1:8 - uri_does_not_exist
@@ -101,282 +94,47 @@ warning - The declaration '_onSearchProduk' isn't referenced - lib\features\prod
   error - The function 'ProdukLoaded' isn't defined - lib\features\product\presentation\bloc\produk_bloc.dart:23:28 - undefined_function
   error - Expected a method, getter, setter or operator declaration - lib\features\product\presentation\bloc\produk_bloc.dart:26:1 - expected_executable
 warning - Unused import: 'package:menu_makanan/features/product/domain/entities/product.dart' - lib\features\product\presentation\cubit\produk_cubit.dart:2:8 - unused_import
-warning - The label 'sortOrder' isn't used - lib\features\product\presentation\cubit\produk_cubit.dart:30:9 - unused_label
-  error - Expected to find ';' - lib\features\product\presentation\cubit\produk_cubit.dart:30:30 - expected_token
-  error - Expected an identifier - lib\features\product\presentation\cubit\produk_cubit.dart:30:42 - missing_identifier
-  error - Expected to find ';' - lib\features\product\presentation\cubit\produk_cubit.dart:30:42 - expected_token
-  error - Unexpected text ';' - lib\features\product\presentation\cubit\produk_cubit.dart:30:42 - unexpected_token
-  error - Expected an identifier - lib\features\product\presentation\cubit\produk_cubit.dart:31:7 - missing_identifier
-  error - Expected to find ';' - lib\features\product\presentation\cubit\produk_cubit.dart:31:7 - expected_token
-  error - Unexpected text ';' - lib\features\product\presentation\cubit\produk_cubit.dart:31:7 - unexpected_token
-  error - Expected an identifier - lib\features\product\presentation\cubit\produk_cubit.dart:31:8 - missing_identifier
-  error - Expected to find ';' - lib\features\product\presentation\cubit\produk_cubit.dart:31:8 - expected_token
-  error - Unexpected text ';' - lib\features\product\presentation\cubit\produk_cubit.dart:31:8 - unexpected_token
-  error - Expected an identifier - lib\features\product\presentation\cubit\produk_cubit.dart:31:9 - missing_identifier
-  error - Expected to find ';' - lib\features\product\presentation\cubit\produk_cubit.dart:31:9 - expected_token
-  error - Unexpected text ';' - lib\features\product\presentation\cubit\produk_cubit.dart:31:9 - unexpected_token
-  error - Expected an identifier - lib\features\product\presentation\cubit\produk_cubit.dart:32:5 - missing_identifier
-  error - Unexpected text ';' - lib\features\product\presentation\cubit\produk_cubit.dart:32:5 - unexpected_token
-   info - Unnecessary empty statement - lib\features\product\presentation\cubit\produk_cubit.dart:32:6 - empty_statements
-   info - Don't invoke 'print' in production code - lib\features\product\presentation\cubit\produk_cubit.dart:40:7 - avoid_print
-   info - Don't invoke 'print' in production code - lib\features\product\presentation\cubit\produk_cubit.dart:41:7 - avoid_print
-   info - Don't invoke 'print' in production code - lib\features\product\presentation\cubit\produk_cubit.dart:53:9 - avoid_print
-   info - Don't invoke 'print' in production code - lib\features\product\presentation\cubit\produk_cubit.dart:62:9 - avoid_print
   error - Target of URI doesn't exist: 'package:menu_makanan/services/meal_service.dart' - lib\features\product\presentation\pages\meal_detail_page.dart:2:8 - uri_does_not_exist
   error - Undefined name 'MealService' - lib\features\product\presentation\pages\meal_detail_page.dart:19:19 - undefined_identifier
 warning - Unused import: 'package:animated_rating_stars/animated_rating_stars.dart' - lib\features\product\presentation\pages\product_detail_page.dart:7:8 - unused_import
    info - 'withOpacity' is deprecated and shouldn't be used. Use .withValues() to avoid precision loss - lib\features\product\presentation\pages\product_detail_page.dart:142:45 - deprecated_member_use
    info - 'withOpacity' is deprecated and shouldn't be used. Use .withValues() to avoid precision loss - lib\features\product\presentation\pages\product_detail_page.dart:324:49 - deprecated_member_use
-   info - Missing type annotation - lib\features\product\presentation\pages\product_list_page.dart:1:5 - strict_top_level_inference
-  error - 'super' can't be used as an identifier because it's a keyword - lib\features\product\presentation\pages\product_list_page.dart:1:5 - expected_identifier_but_got_keyword
-  error - Functions must have an explicit list of parameters - lib\features\product\presentation\pages\product_list_page.dart:1:5 - missing_function_parameters
-  error - A function body must be provided - lib\features\product\presentation\pages\product_list_page.dart:1:10 - missing_function_body
-  error - Expected a method, getter, setter or operator declaration - lib\features\product\presentation\pages\product_list_page.dart:1:10 - expected_executable
-   info - Missing type annotation - lib\features\product\presentation\pages\product_list_page.dart:1:11 - strict_top_level_inference
-  error - A function body must be provided - lib\features\product\presentation\pages\product_list_page.dart:1:22 - missing_function_body
-   info - Missing type annotation - lib\features\product\presentation\pages\product_list_page.dart:3:5 - strict_top_level_inference
-  error - Functions must have an explicit list of parameters - lib\features\product\presentation\pages\product_list_page.dart:3:5 - missing_function_parameters
-  error - A function body must be provided - lib\features\product\presentation\pages\product_list_page.dart:3:12 - missing_function_body
-  error - Expected a method, getter, setter or operator declaration - lib\features\product\presentation\pages\product_list_page.dart:3:12 - expected_executable
-   info - Missing type annotation - lib\features\product\presentation\pages\product_list_page.dart:3:13 - strict_top_level_inference
-  error - A function body must be provided - lib\features\product\presentation\pages\product_list_page.dart:3:32 - missing_function_body
-  error - Expected a method, getter, setter or operator declaration - lib\features\product\presentation\pages\product_list_page.dart:3:32 - expected_executable
-   info - Missing type annotation - lib\features\product\presentation\pages\product_list_page.dart:3:33 - strict_top_level_inference
-   info - Missing type annotation - lib\features\product\presentation\pages\product_list_page.dart:3:43 - strict_top_level_inference
-  error - Named parameters must be enclosed in curly braces ('{' and '}') - lib\features\product\presentation\pages\product_list_page.dart:3:51 - named_parameter_outside_group
-  error - Using a colon as the separator before a default value is no longer supported - lib\features\product\presentation\pages\product_list_page.dart:3:51 - obsolete_colon_for_default_value
-  error - Undefined name '_selectedCategory' - lib\features\product\presentation\pages\product_list_page.dart:3:53 - undefined_identifier
-  error - A function body must be provided - lib\features\product\presentation\pages\product_list_page.dart:3:71 - missing_function_body
-  error - Expected a method, getter, setter or operator declaration - lib\features\product\presentation\pages\product_list_page.dart:4:3 - expected_executable
-  error - Undefined name '_searchController' - lib\features\product\presentation\pages\product_list_page.dart:8:5 - undefined_identifier
-  error - Invalid context for 'super' invocation - lib\features\product\presentation\pages\product_list_page.dart:9:5 - super_in_invalid_context
-  error - The method 'read' isn't defined for the type 'Function' - lib\features\product\presentation\pages\product_list_page.dart:14:15 - undefined_method
-  error - The name 'ProdukCubit' isn't a type, so it can't be used as a type argument - lib\features\product\presentation\pages\product_list_page.dart:14:20 - non_type_as_type_argument
-  error - Undefined name '_selectedCategory' - lib\features\product\presentation\pages\product_list_page.dart:14:55 - undefined_identifier
-  error - The method 'read' isn't defined for the type 'Function' - lib\features\product\presentation\pages\product_list_page.dart:16:15 - undefined_method
-  error - The name 'ProdukCubit' isn't a type, so it can't be used as a type argument - lib\features\product\presentation\pages\product_list_page.dart:16:20 - non_type_as_type_argument
-  error - Undefined name '_selectedCategory' - lib\features\product\presentation\pages\product_list_page.dart:16:65 - undefined_identifier
-  error - Undefined class 'ProdukCategory' - lib\features\product\presentation\pages\product_list_page.dart:20:42 - undefined_class
-  error - The function 'setState' isn't defined - lib\features\product\presentation\pages\product_list_page.dart:22:7 - undefined_function
-  error - Undefined name '_selectedCategory' - lib\features\product\presentation\pages\product_list_page.dart:23:9 - undefined_identifier
-  error - Undefined name '_searchController' - lib\features\product\presentation\pages\product_list_page.dart:24:9 - undefined_identifier
-  error - The method 'read' isn't defined for the type 'Function' - lib\features\product\presentation\pages\product_list_page.dart:26:15 - undefined_method
-  error - The name 'ProdukCubit' isn't a type, so it can't be used as a type argument - lib\features\product\presentation\pages\product_list_page.dart:26:20 - non_type_as_type_argument
-  error - Undefined class 'Widget' - lib\features\product\presentation\pages\product_list_page.dart:31:3 - undefined_class
-  error - Undefined class 'BuildContext' - lib\features\product\presentation\pages\product_list_page.dart:31:16 - undefined_class
-warning - The value of the local variable 'formatRupiah' isn't used - lib\features\product\presentation\pages\product_list_page.dart:32:11 - unused_local_variable
-  error - Undefined name 'NumberFormat' - lib\features\product\presentation\pages\product_list_page.dart:32:26 - undefined_identifier
-  error - The function 'Column' isn't defined - lib\features\product\presentation\pages\product_list_page.dart:38:12 - undefined_function
-  error - The function 'Container' isn't defined - lib\features\product\presentation\pages\product_list_page.dart:41:9 - undefined_function
-  error - The name 'all' isn't a class - lib\features\product\presentation\pages\product_list_page.dart:42:26 - creation_with_non_type
-  error - Undefined name 'Colors' - lib\features\product\presentation\pages\product_list_page.dart:43:18 - undefined_identifier
-  error - The function 'Row' isn't defined - lib\features\product\presentation\pages\product_list_page.dart:44:18 - undefined_function
-  error - The name 'Icon' isn't a class - lib\features\product\presentation\pages\product_list_page.dart:46:21 - creation_with_non_type
-  error - Undefined name 'Icons' - lib\features\product\presentation\pages\product_list_page.dart:46:26 - undefined_identifier
-  error - Undefined name 'Colors' - lib\features\product\presentation\pages\product_list_page.dart:46:52 - undefined_identifier
-  error - The name 'SizedBox' isn't a class - lib\features\product\presentation\pages\product_list_page.dart:47:21 - creation_with_non_type
-  error - The name 'Expanded' isn't a class - lib\features\product\presentation\pages\product_list_page.dart:48:21 - creation_with_non_type
-  error - The function 'Text' isn't defined - lib\features\product\presentation\pages\product_list_page.dart:49:24 - undefined_function
-  error - The function 'TextStyle' isn't defined - lib\features\product\presentation\pages\product_list_page.dart:51:26 - undefined_function
-  error - Undefined name 'FontWeight' - lib\features\product\presentation\pages\product_list_page.dart:51:48 - undefined_identifier
-  error - The function 'Container' isn't defined - lib\features\product\presentation\pages\product_list_page.dart:59:9 - undefined_function
-  error - The name 'symmetric' isn't a class - lib\features\product\presentation\pages\product_list_page.dart:60:26 - creation_with_non_type
-  error - The function 'TextField' isn't defined - lib\features\product\presentation\pages\product_list_page.dart:61:18 - undefined_function
-  error - Undefined name '_searchController' - lib\features\product\presentation\pages\product_list_page.dart:62:25 - undefined_identifier
-  error - The function 'InputDecoration' isn't defined - lib\features\product\presentation\pages\product_list_page.dart:64:25 - undefined_function
-  error - The name 'Icon' isn't a class - lib\features\product\presentation\pages\product_list_page.dart:66:33 - creation_with_non_type
-  error - Undefined name 'Icons' - lib\features\product\presentation\pages\product_list_page.dart:66:38 - undefined_identifier
-  error - The function 'IconButton' isn't defined - lib\features\product\presentation\pages\product_list_page.dart:67:27 - undefined_function
-  error - The name 'Icon' isn't a class - lib\features\product\presentation\pages\product_list_page.dart:68:29 - creation_with_non_type
-  error - Undefined name 'Icons' - lib\features\product\presentation\pages\product_list_page.dart:68:34 - undefined_identifier
-  error - Undefined name '_searchController' - lib\features\product\presentation\pages\product_list_page.dart:70:19 - undefined_identifier
-  error - The function 'OutlineInputBorder' isn't defined - lib\features\product\presentation\pages\product_list_page.dart:74:23 - undefined_function
-  error - Undefined name 'BorderRadius' - lib\features\product\presentation\pages\product_list_page.dart:75:31 - undefined_identifier
-  error - The name 'symmetric' isn't a class - lib\features\product\presentation\pages\product_list_page.dart:77:37 - creation_with_non_type
-  error - The function 'Container' isn't defined - lib\features\product\presentation\pages\product_list_page.dart:86:9 - undefined_function
-  error - The name 'symmetric' isn't a class - lib\features\product\presentation\pages\product_list_page.dart:87:26 - creation_with_non_type
-  error - The function 'Row' isn't defined - lib\features\product\presentation\pages\product_list_page.dart:88:18 - undefined_function
-  error - The function 'ChoiceChip' isn't defined - lib\features\product\presentation\pages\product_list_page.dart:90:15 - undefined_function
-  error - The name 'Text' isn't a class - lib\features\product\presentation\pages\product_list_page.dart:91:30 - creation_with_non_type
-  error - Undefined name '_selectedCategory' - lib\features\product\presentation\pages\product_list_page.dart:92:27 - undefined_identifier
-  error - Undefined name 'ProdukCategory' - lib\features\product\presentation\pages\product_list_page.dart:92:48 - undefined_identifier
-  error - Undefined name 'ProdukCategory' - lib\features\product\presentation\pages\product_list_page.dart:94:50 - undefined_identifier
-  error - Undefined name 'Colors' - lib\features\product\presentation\pages\product_list_page.dart:95:32 - undefined_identifier
-  error - The function 'TextStyle' isn't defined - lib\features\product\presentation\pages\product_list_page.dart:96:29 - undefined_function
-  error - Undefined name '_selectedCategory' - lib\features\product\presentation\pages\product_list_page.dart:97:26 - undefined_identifier
-  error - Undefined name 'ProdukCategory' - lib\features\product\presentation\pages\product_list_page.dart:97:47 - undefined_identifier
-  error - Undefined name 'Colors' - lib\features\product\presentation\pages\product_list_page.dart:98:25 - undefined_identifier
-  error - Undefined name 'Colors' - lib\features\product\presentation\pages\product_list_page.dart:99:25 - undefined_identifier
-  error - The name 'SizedBox' isn't a class - lib\features\product\presentation\pages\product_list_page.dart:102:21 - creation_with_non_type
-  error - The function 'ChoiceChip' isn't defined - lib\features\product\presentation\pages\product_list_page.dart:103:15 - undefined_function
-  error - The name 'Text' isn't a class - lib\features\product\presentation\pages\product_list_page.dart:104:30 - creation_with_non_type
-  error - Undefined name '_selectedCategory' - lib\features\product\presentation\pages\product_list_page.dart:105:27 - undefined_identifier
-  error - Undefined name 'ProdukCategory' - lib\features\product\presentation\pages\product_list_page.dart:105:48 - undefined_identifier
-  error - Undefined name 'ProdukCategory' - lib\features\product\presentation\pages\product_list_page.dart:107:50 - undefined_identifier
-  error - Undefined name 'Colors' - lib\features\product\presentation\pages\product_list_page.dart:108:32 - undefined_identifier
-  error - The function 'TextStyle' isn't defined - lib\features\product\presentation\pages\product_list_page.dart:109:29 - undefined_function
-  error - Undefined name '_selectedCategory' - lib\features\product\presentation\pages\product_list_page.dart:110:26 - undefined_identifier
-  error - Undefined name 'ProdukCategory' - lib\features\product\presentation\pages\product_list_page.dart:110:47 - undefined_identifier
-  error - Undefined name 'Colors' - lib\features\product\presentation\pages\product_list_page.dart:111:25 - undefined_identifier
-  error - Undefined name 'Colors' - lib\features\product\presentation\pages\product_list_page.dart:112:25 - undefined_identifier
-  error - The name 'Spacer' isn't a class - lib\features\product\presentation\pages\product_list_page.dart:115:21 - creation_with_non_type
-  error - The function 'PopupMenuButton' isn't defined - lib\features\product\presentation\pages\product_list_page.dart:116:15 - undefined_function
-  error - The name 'Icon' isn't a class - lib\features\product\presentation\pages\product_list_page.dart:117:29 - creation_with_non_type
-  error - Undefined name 'Icons' - lib\features\product\presentation\pages\product_list_page.dart:117:34 - undefined_identifier
-  error - The name 'ProdukCubit' isn't a type, so it can't be used as a type argument - lib\features\product\presentation\pages\product_list_page.dart:119:32 - non_type_as_type_argument
-  error - Undefined class 'BuildContext' - lib\features\product\presentation\pages\product_list_page.dart:121:31 - undefined_class
-  error - The name 'PopupMenuEntry' isn't a type, so it can't be used as a type argument - lib\features\product\presentation\pages\product_list_page.dart:121:57 - non_type_as_type_argument
-  error - The name 'PopupMenuItem' isn't a class - lib\features\product\presentation\pages\product_list_page.dart:122:25 - creation_with_non_type
-  error - The function 'Row' isn't defined - lib\features\product\presentation\pages\product_list_page.dart:124:28 - undefined_function
-  error - The function 'Icon' isn't defined - lib\features\product\presentation\pages\product_list_page.dart:126:25 - undefined_function
-  error - Undefined name 'Icons' - lib\features\product\presentation\pages\product_list_page.dart:126:30 - undefined_identifier
-  error - The function 'SizedBox' isn't defined - lib\features\product\presentation\pages\product_list_page.dart:127:25 - undefined_function
-  error - The function 'Text' isn't defined - lib\features\product\presentation\pages\product_list_page.dart:128:25 - undefined_function
-  error - The name 'PopupMenuItem' isn't a class - lib\features\product\presentation\pages\product_list_page.dart:132:25 - creation_with_non_type
-  error - The function 'Row' isn't defined - lib\features\product\presentation\pages\product_list_page.dart:134:28 - undefined_function
-  error - The function 'Icon' isn't defined - lib\features\product\presentation\pages\product_list_page.dart:136:25 - undefined_function
-  error - Undefined name 'Icons' - lib\features\product\presentation\pages\product_list_page.dart:136:30 - undefined_identifier
-  error - The function 'SizedBox' isn't defined - lib\features\product\presentation\pages\product_list_page.dart:137:25 - undefined_function
-  error - The function 'Text' isn't defined - lib\features\product\presentation\pages\product_list_page.dart:138:25 - undefined_function
-  error - The name 'PopupMenuItem' isn't a class - lib\features\product\presentation\pages\product_list_page.dart:142:25 - creation_with_non_type
-  error - The function 'Row' isn't defined - lib\features\product\presentation\pages\product_list_page.dart:144:28 - undefined_function
-  error - The function 'Icon' isn't defined - lib\features\product\presentation\pages\product_list_page.dart:146:25 - undefined_function
-  error - Undefined name 'Icons' - lib\features\product\presentation\pages\product_list_page.dart:146:30 - undefined_identifier
-  error - The function 'SizedBox' isn't defined - lib\features\product\presentation\pages\product_list_page.dart:147:25 - undefined_function
-  error - The function 'Text' isn't defined - lib\features\product\presentation\pages\product_list_page.dart:148:25 - undefined_function
-  error - The function 'Expanded' isn't defined - lib\features\product\presentation\pages\product_list_page.dart:159:9 - undefined_function
-  error - The function 'BlocBuilder' isn't defined - lib\features\product\presentation\pages\product_list_page.dart:160:18 - undefined_function
-  error - The name 'ProdukCubit' isn't a type, so it can't be used as a type argument - lib\features\product\presentation\pages\product_list_page.dart:160:30 - non_type_as_type_argument
-  error - The name 'ProdukState' isn't a type, so it can't be used as a type argument - lib\features\product\presentation\pages\product_list_page.dart:160:43 - non_type_as_type_argument
-  error - The name 'ProdukLoading' isn't defined, so it can't be used in an 'is' expression - lib\features\product\presentation\pages\product_list_page.dart:162:28 - type_test_with_undefined_name
-  error - The name 'Center' isn't a class - lib\features\product\presentation\pages\product_list_page.dart:163:30 - creation_with_non_type
-  error - The function 'CircularProgressIndicator' isn't defined - lib\features\product\presentation\pages\product_list_page.dart:163:44 - undefined_function
-warning - Dead code - lib\features\product\presentation\pages\product_list_page.dart:164:22 - dead_code
-  error - The name 'ProdukError' isn't defined, so it can't be used in an 'is' expression - lib\features\product\presentation\pages\product_list_page.dart:164:35 - type_test_with_undefined_name
-  error - The function 'Center' isn't defined - lib\features\product\presentation\pages\product_list_page.dart:165:24 - undefined_function
-  error - The function 'Text' isn't defined - lib\features\product\presentation\pages\product_list_page.dart:165:38 - undefined_function
-  error - The name 'ProdukLoaded' isn't defined, so it can't be used in an 'is' expression - lib\features\product\presentation\pages\product_list_page.dart:166:35 - type_test_with_undefined_name
-warning - The value of the local variable 'sortOrder' isn't used - lib\features\product\presentation\pages\product_list_page.dart:168:23 - unused_local_variable
-  error - The name 'Center' isn't a class - lib\features\product\presentation\pages\product_list_page.dart:171:32 - creation_with_non_type
-  error - The function 'Text' isn't defined - lib\features\product\presentation\pages\product_list_page.dart:171:46 - undefined_function
-warning - The label 'mainAxisSpacing' isn't used - lib\features\product\presentation\pages\product_list_page.dart:174:9 - unused_label
-  error - Expected to find ';' - lib\features\product\presentation\pages\product_list_page.dart:174:26 - expected_token
-  error - Expected an identifier - lib\features\product\presentation\pages\product_list_page.dart:174:28 - missing_identifier
-  error - Unexpected text ',' - lib\features\product\presentation\pages\product_list_page.dart:174:28 - unexpected_token
-  error - Expected to find '}' - lib\features\product\presentation\pages\product_list_page.dart:175:7 - expected_token
-  error - Undefined name 'produkList' - lib\features\product\presentation\pages\product_list_page.dart:176:18 - undefined_identifier
-  error - Undefined name 'produkList' - lib\features\product\presentation\pages\product_list_page.dart:179:11 - undefined_identifier
-  error - Undefined name 'currencyFormatter' - lib\features\product\presentation\pages\product_list_page.dart:180:11 - undefined_identifier
-  error - Expected to find ')' - lib\features\product\presentation\pages\product_list_page.dart:184:6 - expected_token
-  error - Expected to find ']' - lib\features\product\presentation\pages\product_list_page.dart:184:6 - expected_token
-  error - Undefined class 'Widget' - lib\features\product\presentation\pages\product_list_page.dart:187:3 - undefined_class
-  error - Undefined class 'Produk' - lib\features\product\presentation\pages\product_list_page.dart:188:5 - undefined_class
-  error - Undefined class 'NumberFormat' - lib\features\product\presentation\pages\product_list_page.dart:189:5 - undefined_class
-  error - Undefined class 'BuildContext' - lib\features\product\presentation\pages\product_list_page.dart:190:5 - undefined_class
-  error - The function 'InkWell' isn't defined - lib\features\product\presentation\pages\product_list_page.dart:194:12 - undefined_function
-  error - The function 'Card' isn't defined - lib\features\product\presentation\pages\product_list_page.dart:203:14 - undefined_function
-  error - The function 'RoundedRectangleBorder' isn't defined - lib\features\product\presentation\pages\product_list_page.dart:205:16 - undefined_function
-  error - Undefined name 'BorderRadius' - lib\features\product\presentation\pages\product_list_page.dart:205:53 - undefined_identifier
-  error - The function 'Column' isn't defined - lib\features\product\presentation\pages\product_list_page.dart:206:16 - undefined_function
-  error - Undefined name 'CrossAxisAlignment' - lib\features\product\presentation\pages\product_list_page.dart:207:31 - undefined_identifier
-  error - The function 'Expanded' isn't defined - lib\features\product\presentation\pages\product_list_page.dart:210:13 - undefined_function
-  error - The function 'Container' isn't defined - lib\features\product\presentation\pages\product_list_page.dart:211:22 - undefined_function
-  error - The function 'BoxDecoration' isn't defined - lib\features\product\presentation\pages\product_list_page.dart:213:29 - undefined_function
-  error - The name 'vertical' isn't a class - lib\features\product\presentation\pages\product_list_page.dart:214:39 - creation_with_non_type
-  error - Undefined name 'Radius' - lib\features\product\presentation\pages\product_list_page.dart:215:26 - undefined_identifier
-  error - The function 'DecorationImage' isn't defined - lib\features\product\presentation\pages\product_list_page.dart:217:26 - undefined_function
-  error - The function 'NetworkImage' isn't defined - lib\features\product\presentation\pages\product_list_page.dart:218:28 - undefined_function
-  error - Undefined name 'BoxFit' - lib\features\product\presentation\pages\product_list_page.dart:219:26 - undefined_identifier
-  error - The name 'Icon' isn't a class - lib\features\product\presentation\pages\product_list_page.dart:224:29 - creation_with_non_type
-  error - Undefined name 'Icons' - lib\features\product\presentation\pages\product_list_page.dart:224:34 - undefined_identifier
-  error - Undefined name 'Colors' - lib\features\product\presentation\pages\product_list_page.dart:224:67 - undefined_identifier
-  error - The function 'Padding' isn't defined - lib\features\product\presentation\pages\product_list_page.dart:230:13 - undefined_function
-  error - The name 'all' isn't a class - lib\features\product\presentation\pages\product_list_page.dart:231:30 - creation_with_non_type
-  error - The function 'Column' isn't defined - lib\features\product\presentation\pages\product_list_page.dart:232:22 - undefined_function
-  error - Undefined name 'CrossAxisAlignment' - lib\features\product\presentation\pages\product_list_page.dart:233:37 - undefined_identifier
-  error - The function 'Text' isn't defined - lib\features\product\presentation\pages\product_list_page.dart:235:19 - undefined_function
-  error - The name 'TextStyle' isn't a class - lib\features\product\presentation\pages\product_list_page.dart:237:34 - creation_with_non_type
-  error - Undefined name 'FontWeight' - lib\features\product\presentation\pages\product_list_page.dart:238:35 - undefined_identifier
-  error - Undefined name 'TextOverflow' - lib\features\product\presentation\pages\product_list_page.dart:242:31 - undefined_identifier
-  error - The name 'SizedBox' isn't a class - lib\features\product\presentation\pages\product_list_page.dart:244:25 - creation_with_non_type
-  error - The function 'Text' isn't defined - lib\features\product\presentation\pages\product_list_page.dart:245:19 - undefined_function
-  error - The function 'TextStyle' isn't defined - lib\features\product\presentation\pages\product_list_page.dart:247:28 - undefined_function
-  error - Undefined name 'Colors' - lib\features\product\presentation\pages\product_list_page.dart:248:30 - undefined_identifier
-  error - Undefined name 'FontWeight' - lib\features\product\presentation\pages\product_list_page.dart:249:35 - undefined_identifier
-  error - The name 'SizedBox' isn't a class - lib\features\product\presentation\pages\product_list_page.dart:253:25 - creation_with_non_type
-  error - The function 'SizedBox' isn't defined - lib\features\product\presentation\pages\product_list_page.dart:254:19 - undefined_function
-  error - The function 'ElevatedButton' isn't defined - lib\features\product\presentation\pages\product_list_page.dart:257:28 - undefined_function
-  error - The name 'CartBloc' isn't a type, so it can't be used as a type argument - lib\features\product\presentation\pages\product_list_page.dart:259:38 - non_type_as_type_argument
-  error - The function 'AddToCart' isn't defined - lib\features\product\presentation\pages\product_list_page.dart:259:54 - undefined_function
-  error - Undefined name 'ElevatedButton' - lib\features\product\presentation\pages\product_list_page.dart:261:30 - undefined_identifier
-  error - Undefined name 'Colors' - lib\features\product\presentation\pages\product_list_page.dart:262:42 - undefined_identifier
-  error - Undefined name 'Colors' - lib\features\product\presentation\pages\product_list_page.dart:263:42 - undefined_identifier
-  error - Undefined name 'EdgeInsets' - lib\features\product\presentation\pages\product_list_page.dart:264:34 - undefined_identifier
-  error - The name 'Text' isn't a class - lib\features\product\presentation\pages\product_list_page.dart:266:36 - creation_with_non_type
-  error - The function 'TextStyle' isn't defined - lib\features\product\presentation\pages\product_list_page.dart:266:57 - undefined_function
-  error - Undefined class 'Widget' - lib\features\product\presentation\pages\product_list_page.dart:278:3 - undefined_class
-warning - The declaration '_buildDesktopLayout' isn't referenced - lib\features\product\presentation\pages\product_list_page.dart:278:10 - unused_element
-  error - The name 'Produk' isn't a type, so it can't be used as a type argument - lib\features\product\presentation\pages\product_list_page.dart:279:10 - non_type_as_type_argument
-  error - Undefined class 'NumberFormat' - lib\features\product\presentation\pages\product_list_page.dart:280:5 - undefined_class
-  error - Undefined class 'BuildContext' - lib\features\product\presentation\pages\product_list_page.dart:281:5 - undefined_class
-  error - Undefined class 'SortOrder' - lib\features\product\presentation\pages\product_list_page.dart:283:5 - undefined_class
-  error - Undefined name 'GridView' - lib\features\product\presentation\pages\product_list_page.dart:287:12 - undefined_identifier
-  error - The function 'ValueKey' isn't defined - lib\features\product\presentation\pages\product_list_page.dart:288:12 - undefined_function
-  error - The name 'all' isn't a class - lib\features\product\presentation\pages\product_list_page.dart:289:22 - creation_with_non_type
-  error - The function 'SliverGridDelegateWithFixedCrossAxisCount' isn't defined - lib\features\product\presentation\pages\product_list_page.dart:291:21 - undefined_function
-  error - Undefined class 'Widget' - lib\features\product\presentation\pages\product_list_page.dart:304:3 - undefined_class
-  error - Undefined class 'Produk' - lib\features\product\presentation\pages\product_list_page.dart:305:5 - undefined_class
-  error - Undefined class 'NumberFormat' - lib\features\product\presentation\pages\product_list_page.dart:306:5 - undefined_class
-  error - Undefined class 'BuildContext' - lib\features\product\presentation\pages\product_list_page.dart:307:5 - undefined_class
-  error - The function 'InkWell' isn't defined - lib\features\product\presentation\pages\product_list_page.dart:309:12 - undefined_function
-  error - The function 'Card' isn't defined - lib\features\product\presentation\pages\product_list_page.dart:313:14 - undefined_function
-  error - The function 'RoundedRectangleBorder' isn't defined - lib\features\product\presentation\pages\product_list_page.dart:315:16 - undefined_function
-  error - Undefined name 'BorderRadius' - lib\features\product\presentation\pages\product_list_page.dart:315:53 - undefined_identifier
-  error - The function 'Column' isn't defined - lib\features\product\presentation\pages\product_list_page.dart:316:16 - undefined_function
-  error - Undefined name 'CrossAxisAlignment' - lib\features\product\presentation\pages\product_list_page.dart:317:31 - undefined_identifier
-  error - The function 'Expanded' isn't defined - lib\features\product\presentation\pages\product_list_page.dart:319:13 - undefined_function
-  error - The function 'ClipRRect' isn't defined - lib\features\product\presentation\pages\product_list_page.dart:321:22 - undefined_function
-  error - The name 'vertical' isn't a class - lib\features\product\presentation\pages\product_list_page.dart:322:37 - creation_with_non_type
-  error - Undefined name 'Radius' - lib\features\product\presentation\pages\product_list_page.dart:323:24 - undefined_identifier
-  error - Undefined name 'Image' - lib\features\product\presentation\pages\product_list_page.dart:325:24 - undefined_identifier
-  error - Undefined name 'BoxFit' - lib\features\product\presentation\pages\product_list_page.dart:328:24 - undefined_identifier
-  error - The name 'Center' isn't a class - lib\features\product\presentation\pages\product_list_page.dart:330:29 - creation_with_non_type
-  error - The function 'Icon' isn't defined - lib\features\product\presentation\pages\product_list_page.dart:330:43 - undefined_function
-  error - Undefined name 'Icons' - lib\features\product\presentation\pages\product_list_page.dart:330:48 - undefined_identifier
-  error - The function 'Padding' isn't defined - lib\features\product\presentation\pages\product_list_page.dart:334:13 - undefined_function
-  error - The name 'all' isn't a class - lib\features\product\presentation\pages\product_list_page.dart:335:30 - creation_with_non_type
-  error - The function 'Column' isn't defined - lib\features\product\presentation\pages\product_list_page.dart:336:22 - undefined_function
-  error - Undefined name 'CrossAxisAlignment' - lib\features\product\presentation\pages\product_list_page.dart:337:37 - undefined_identifier
-  error - The function 'Text' isn't defined - lib\features\product\presentation\pages\product_list_page.dart:339:19 - undefined_function
-  error - The name 'TextStyle' isn't a class - lib\features\product\presentation\pages\product_list_page.dart:341:34 - creation_with_non_type
-  error - Undefined name 'FontWeight' - lib\features\product\presentation\pages\product_list_page.dart:342:35 - undefined_identifier
-  error - Undefined name 'TextOverflow' - lib\features\product\presentation\pages\product_list_page.dart:346:31 - undefined_identifier
-  error - The name 'SizedBox' isn't a class - lib\features\product\presentation\pages\product_list_page.dart:348:25 - creation_with_non_type
-  error - The function 'Text' isn't defined - lib\features\product\presentation\pages\product_list_page.dart:349:19 - undefined_function
-  error - The name 'TextStyle' isn't a class - lib\features\product\presentation\pages\product_list_page.dart:351:34 - creation_with_non_type
-  error - Undefined name 'Colors' - lib\features\product\presentation\pages\product_list_page.dart:352:30 - undefined_identifier
-  error - Undefined name 'FontWeight' - lib\features\product\presentation\pages\product_list_page.dart:353:35 - undefined_identifier
-  error - The function 'Padding' isn't defined - lib\features\product\presentation\pages\product_list_page.dart:360:13 - undefined_function
-  error - The name 'fromLTRB' isn't a class - lib\features\product\presentation\pages\product_list_page.dart:361:30 - creation_with_non_type
-  error - The function 'SizedBox' isn't defined - lib\features\product\presentation\pages\product_list_page.dart:362:22 - undefined_function
-  error - Undefined name 'ElevatedButton' - lib\features\product\presentation\pages\product_list_page.dart:364:24 - undefined_identifier
-  error - The name 'CartBloc' isn't a type, so it can't be used as a type argument - lib\features\product\presentation\pages\product_list_page.dart:366:36 - non_type_as_type_argument
-  error - The function 'AddToCart' isn't defined - lib\features\product\presentation\pages\product_list_page.dart:366:52 - undefined_function
-  error - The name 'Icon' isn't a class - lib\features\product\presentation\pages\product_list_page.dart:367:31 - creation_with_non_type
-  error - Undefined name 'Icons' - lib\features\product\presentation\pages\product_list_page.dart:367:36 - undefined_identifier
-  error - The name 'Text' isn't a class - lib\features\product\presentation\pages\product_list_page.dart:368:32 - creation_with_non_type
-  error - Undefined name 'ElevatedButton' - lib\features\product\presentation\pages\product_list_page.dart:369:26 - undefined_identifier
-  error - Undefined name 'Colors' - lib\features\product\presentation\pages\product_list_page.dart:370:38 - undefined_identifier
-  error - Undefined name 'Colors' - lib\features\product\presentation\pages\product_list_page.dart:371:38 - undefined_identifier
-  error - The name 'TextStyle' isn't a class - lib\features\product\presentation\pages\product_list_page.dart:372:38 - creation_with_non_type
-  error - Expected a method, getter, setter or operator declaration - lib\features\product\presentation\pages\product_list_page.dart:382:1 - expected_executable
    info - Don't use 'BuildContext's across async gaps - lib\features\profile\presentation\pages\about_us_page.dart:210:30 - use_build_context_synchronously
    info - Don't use 'BuildContext's across async gaps - lib\features\profile\presentation\pages\about_us_page.dart:216:9 - use_build_context_synchronously
    info - 'withOpacity' is deprecated and shouldn't be used. Use .withValues() to avoid precision loss - lib\features\profile\presentation\pages\about_us_page.dart:233:33 - deprecated_member_use
-warning - Unused import: 'package:menu_makanan/features/cart/data/repositories/cart_repository_impl.dart' - lib\main.dart:14:8 - unused_import
-warning - Duplicate import - lib\main.dart:21:8 - duplicate_import
-warning - Duplicate import - lib\main.dart:22:8 - duplicate_import
-warning - The value of the local variable 'email' isn't used - lib\router\app_router.dart:56:17 - unused_local_variable
-  error - The function 'HalamanDaftarProduk' isn't defined - lib\router\app_router.dart:57:18 - undefined_function
-   info - Unnecessary instance of 'Container' - lib\tombol\pengaturan.dart:46:14 - avoid_unnecessary_containers
+  error - Target of URI doesn't exist: 'package:menu_makanan/model/produk.dart' - lib\model\makanan.dart:1:8 - uri_does_not_exist
+  error - Classes can only extend other classes - lib\model\makanan.dart:3:23 - extends_non_class
+warning - The field doesn't override an inherited getter or setter - lib\model\makanan.dart:6:16 - override_on_non_overriding_member
+  error - No associated named super constructor parameter - lib\model\makanan.dart:9:20 - super_formal_parameter_without_associated_named
+  error - No associated named super constructor parameter - lib\model\makanan.dart:10:20 - super_formal_parameter_without_associated_named
+  error - No associated named super constructor parameter - lib\model\makanan.dart:11:20 - super_formal_parameter_without_associated_named
+  error - No associated named super constructor parameter - lib\model\makanan.dart:12:20 - super_formal_parameter_without_associated_named
+  error - No associated named super constructor parameter - lib\model\makanan.dart:13:20 - super_formal_parameter_without_associated_named
+  error - No associated named super constructor parameter - lib\model\makanan.dart:14:20 - super_formal_parameter_without_associated_named
+  error - No associated named super constructor parameter - lib\model\makanan.dart:15:20 - super_formal_parameter_without_associated_named
+warning - The method doesn't override an inherited method - lib\model\makanan.dart:22:10 - override_on_non_overriding_member
+  error - Undefined name 'nama' - lib\model\makanan.dart:24:14 - undefined_identifier
+  error - Undefined name 'harga' - lib\model\makanan.dart:24:38 - undefined_identifier
+warning - Unused import: 'package:menu_makanan/core/errors/failures.dart' - test\features\product\domain\usecases\get_all_produk_usecase_test.dart:4:8 - unused_import
+   info - Don't invoke 'print' in production code - test\produk_equality_test.dart:25:5 - avoid_print
+   info - Don't invoke 'print' in production code - test\produk_equality_test.dart:26:5 - avoid_print
+   info - Don't invoke 'print' in production code - test\produk_equality_test.dart:27:5 - avoid_print
+   info - Don't invoke 'print' in production code - test\produk_equality_test.dart:28:5 - avoid_print
+   info - Don't invoke 'print' in production code - test\produk_equality_test.dart:29:5 - avoid_print
 
+flutter : 121 issues found. 
+(ran in 2.6s)
+At line:1 char:1
++ flutter analyze 2>&1 | 
+Out-File -FilePath 
+"analyze_output.txt" -Encod 
+...
++ ~~~~~~~~~~~~~~~~~~~~
+    + CategoryInfo           
+   : NotSpecified: (121 iss  
+  ues found. (ran in 2.6s)   
+ :String) [], RemoteExcep    
+tion
+    + FullyQualifiedErrorId  
+   : NativeCommandError
+ 
