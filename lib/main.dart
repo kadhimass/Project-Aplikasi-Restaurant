@@ -19,14 +19,6 @@ import 'package:menu_makanan/features/product/domain/usecases/get_all_produk_use
 import 'package:menu_makanan/features/product/domain/usecases/search_produk_usecase.dart';
 import 'package:menu_makanan/features/product/domain/usecases/get_minuman_usecase.dart';
 import 'package:menu_makanan/features/product/domain/usecases/search_minuman_usecase.dart';
-import 'package:menu_makanan/features/cart/data/repositories/cart_repository_impl.dart';
-import 'package:menu_makanan/features/produk/presentation/cubit/produk_cubit.dart';
-import 'package:menu_makanan/features/produk/data/datasources/produk_remote_datasource.dart';
-import 'package:menu_makanan/features/produk/data/repositories/produk_repository_impl.dart';
-import 'package:menu_makanan/features/produk/domain/usecases/get_all_produk_usecase.dart';
-import 'package:menu_makanan/features/produk/domain/usecases/get_all_minuman_usecase.dart';
-import 'package:menu_makanan/features/produk/domain/usecases/search_produk_usecase.dart';
-import 'package:menu_makanan/features/produk/domain/usecases/search_minuman_usecase.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
@@ -44,9 +36,6 @@ void main() async {
     localDataSource: produkLocalDataSource,
   );
   
-  final produkRepository = ProdukRepositoryImpl(
-    remoteDataSource: produkRemoteDataSource,
-  );
   final getAllProdukUseCase = GetAllProdukUseCase(produkRepository);
   final searchProdukUseCase = SearchProdukUseCase(produkRepository);
   final getMinumanUseCase = GetMinumanUseCase(produkRepository);
@@ -60,9 +49,7 @@ void main() async {
             ChangeNotifierProvider(create: (_) => TransactionProvider()),
             ChangeNotifierProvider(create: (_) => ThemeProvider()),
             ChangeNotifierProvider(create: (_) => PaymentProvider()),
-            BlocProvider(
-              create: (_) => CartBloc(cartRepository: CartRepositoryImpl()),
-            ),
+            BlocProvider(create: (_) => CartBloc()),
             BlocProvider(
               create: (_) => ProdukCubit(
                 getAllProdukUseCase: getAllProdukUseCase,

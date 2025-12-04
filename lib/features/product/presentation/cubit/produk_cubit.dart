@@ -61,7 +61,6 @@ class ProdukCubit extends Cubit<ProdukState> {
       final originalList = currentState.originalList;
       
       if (ascending == null) {
-        // Default sort (original order)
         emit(ProdukLoaded(
           List.of(originalList),
           originalList: originalList,
