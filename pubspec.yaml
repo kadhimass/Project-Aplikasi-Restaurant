@@ -97,12 +97,11 @@ flutter:
   uses-material-design: true
   assets:
     - assets/unesa logo.png
-    - assets/halim.jpg
     - assets/buri.jpeg
     - assets/mie setan.jpg
     - assets/mie iblis.jpg
-    - assets/logo.jpeg
     - assets/LOGO.png
+    - assets/ikon.png
     - assets/sate ayam.jpg
     - assets/rendang.jpeg
     - assets/nasi goreng.jpg
@@ -125,7 +124,11 @@ flutter:
     - assets/caffe latte.jpg
     - assets/instagram.jpeg
     - assets/github.png
-
+    - assets/profile/halim.jpg
+    - assets/profile/avatar.jpg
+    - assets/profile/dimas.jpeg
+    - assets/profile/yusa.jpeg
+    - assets/profile/wendy.jpeg 
   #fonts:
    # - family: Poppin-Regular
     #  fonts:
