@@ -7,10 +7,7 @@ import 'package:menu_makanan/features/cart/presentation/bloc/cart_state.dart';
 import 'package:menu_makanan/features/cart/domain/entities/cart_item.dart';
 import 'package:go_router/go_router.dart';
 import 'package:menu_makanan/model/produk.dart';
-import 'package:provider/provider.dart';
-import 'package:menu_makanan/providers/transaction_provider.dart';
 import 'package:menu_makanan/model/keranjang.dart';
-import 'package:menu_makanan/services/cart_service.dart';
 
 class HalamanKeranjangPage extends StatefulWidget {
   final String email;
@@ -31,11 +28,6 @@ class _HalamanKeranjangPageState extends State<HalamanKeranjangPage> {
   void _tambahItem(Produk produk) {
     context.read<CartBloc>().add(AddToCart(produk));
     _showSnackBar('${produk.nama} ditambahkan!', Colors.green);
-  }
-
-  void _kosongkanKeranjang() {
-    context.read<CartBloc>().add(ClearCart());
-    _showSnackBar('Keranjang dikosongkan!', Colors.orange);
   }
 
   void _kurangiItem(Produk produk) {
@@ -209,25 +201,10 @@ class _HalamanKeranjangPageState extends State<HalamanKeranjangPage> {
           .toList(),
     );
 
-    final newTransaction = CartService.createTransaction(
-      keranjang: keranjangLama,
-      email: widget.email,
-    );
-
-    Provider.of<TransactionProvider>(
-      context,
-      listen: false,
-    ).addTransaction(newTransaction);
-    _kosongkanKeranjang();
-
+    // Navigate ke payment method page FIRST
     context.pushNamed(
-      'bukti',
-      extra: {
-        'keranjang': newTransaction.keranjang,
-        'email': newTransaction.email,
-        'idTransaksi': newTransaction.idTransaksi,
-        'waktuTransaksi': newTransaction.waktuTransaksi,
-      },
+      'payment',
+      extra: {'keranjang': keranjangLama, 'email': widget.email},
     );
   }
 

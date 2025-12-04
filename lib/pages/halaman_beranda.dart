@@ -2,15 +2,12 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:intl/intl.dart';
 import 'package:sizer/sizer.dart';
-import 'package:menu_makanan/bloc/cart_bloc.dart';
-import 'package:menu_makanan/bloc/cart_event.dart';
 import 'package:menu_makanan/services/produk_filter_service.dart';
-
+import 'package:menu_makanan/features/cart/presentation/bloc/cart_bloc.dart';
+import 'package:menu_makanan/features/cart/presentation/bloc/cart_event.dart';
 import 'package:go_router/go_router.dart';
-import 'package:menu_makanan/model/dummydata.dart';
 import 'package:menu_makanan/model/keranjang.dart';
 import 'package:menu_makanan/model/produk.dart';
-import 'package:menu_makanan/pages/halaman_beranda_example_api.dart';
 
 class HalamanBeranda extends StatefulWidget {
   final Keranjang keranjang;
@@ -53,7 +50,8 @@ class _HalamanBerandaState extends State<HalamanBeranda> {
 
   @override
   Widget build(BuildContext context) {
-    List<Produk> produkList = DummyData.getProdukList();
+    // Gunakan empty list - data dari API melalui provider/cubit
+    List<Produk> produkList = [];
     List<Produk> filteredProdukList = _getFilteredAndSortedProducts(produkList);
 
     final formatRupiah = NumberFormat.currency(
@@ -118,7 +116,7 @@ class _HalamanBerandaState extends State<HalamanBeranda> {
         ),
 
         // Latest meals from TheMealDB (connected to the same search box)
-        MealFromApiWidget(searchQuery: _searchQuery),
+        _buildMealFromApiWidget(),
 
         // Filter Tabs (Makanan / Minuman / Semua)
         Container(
@@ -598,6 +596,16 @@ class _HalamanBerandaState extends State<HalamanBeranda> {
           ],
         ),
       ),
+    );
+  }
+
+  /// Build meal list from API
+  Widget _buildMealFromApiWidget() {
+    // TODO: Integrate dengan API provider/cubit untuk menampilkan meals dari TheMealDB
+    // Saat ini return empty Container sampai API data tersedia
+    return Container(
+      padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 8),
+      child: const SizedBox.shrink(),
     );
   }
 }

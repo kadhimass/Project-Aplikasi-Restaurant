@@ -4,7 +4,6 @@ import 'package:intl/intl.dart';
 import 'package:menu_makanan/features/cart/presentation/bloc/cart_bloc.dart';
 import 'package:menu_makanan/features/cart/presentation/bloc/cart_event.dart';
 import 'package:menu_makanan/model/produk.dart';
-import 'package:animated_rating_stars/animated_rating_stars.dart';
 import 'package:flutter_rating_bar/flutter_rating_bar.dart';
 import 'package:menu_makanan/services/rating_service.dart';
 import 'package:menu_makanan/utils/responsive_breakpoints.dart';

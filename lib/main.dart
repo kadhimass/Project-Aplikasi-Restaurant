@@ -19,8 +19,6 @@ import 'package:menu_makanan/features/produk/domain/usecases/get_all_produk_usec
 import 'package:menu_makanan/features/produk/domain/usecases/get_all_minuman_usecase.dart';
 import 'package:menu_makanan/features/produk/domain/usecases/search_produk_usecase.dart';
 import 'package:menu_makanan/features/produk/domain/usecases/search_minuman_usecase.dart';
-import 'package:menu_makanan/providers/transaction_provider.dart';
-import 'package:menu_makanan/providers/theme_provider.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
@@ -32,7 +30,9 @@ void main() async {
 
   // Setup Dependency Injection
   final produkRemoteDataSource = ProdukRemoteDataSourceImpl(dio: dio);
-  final produkRepository = ProdukRepositoryImpl(remoteDataSource: produkRemoteDataSource);
+  final produkRepository = ProdukRepositoryImpl(
+    remoteDataSource: produkRemoteDataSource,
+  );
   final getAllProdukUseCase = GetAllProdukUseCase(produkRepository);
   final getAllMinumanUseCase = GetAllMinumanUseCase(produkRepository);
   final searchProdukUseCase = SearchProdukUseCase(produkRepository);
@@ -46,7 +46,9 @@ void main() async {
             ChangeNotifierProvider(create: (_) => TransactionProvider()),
             ChangeNotifierProvider(create: (_) => ThemeProvider()),
             ChangeNotifierProvider(create: (_) => PaymentProvider()),
-            BlocProvider(create: (_) => CartBloc(cartRepository: CartRepositoryImpl())),
+            BlocProvider(
+              create: (_) => CartBloc(cartRepository: CartRepositoryImpl()),
+            ),
             BlocProvider(
               create: (_) => ProdukCubit(
                 getAllProdukUseCase: getAllProdukUseCase,

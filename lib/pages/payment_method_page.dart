@@ -1,19 +1,19 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
+import 'package:go_router/go_router.dart';
 import 'package:menu_makanan/model/payment_method.dart';
 import 'package:menu_makanan/model/keranjang.dart';
 import 'package:menu_makanan/providers/payment_provider.dart';
-import 'package:menu_makanan/pages/order_details_page.dart';
 
 class PaymentMethodPage extends StatelessWidget {
   final Keranjang keranjang;
   final String email;
 
   const PaymentMethodPage({
-    Key? key,
+    super.key,
     required this.keranjang,
     required this.email,
-  }) : super(key: key);
+  });
 
   @override
   Widget build(BuildContext context) {
@@ -42,11 +42,14 @@ class PaymentMethodPage extends StatelessWidget {
                             value: m,
                             groupValue: paymentProvider.selectedPaymentMethod,
                             onChanged: (v) {
-                              if (v != null)
+                              if (v != null) {
                                 paymentProvider.selectPaymentMethod(v);
+                              }
                             },
                           ),
-                          onTap: () => paymentProvider.selectPaymentMethod(m),
+                          onTap: () {
+                            paymentProvider.selectPaymentMethod(m);
+                          },
                         ),
                       );
                     }).toList(),
@@ -58,16 +61,15 @@ class PaymentMethodPage extends StatelessWidget {
                     onPressed: paymentProvider.selectedPaymentMethod == null
                         ? null
                         : () {
-                            Navigator.push(
-                              context,
-                              MaterialPageRoute(
-                                builder: (_) => OrderDetailsPage(
-                                  keranjang: keranjang,
-                                  paymentMethod:
-                                      paymentProvider.selectedPaymentMethod!,
-                                  email: email,
-                                ),
-                              ),
+                            // Navigate to order details page
+                            context.pushNamed(
+                              'order-details',
+                              extra: {
+                                'keranjang': keranjang,
+                                'paymentMethod':
+                                    paymentProvider.selectedPaymentMethod!,
+                                'email': email,
+                              },
                             );
                           },
                     child: const Text('Lanjutkan ke Detail Pesanan'),

@@ -2,6 +2,7 @@ import 'package:menu_makanan/model/produk.dart';
 
 class Makanan extends Produk {
   final bool pedas;
+  @override
   final String kategori;
 
   Makanan({
