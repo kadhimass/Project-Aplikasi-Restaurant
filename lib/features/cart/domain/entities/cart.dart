@@ -1,5 +1,5 @@
 import 'package:menu_makanan/features/cart/domain/entities/cart_item.dart';
-import 'package:menu_makanan/model/produk.dart';
+import 'package:menu_makanan/features/product/domain/entities/product.dart';
 
 class Cart {
   final List<CartItem> items;

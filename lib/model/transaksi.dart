@@ -1,8 +1,7 @@
-import 'package:menu_makanan/model/keranjang.dart';
-// Import Produk
+import 'package:menu_makanan/features/cart/domain/entities/cart.dart';
 
 class Transaksi {
-  final Keranjang keranjang;
+  final Cart keranjang;
   final String email;
   final String idTransaksi;
   final DateTime waktuTransaksi;
@@ -13,10 +12,4 @@ class Transaksi {
     required this.idTransaksi,
     required this.waktuTransaksi,
   });
-
-  // Getter untuk informasi diskon
-  double get totalSebelumDiskon => keranjang.totalHarga;
-  double get jumlahDiskon => keranjang.jumlahDiskon;
-  double get totalSetelahDiskon => keranjang.hargaSetelahDiskon;
-  bool get dapatDiskon => keranjang.dapatDiskon;
 }

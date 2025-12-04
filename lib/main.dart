@@ -11,16 +11,14 @@ import 'package:go_router/go_router.dart';
 
 import 'package:menu_makanan/router/app_router.dart';
 import 'package:menu_makanan/features/cart/presentation/bloc/cart_bloc.dart';
-import 'package:menu_makanan/features/cart/data/repositories/cart_repository_impl.dart';
-import 'package:menu_makanan/features/produk/presentation/cubit/produk_cubit.dart';
-import 'package:menu_makanan/features/produk/data/datasources/produk_remote_datasource.dart';
-import 'package:menu_makanan/features/produk/data/repositories/produk_repository_impl.dart';
-import 'package:menu_makanan/features/produk/domain/usecases/get_all_produk_usecase.dart';
-import 'package:menu_makanan/features/produk/domain/usecases/get_all_minuman_usecase.dart';
-import 'package:menu_makanan/features/produk/domain/usecases/search_produk_usecase.dart';
-import 'package:menu_makanan/features/produk/domain/usecases/search_minuman_usecase.dart';
-import 'package:menu_makanan/providers/transaction_provider.dart';
-import 'package:menu_makanan/providers/theme_provider.dart';
+import 'package:menu_makanan/features/product/presentation/cubit/produk_cubit.dart';
+import 'package:menu_makanan/features/product/data/datasources/produk_remote_datasource.dart';
+import 'package:menu_makanan/features/product/data/datasources/produk_local_datasource.dart';
+import 'package:menu_makanan/features/product/data/repositories/produk_repository_impl.dart';
+import 'package:menu_makanan/features/product/domain/usecases/get_all_produk_usecase.dart';
+import 'package:menu_makanan/features/product/domain/usecases/search_produk_usecase.dart';
+import 'package:menu_makanan/features/product/domain/usecases/get_minuman_usecase.dart';
+import 'package:menu_makanan/features/product/domain/usecases/search_minuman_usecase.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
@@ -32,10 +30,15 @@ void main() async {
 
   // Setup Dependency Injection
   final produkRemoteDataSource = ProdukRemoteDataSourceImpl(dio: dio);
-  final produkRepository = ProdukRepositoryImpl(remoteDataSource: produkRemoteDataSource);
+  final produkLocalDataSource = ProdukLocalDataSourceImpl();
+  final produkRepository = ProdukRepositoryImpl(
+    remoteDataSource: produkRemoteDataSource,
+    localDataSource: produkLocalDataSource,
+  );
+  
   final getAllProdukUseCase = GetAllProdukUseCase(produkRepository);
-  final getAllMinumanUseCase = GetAllMinumanUseCase(produkRepository);
   final searchProdukUseCase = SearchProdukUseCase(produkRepository);
+  final getMinumanUseCase = GetMinumanUseCase(produkRepository);
   final searchMinumanUseCase = SearchMinumanUseCase(produkRepository);
 
   runApp(
@@ -46,12 +49,12 @@ void main() async {
             ChangeNotifierProvider(create: (_) => TransactionProvider()),
             ChangeNotifierProvider(create: (_) => ThemeProvider()),
             ChangeNotifierProvider(create: (_) => PaymentProvider()),
-            BlocProvider(create: (_) => CartBloc(cartRepository: CartRepositoryImpl())),
+            BlocProvider(create: (_) => CartBloc()),
             BlocProvider(
               create: (_) => ProdukCubit(
                 getAllProdukUseCase: getAllProdukUseCase,
-                getAllMinumanUseCase: getAllMinumanUseCase,
                 searchProdukUseCase: searchProdukUseCase,
+                getMinumanUseCase: getMinumanUseCase,
                 searchMinumanUseCase: searchMinumanUseCase,
               ),
             ),

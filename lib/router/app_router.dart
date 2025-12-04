@@ -1,19 +1,19 @@
 import 'package:go_router/go_router.dart';
-import 'package:menu_makanan/features/produk/presentation/pages/produk_list_page.dart';
-import 'package:menu_makanan/pages/halaman_login.dart';
-import 'package:menu_makanan/pages/halaman_registrasi.dart';
-import 'package:menu_makanan/pages/halaman_password.dart';
-import 'package:menu_makanan/pages/halaman_webview.dart';
-import 'package:menu_makanan/pages/halaman_about_us.dart';
-import 'package:menu_makanan/pages/halaman_riwayat.dart';
-import 'package:menu_makanan/pages/halaman_detailproduk.dart';
-import 'package:menu_makanan/pages/halaman_buktitransaksi.dart';
-import 'package:menu_makanan/pages/loading.dart';
-import 'package:menu_makanan/pages/halaman_appbar.dart' show MainScreen;
-import 'package:menu_makanan/tombol/profil.dart' show HalamanProfil;
-import 'package:menu_makanan/model/produk.dart';
-import 'package:menu_makanan/pages/payment_method_page.dart';
-import 'package:menu_makanan/pages/order_details_page.dart';
+import 'package:menu_makanan/features/product/presentation/pages/product_list_page.dart'; // Check if this exists
+import 'package:menu_makanan/features/auth/presentation/pages/login_page.dart';
+import 'package:menu_makanan/features/auth/presentation/pages/register_page.dart';
+import 'package:menu_makanan/features/auth/presentation/pages/forgot_password_page.dart';
+import 'package:menu_makanan/features/common/presentation/pages/webview_page.dart';
+import 'package:menu_makanan/features/profile/presentation/pages/about_us_page.dart';
+import 'package:menu_makanan/features/history/presentation/pages/history_page.dart';
+import 'package:menu_makanan/features/product/presentation/pages/product_detail_page.dart';
+import 'package:menu_makanan/features/history/presentation/pages/transaction_proof_page.dart';
+import 'package:menu_makanan/features/common/presentation/pages/splash_screen.dart';
+import 'package:menu_makanan/features/home/presentation/pages/main_screen.dart' show MainScreen;
+import 'package:menu_makanan/features/profile/presentation/pages/profile_page.dart' show HalamanProfil;
+import 'package:menu_makanan/features/product/domain/entities/product.dart';
+import 'package:menu_makanan/features/cart/presentation/pages/payment_method_page.dart';
+import 'package:menu_makanan/features/history/presentation/pages/order_details_page.dart';
 
 GoRouter createAppRouter() {
   return GoRouter(

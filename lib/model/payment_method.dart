@@ -1,25 +1,10 @@
-enum PaymentMethod { dana, qris, tunai }
+enum PaymentMethod {
+  cash('Tunai', '💵'),
+  qris('QRIS', '📱'),
+  transfer('Transfer Bank', '🏦');
 
-extension PaymentMethodExtension on PaymentMethod {
-  String get displayName {
-    switch (this) {
-      case PaymentMethod.dana:
-        return 'Dana';
-      case PaymentMethod.qris:
-        return 'QRIS';
-      case PaymentMethod.tunai:
-        return 'Tunai';
-    }
-  }
+  final String displayName;
+  final String icon;
 
-  String get icon {
-    switch (this) {
-      case PaymentMethod.dana:
-        return '💳';
-      case PaymentMethod.qris:
-        return '📱';
-      case PaymentMethod.tunai:
-        return '💵';
-    }
-  }
+  const PaymentMethod(this.displayName, this.icon);
 }

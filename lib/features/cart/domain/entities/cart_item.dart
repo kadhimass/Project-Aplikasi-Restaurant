@@ -1,4 +1,4 @@
-import 'package:menu_makanan/model/produk.dart';
+import 'package:menu_makanan/features/product/domain/entities/product.dart';
 
 class CartItem {
   final Produk produk;
