@@ -43,104 +43,89 @@ class _HalamanPengaturanState extends State<HalamanPengaturan> {
     final themeProvider = Provider.of<ThemeProvider>(context);
 
     return Center(
-      child: Container(
-        child: ListView(
-          children: [
-            _SingleSection(
-              title: "Umum",
-              children: [
-                ListTile(
-                  leading: const Icon(
-                    Icons.dark_mode_outlined,
-                    color: Colors.orange,
-                  ),
-                  title: const Text("Mode Gelap"),
-                  trailing: Switch(
-                    value: themeProvider.isDarkMode,
-                    onChanged: (value) => themeProvider.toggleTheme(value),
-                  ),
+      child: ListView(
+        children: [
+          _SingleSection(
+            title: "Umum",
+            children: [
+              ListTile(
+                leading: const Icon(
+                  Icons.dark_mode_outlined,
+                  color: Colors.orange,
                 ),
-                ListTile(
-                  leading: const Icon(
-                    Icons.security_outlined,
-                    color: Colors.orange,
-                  ),
-                  title: const Text("Status Keamanan"),
-                  onTap: () {
-                    context.pushNamed(
-                      'webview',
-                      extra: {
-                        'title': 'Status Keamanan',
-                        'url':
-                            'https://drive.google.com/drive/folders/1YUHXOt886dwnQr8IpQN9u4GtCKXp5PL_?usp=sharing',
-                      },
-                    );
-                  },
+                title: const Text("Mode Gelap"),
+                trailing: Switch(
+                  value: themeProvider.isDarkMode,
+                  onChanged: (value) => themeProvider.toggleTheme(value),
                 ),
-              ],
-            ),
-            const Divider(),
-            _SingleSection(
-              title: "Organisasi",
-              children: [
-                ListTile(
-                  leading: const Icon(
-                    Icons.person_outline_rounded,
-                    color: Colors.orange,
-                  ),
-                  title: const Text("Profil"),
-                  onTap: () {
-                    context.pushNamed('profil', extra: {'email': widget.email});
-                  },
+              ),
+              ListTile(
+                leading: const Icon(
+                  Icons.security_outlined,
+                  color: Colors.orange,
                 ),
-                ListTile(
-                  leading: const Icon(
-                    Icons.history_edu_outlined,
-                    color: Colors.orange,
-                  ),
-                  title: const Text("Riwayat Transaksi"),
-                  onTap: () {
-                    context.pushNamed(
-                      'riwayat',
-                      extra: {'email': widget.email},
-                    );
-                  },
+                title: const Text("Status Keamanan"),
+                onTap: () {
+                  context.pushNamed(
+                    'webview',
+                    extra: {
+                      'title': 'Status Keamanan',
+                      'url':
+                          'https://drive.google.com/drive/folders/1YUHXOt886dwnQr8IpQN9u4GtCKXp5PL_?usp=sharing',
+                    },
+                  );
+                },
+              ),
+            ],
+          ),
+          const Divider(),
+          _SingleSection(
+            title: "Organisasi",
+            children: [
+              ListTile(
+                leading: const Icon(
+                  Icons.history_edu_outlined,
+                  color: Colors.orange,
                 ),
-              ],
-            ),
-            const Divider(),
-            _SingleSection(
-              children: [
-                ListTile(
-                  leading: const Icon(
-                    Icons.info_outline_rounded,
-                    color: Colors.orange,
-                  ),
-                  title: const Text("About Us"),
-                  onTap: () {
-                    context.pushNamed('about');
-                  },
+                title: const Text("Riwayat Transaksi"),
+                onTap: () {
+                  context.pushNamed('riwayat', extra: {'email': widget.email});
+                },
+              ),
+            ],
+          ),
+          const Divider(),
+          _SingleSection(
+            children: [
+              ListTile(
+                leading: const Icon(
+                  Icons.info_outline_rounded,
+                  color: Colors.orange,
                 ),
-                ListTile(
-                  leading: const Icon(
-                    Icons.exit_to_app_rounded,
-                    color: Colors.orange,
-                  ),
-                  title: const Text("Tentang Aplikasi"),
-                  onTap: _tentangaplikasi,
+                title: const Text("About Us"),
+                onTap: () {
+                  context.pushNamed('about');
+                },
+              ),
+              ListTile(
+                leading: const Icon(
+                  Icons.exit_to_app_rounded,
+                  color: Colors.orange,
                 ),
-                ListTile(
-                  leading: const Icon(
-                    Icons.exit_to_app_rounded,
-                    color: Colors.orange,
-                  ),
-                  title: const Text("Keluar"),
-                  onTap: _logout,
+                title: const Text("Tentang Aplikasi"),
+                onTap: _tentangaplikasi,
+              ),
+              ListTile(
+                leading: const Icon(
+                  Icons.exit_to_app_rounded,
+                  color: Colors.orange,
                 ),
-              ],
-            ),
-          ],
-        ),
+                title: const Text("Keluar"),
+                onTap: _logout,
+              ),
+            ],
+          ),
+        ],
       ),
     );
   }

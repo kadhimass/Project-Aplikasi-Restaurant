@@ -1,5 +1,7 @@
 import 'package:menu_makanan/features/product/data/datasources/dummydata.dart';
 import 'package:menu_makanan/features/product/domain/entities/product.dart';
+import 'package:menu_makanan/features/produk/data/datasources/produk_datasource.dart';
+import 'package:menu_makanan/features/produk/domain/entities/produk_entity.dart';
 
 abstract class ProdukLocalDataSource {
   Future<List<Produk>> getAllProduk();
@@ -26,6 +28,8 @@ class ProdukLocalDataSourceImpl implements ProdukLocalDataSource {
         linkWeb: produk.linkWeb,
       );
     }).toList();
+    // Return empty list - data harus dari API
+    return [];
   }
 
   @override
@@ -47,6 +51,8 @@ class ProdukLocalDataSourceImpl implements ProdukLocalDataSource {
       rating: produk.rating,
       linkWeb: produk.linkWeb,
     );
+    // Data harus dari API
+    throw Exception('Produk not found - use API data source');
   }
 
   @override
@@ -73,5 +79,7 @@ class ProdukLocalDataSourceImpl implements ProdukLocalDataSource {
         linkWeb: produk.linkWeb,
       );
     }).toList();
+    // Data harus dari API
+    return [];
   }
 }

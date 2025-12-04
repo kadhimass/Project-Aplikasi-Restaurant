@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 
 class OrderSuccessPage extends StatelessWidget {
-  const OrderSuccessPage({Key? key}) : super(key: key);
+  const OrderSuccessPage({super.key});
 
   @override
   Widget build(BuildContext context) {

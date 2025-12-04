@@ -11,6 +11,12 @@ import 'package:menu_makanan/features/product/data/datasources/dummydata.dart'; 
 import 'package:menu_makanan/features/cart/domain/entities/cart.dart';
 import 'package:menu_makanan/features/product/domain/entities/product.dart';
 import 'package:menu_makanan/features/home/presentation/pages/meal_search_page.dart'; // Replaced example api with actual search page or similar?
+import 'package:menu_makanan/services/produk_filter_service.dart';
+import 'package:menu_makanan/features/cart/presentation/bloc/cart_bloc.dart';
+import 'package:menu_makanan/features/cart/presentation/bloc/cart_event.dart';
+import 'package:go_router/go_router.dart';
+import 'package:menu_makanan/model/keranjang.dart';
+import 'package:menu_makanan/model/produk.dart';
 
 class HalamanBeranda extends StatefulWidget {
   final Keranjang keranjang;
@@ -53,7 +59,8 @@ class _HalamanBerandaState extends State<HalamanBeranda> {
 
   @override
   Widget build(BuildContext context) {
-    List<Produk> produkList = DummyData.getProdukList();
+    // Gunakan empty list - data dari API melalui provider/cubit
+    List<Produk> produkList = [];
     List<Produk> filteredProdukList = _getFilteredAndSortedProducts(produkList);
 
     final formatRupiah = NumberFormat.currency(
@@ -117,25 +124,11 @@ class _HalamanBerandaState extends State<HalamanBeranda> {
           ),
         ),
 
-        // Latest meals from TheMealDB (connected to the same search box)
-        // MealFromApiWidget(searchQuery: _searchQuery), // Replaced with MealSearchWidget logic if needed, or just remove if MealSearchWidget is a full page.
-        // Actually MealSearchWidget seems to be a full widget with its own search.
-        // But here we want to embed it?
-        // Let's check MealSearchWidget implementation again.
-        // It has its own TextField.
-        // So maybe we should just use it directly or adapt.
-        // For now, I'll comment it out or replace with a placeholder if I can't easily integrate.
-        // But wait, the user wants it.
-        // I'll assume MealSearchWidget is what was intended.
-        // But MealSearchWidget has its own search bar.
-        // In home_page, there is ALREADY a search bar.
-        // So embedding MealSearchWidget (which has a search bar) inside home_page (which has a search bar) is weird.
-        // Maybe MealFromApiWidget was a DIFFERENT widget that took a query?
-        // Since I can't find it, I'll create a simple placeholder or just comment it out to avoid errors.
         Container(
           padding: const EdgeInsets.all(12),
           child: const Text('API Meals Integration (Coming Soon)'),
         ),
+        _buildMealFromApiWidget(),
 
         // Filter Tabs (Makanan / Minuman / Semua)
         Container(
@@ -615,6 +608,16 @@ class _HalamanBerandaState extends State<HalamanBeranda> {
           ],
         ),
       ),
+    );
+  }
+
+  /// Build meal list from API
+  Widget _buildMealFromApiWidget() {
+    // TODO: Integrate dengan API provider/cubit untuk menampilkan meals dari TheMealDB
+    // Saat ini return empty Container sampai API data tersedia
+    return Container(
+      padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 8),
+      child: const SizedBox.shrink(),
     );
   }
 }

@@ -21,6 +21,14 @@ class ProdukModel extends Produk {
           linkWeb: linkWeb,
           bahan: bahan,
         );
+    required super.id,
+    required super.nama,
+    required super.deskripsi,
+    required super.harga,
+    required super.gambar,
+    required super.rating,
+    super.bahan = const [],
+  });
 
   factory ProdukModel.fromJson(Map<String, dynamic> json) {
     return ProdukModel(
@@ -30,7 +38,11 @@ class ProdukModel extends Produk {
       harga: (json['harga'] as num?)?.toDouble() ?? 0.0,
       gambar: json['gambar'] ?? '',
       rating: (json['rating'] as num?)?.toDouble() ?? 0.0,
-      bahan: (json['bahan'] as List<dynamic>?)?.map((e) => e.toString()).toList() ?? [],
+      bahan:
+          (json['bahan'] as List<dynamic>?)
+              ?.map((e) => e.toString())
+              .toList() ??
+          [],
     );
   }
 
@@ -41,7 +53,7 @@ class ProdukModel extends Produk {
     for (int i = 1; i <= 20; i++) {
       final ingredient = json['strIngredient$i'];
       final measure = json['strMeasure$i'];
-      
+
       if (ingredient != null && ingredient.toString().trim().isNotEmpty) {
         String item = ingredient.toString().trim();
         if (measure != null && measure.toString().trim().isNotEmpty) {
@@ -70,7 +82,7 @@ class ProdukModel extends Produk {
     for (int i = 1; i <= 15; i++) {
       final ingredient = json['strIngredient$i'];
       final measure = json['strMeasure$i'];
-      
+
       if (ingredient != null && ingredient.toString().trim().isNotEmpty) {
         String item = ingredient.toString().trim();
         if (measure != null && measure.toString().trim().isNotEmpty) {
@@ -98,10 +110,10 @@ class ProdukModel extends Produk {
       // but variety across different IDs.
       final Random random = Random(id.hashCode);
       final int range = max - min;
-      
+
       final int randomValue = random.nextInt(range);
       final int rawPrice = randomValue + min;
-      
+
       // Round to nearest 1000 for cleaner prices
       return (rawPrice / 1000).round() * 1000.0;
     } catch (e) {
