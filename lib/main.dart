@@ -60,7 +60,6 @@ void main() async {
             ChangeNotifierProvider(create: (_) => TransactionProvider()),
             ChangeNotifierProvider(create: (_) => ThemeProvider()),
             ChangeNotifierProvider(create: (_) => PaymentProvider()),
-            BlocProvider(create: (_) => CartBloc()),
             BlocProvider(
               create: (_) => CartBloc(cartRepository: CartRepositoryImpl()),
             ),
