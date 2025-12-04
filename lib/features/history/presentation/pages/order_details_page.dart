@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
-<<<<<<< HEAD:lib/features/history/presentation/pages/order_details_page.dart
 import 'package:provider/provider.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:go_router/go_router.dart';
 import 'package:menu_makanan/features/cart/domain/entities/cart.dart';
 import 'package:menu_makanan/model/payment_method.dart';
 import 'package:menu_makanan/model/transaksi.dart';
@@ -9,17 +9,6 @@ import 'package:menu_makanan/providers/transaction_provider.dart';
 import 'package:menu_makanan/features/cart/presentation/bloc/cart_bloc.dart';
 import 'package:menu_makanan/features/cart/presentation/bloc/cart_event.dart';
 import 'package:menu_makanan/features/history/presentation/pages/transaction_proof_page.dart';
-=======
-import 'package:menu_makanan/model/payment_method.dart';
-import 'package:menu_makanan/features/cart/presentation/bloc/cart_bloc.dart';
-import 'package:menu_makanan/features/cart/presentation/bloc/cart_event.dart';
-import 'package:menu_makanan/model/keranjang.dart';
-import 'package:menu_makanan/model/transaksi.dart';
-import 'package:menu_makanan/providers/transaction_provider.dart';
-import 'package:provider/provider.dart';
-import 'package:go_router/go_router.dart';
-import 'package:flutter_bloc/flutter_bloc.dart';
->>>>>>> 304aae5a4f5f1d45bc8aca21c7f0b3cb74fa1c5c:lib/pages/order_details_page.dart
 
 class OrderDetailsPage extends StatelessWidget {
   final Cart keranjang;
@@ -40,23 +29,33 @@ class OrderDetailsPage extends StatelessWidget {
     return Scaffold(
       appBar: AppBar(
         title: const Text('Detail Pesanan'),
-        automaticallyImplyLeading: true,
+        backgroundColor: Colors.orange,
       ),
-      body: Column(
-        children: [
-          Expanded(
-            child: SingleChildScrollView(
-              padding: const EdgeInsets.all(16),
-              child: Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  const Text(
-                    'Daftar Pesanan',
-                    style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
-                  ),
-                  const SizedBox(height: 12),
-                  Card(
-                    child: ListView.separated(
+      body: SingleChildScrollView(
+        padding: const EdgeInsets.all(16),
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            const Text(
+              'Detail Pesanan Anda',
+              style: TextStyle(
+                fontSize: 20,
+                fontWeight: FontWeight.bold,
+              ),
+            ),
+            const Divider(thickness: 2),
+            const SizedBox(height: 16),
+            const Text(
+              'Daftar Pesanan:',
+              style: TextStyle(fontSize: 16, fontWeight: FontWeight.bold),
+            ),
+            const SizedBox(height: 8),
+            Card(
+              child: Padding(
+                padding: const EdgeInsets.all(12),
+                child: Column(
+                  children: [
+                    ListView.separated(
                       shrinkWrap: true,
                       physics: const NeverScrollableScrollPhysics(),
                       itemCount: keranjang.items.length,
@@ -66,68 +65,107 @@ class OrderDetailsPage extends StatelessWidget {
                         final name = item.produk.nama;
                         final qty = item.jumlah;
                         final price = item.produk.harga;
+                        final subtotal = price * qty;
+
                         return ListTile(
+                          contentPadding: EdgeInsets.zero,
                           title: Text(name),
-                          subtitle: Text('Jumlah: $qty'),
-                          trailing: Text(_formatPrice(price * qty)),
+                          subtitle: Text('${_formatPrice(price)} x $qty'),
+                          trailing: Text(
+                            _formatPrice(subtotal),
+                            style: const TextStyle(
+                              fontWeight: FontWeight.bold,
+                            ),
+                          ),
                         );
                       },
                     ),
-                  ),
-                  const SizedBox(height: 16),
-                  const Text(
-                    'Metode Pembayaran',
-                    style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
-                  ),
-                  const SizedBox(height: 8),
-                  Card(
-                    color: Colors.orange.shade50,
-                    child: ListTile(
-                      leading: Text(
-                        paymentMethod.icon,
-                        style: const TextStyle(fontSize: 30),
-                      ),
-                      title: Text(paymentMethod.displayName),
-                    ),
-                  ),
-                  const SizedBox(height: 16),
-                  Card(
-                    child: ListTile(
-                      title: const Text(
-                        'Total Harga',
-                        style: TextStyle(fontWeight: FontWeight.bold),
-                      ),
-                      trailing: Text(
-                        _formatPrice(keranjang.hargaSetelahDiskon),
-                      ),
-                    ),
-                  ),
-                ],
+                  ],
+                ),
               ),
             ),
-          ),
-          Padding(
-            padding: const EdgeInsets.all(16),
-            child: SizedBox(
+            const SizedBox(height: 16),
+            const Text(
+              'Metode Pembayaran:',
+              style: TextStyle(fontSize: 16, fontWeight: FontWeight.bold),
+            ),
+            const SizedBox(height: 8),
+            Card(
+              child: ListTile(
+                leading: const Icon(Icons.payment, color: Colors.orange),
+                title: Text(paymentMethod.displayName),
+              ),
+            ),
+            const SizedBox(height: 16),
+            Card(
+              color: Colors.orange.shade50,
+              child: Padding(
+                padding: const EdgeInsets.all(16),
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    Row(
+                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                      children: [
+                        const Text('Subtotal:'),
+                        Text(_formatPrice(keranjang.totalHarga)),
+                      ],
+                    ),
+                    if (keranjang.dapatDiskon) ...[
+                      const SizedBox(height: 8),
+                      Row(
+                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                        children: [
+                          const Text('Diskon:', style: TextStyle(color: Colors.green)),
+                          Text(
+                            '-${_formatPrice(keranjang.jumlahDiskon)}',
+                            style: const TextStyle(color: Colors.green),
+                          ),
+                        ],
+                      ),
+                    ],
+                    const Divider(),
+                    Row(
+                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                      children: [
+                        const Text(
+                          'Total:',
+                          style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
+                        ),
+                        Text(
+                          _formatPrice(keranjang.hargaSetelahDiskon),
+                          style: const TextStyle(
+                            fontSize: 18,
+                            fontWeight: FontWeight.bold,
+                            color: Colors.orange,
+                          ),
+                        ),
+                      ],
+                    ),
+                  ],
+                ),
+              ),
+            ),
+            const SizedBox(height: 24),
+            SizedBox(
               width: double.infinity,
               child: ElevatedButton(
+                style: ElevatedButton.styleFrom(
+                  backgroundColor: Colors.orange,
+                  padding: const EdgeInsets.symmetric(vertical: 16),
+                ),
                 onPressed: () {
-                  // Create transaksi, simpan ke provider, kosongkan keranjang, dan buka bukti
-                  final idTransaksi =
-                      'WRKT${DateTime.now().millisecondsSinceEpoch}';
-                  final waktuTransaksi = DateTime.now();
-
+                  // Buat transaksi
                   final transaksi = Transaksi(
-                    keranjang: keranjang, // Using Cart directly
+                    keranjang: keranjang,
                     email: email,
-                    idTransaksi: idTransaksi,
-                    waktuTransaksi: waktuTransaksi,
+                    idTransaksi: 'TRX-${DateTime.now().millisecondsSinceEpoch}',
+                    waktuTransaksi: DateTime.now(),
                   );
 
-                  Provider.of<TransactionProvider>(
-                    context,
-                    listen: false,
-                  ).addTransaction(transaksi);
+                  // Simpan ke provider
+                  Provider.of<TransactionProvider>(context, listen: false)
+                      .addTransaction(transaksi);
 
                   // kosongkan keranjang melalui bloc
                   context.read<CartBloc>().add(ClearCart());
@@ -147,8 +185,8 @@ class OrderDetailsPage extends StatelessWidget {
                 child: const Text('Konfirmasi Pesanan'),
               ),
             ),
-          ),
-        ],
+          ],
+        ),
       ),
     );
   }

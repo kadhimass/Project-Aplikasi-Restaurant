@@ -21,14 +21,7 @@ class ProdukModel extends Produk {
           linkWeb: linkWeb,
           bahan: bahan,
         );
-    required super.id,
-    required super.nama,
-    required super.deskripsi,
-    required super.harga,
-    required super.gambar,
-    required super.rating,
-    super.bahan = const [],
-  });
+
 
   factory ProdukModel.fromJson(Map<String, dynamic> json) {
     return ProdukModel(
